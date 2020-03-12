@@ -24,4 +24,4 @@ def index():
         country_data=country_response.text)
 
 if __name__ == '__main__':
-    app.run()
+    app.run(threaded=True)
