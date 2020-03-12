@@ -30,7 +30,7 @@
     </a>
 
     <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ml-auto" style="margin-right: 24px;">
+      <ul class="navbar-nav ml-auto" style="margin-right: 0.5rem;">
         <li class="nav-item">
           <a href="https://www.rtvslo.si/zdravje/novi-koronavirus" class="text-decoration-none nav-link"
             target="_blank">
@@ -45,9 +45,10 @@
       </ul>
     </div>
 
-    <form class="form-inline">
+    <form class="form-inline mw-25">
       <input class="form-control form-control-sm mr-auto" id="search" placeholder="Poišči državo">
     </form>
+
   </nav>
 
   <div class="table-responsive-sm">
@@ -190,6 +191,7 @@
 
     function tableCreate() {
       var headers = ["Država", "Populacija", "Okuženi", "Delež okuženih", "Mrtvi", "Delež mrtvih", "Ozdraveli", ""];
+      var headersIcons = ["", "", "fas fa-frown-open", "", "fas fa-dizzy", "", "fas fa-smile"];
       var tbl = document.getElementById('dataTable');
       var tbdy = document.createElement('tbody');
       var thdr = tbl.createTHead();
@@ -198,16 +200,22 @@
       for (var i = 0; i < headers.length; i++) {
         var cell = document.createElement("th");
         cell.setAttribute("style", "border:none !important; cursor: pointer;");
-        cell.innerHTML = headers[i];
+        // TU SPREMNINJAJMO
+        cell.innerHTML = '<div class="d-none d-sm-block">' + headers[i] + '</div><div class="d-sm-none"><i class="' + headersIcons[i] + '"></i></div>'
+        //cell.innerHTML = headers[i];
         if (headers[i] == "Okuženi") {
           cell.setAttribute("data-sort-default", "")
         } else if (i == headers.length - 1) {
           cell.setAttribute("data-sort-method", "none")
           cell.removeAttribute("style");
           cell.setAttribute("style", "border:none !important;");
+          cell.innerHTML = headers[i];
         }
         if (i != 0) {
           cell.setAttribute("class", "text-right");
+        }
+        else {
+          cell.innerHTML = headers[i];
         }
         if (headers[i] == "Populacija" || headers[i] == "Delež okuženih" || headers[i] == "Delež mrtvih") {
           cell.setAttribute("class", "d-none d-lg-table-cell text-right");

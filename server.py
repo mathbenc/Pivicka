@@ -5,6 +5,7 @@ import schedule
 import time
 
 app = Flask(__name__)
+app.config['TEMPLATES_AUTO_RELOAD'] = True
 #sslify = SSLify(app)
 
 def get_data():
@@ -25,4 +26,4 @@ def index():
         country_data=country_response.text)
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
