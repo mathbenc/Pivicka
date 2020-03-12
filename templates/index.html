@@ -46,8 +46,8 @@
     </div>
 
     <form class="form-inline" id="searchContainer">
-      <input class="form-control form-control-sm mr-auto d-none d-sm-block d-md-block" id="search" placeholder="Poišči državo">
-      <input class="form-control form-control-sm mr-auto d-block d-sm-none d-sm-block d-md-none" id="searchMobile" placeholder="Poišči državo">
+      <input class="form-control form-control-sm mr-auto d-none d-sm-block d-md-block" id="search" placeholder="Išči državo">
+      <input class="form-control form-control-sm mr-auto d-block d-sm-none d-sm-block d-md-none" id="searchMobile" placeholder="Išči državo">
     </form>
 
   </nav>
@@ -224,7 +224,7 @@
         if (i == 1 || i == 5) {
           cell.setAttribute("class", "d-none d-lg-table-cell text-right");
         }
-        if (headers[i] == 3) {
+        if (i == 3) {
           cell.setAttribute("class", "d-none d-sm-block d-lg-table-cell text-right");
         }
         row.appendChild(cell);
