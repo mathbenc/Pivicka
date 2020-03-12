@@ -191,7 +191,7 @@
     }
 
     function tableCreate() {
-      var headers = ["Država", "Populacija", "Okuženi", "Delež okuženih", "Mrtvi", "Delež mrtvih", "Ozdraveli", ""];
+      var headers = ["Država", "Populacija", "Okuženi", "Obolevnost", "Mrtvi", "Umrljivost", "Ozdraveli", ""];
       var headersIcons = ["", "", "fas fa-frown-open", "", "fas fa-dizzy", "", "fas fa-smile"];
       var tbl = document.getElementById('dataTable');
       var tbdy = document.createElement('tbody');
@@ -218,10 +218,10 @@
         else {
           cell.innerHTML = headers[i];
         }
-        if (headers[i] == "Populacija" || headers[i] == "Delež mrtvih") {
+        if (i == 1 || i == 5) {
           cell.setAttribute("class", "d-none d-lg-table-cell text-right");
         }
-        if (headers[i] == "Delež okuženih") {
+        if (headers[i] == 3) {
           cell.setAttribute("class", "d-none d-sm-block d-lg-table-cell text-right");
         }
         row.appendChild(cell);
