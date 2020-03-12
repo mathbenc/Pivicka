@@ -1,9 +1,11 @@
 from flask import Flask, render_template, jsonify
+from flask_sslify import SSLify
 import requests
 import schedule
 import time
 
 app = Flask(__name__)
+sslify = SSLify(app)
 
 def get_data():
     global corona_response, country_response
