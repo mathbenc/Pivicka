@@ -4,7 +4,6 @@ import schedule
 import time
 
 app = Flask(__name__)
-app.config['TEMPLATES_AUTO_RELOAD'] = True
 
 def get_data():
     global corona_response, country_response
@@ -24,4 +23,4 @@ def index():
         country_data=country_response.text)
 
 if __name__ == '__main__':
-    app.run(threaded=True)
+    app.run()
