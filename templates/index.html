@@ -79,9 +79,12 @@
 
   <script>
 
-    $("#search, #searchMobile").keyup(function () {
+    $("#search,#searchMobile").keyup(function () {
       var input, filter, table, tr, td, i, txtValue;
       input = document.getElementById("search");
+      if (input.value == "") {
+        input = document.getElementById("searchMobile");
+      }
       filter = input.value.toUpperCase();
       table = document.getElementById("dataTable");
       tr = table.getElementsByTagName("tr");
