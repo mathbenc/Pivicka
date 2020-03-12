@@ -45,8 +45,9 @@
       </ul>
     </div>
 
-    <form class="form-inline mw-25">
-      <input class="form-control form-control-sm mr-auto" id="search" placeholder="Poišči državo">
+    <form class="form-inline" id="searchContainer">
+      <input class="form-control form-control-sm mr-auto d-none d-sm-block" id="search" placeholder="Poišči državo">
+      <input class="form-control form-control-sm mr-auto d-sm-none" id="searchMobile" placeholder="Poišči državo">
     </form>
 
   </nav>
@@ -217,8 +218,11 @@
         else {
           cell.innerHTML = headers[i];
         }
-        if (headers[i] == "Populacija" || headers[i] == "Delež okuženih" || headers[i] == "Delež mrtvih") {
+        if (headers[i] == "Populacija" || headers[i] == "Delež mrtvih") {
           cell.setAttribute("class", "d-none d-lg-table-cell text-right");
+        }
+        if (headers[i] == "Delež okuženih") {
+          cell.setAttribute("class", "d-none d-sm-block d-lg-table-cell text-right");
         }
         row.appendChild(cell);
       }
@@ -235,7 +239,7 @@
         cell.innerHTML = infected[i];
         cell = row.insertCell();
         cell.setAttribute("align", "right");
-        cell.setAttribute("class", "d-none d-lg-table-cell text-right");
+        cell.setAttribute("class", "d-none d-sm-block d-lg-table-cell text-right");
         cell.innerHTML = infectedRatio[i] + "%";
         cell = row.insertCell();
         cell.setAttribute("align", "right");
