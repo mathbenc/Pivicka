@@ -3,4 +3,4 @@ flask_sslify
 requests
 gunicorn
 waitress
-apscheduler
+apscheduler==2.1.2
