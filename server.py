@@ -3,17 +3,23 @@ from flask_sslify import SSLify
 import requests
 import schedule
 import time
-
-app = Flask(__name__)
-#app.config['TEMPLATES_AUTO_RELOAD'] = True
-#sslify = SSLify(app)
+from apscheduler.schedulers.background import BackgroundScheduler
 
 def get_data():
     global corona_response, country_response
     country_response = requests.get("https://restcountries.eu/rest/v2/all")
     corona_response = requests.get("https://lab.isaaclin.cn/nCoV/api/area?")
+    print("updated...")
 
-schedule.every(1).minutes.do(get_data)
+sched = BackgroundScheduler(deamon=True)
+sched.add_job(get_data,"interval",minutes=1)
+sched.start()
+
+app = Flask(__name__)
+#app.config['TEMPLATES_AUTO_RELOAD'] = True
+#sslify = SSLify(app)
+
+#schedule.every(1).minutes.do(get_data)
 
 country_response = requests.get("https://restcountries.eu/rest/v2/all")
 corona_response = requests.get("https://lab.isaaclin.cn/nCoV/api/area?")
