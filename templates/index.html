@@ -157,7 +157,7 @@
 
     for (var i = 0; i < coronaData.length; i++) {
       for (var j = 0; j < countryData.length; j++) {
-        if (coronaData[i].provinceEnglishName == countryData[j].name) {
+        if (coronaData[i].provinceEnglishName == /^{countryData[j].name}\s(.*Republic.*)$/) {
 
           // Podatki o državi
           countries.push(countryData[j].name);
