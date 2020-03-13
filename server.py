@@ -4,7 +4,6 @@ import requests
 import schedule
 import time
 import sys
-from datetime import datetime
 from apscheduler.schedulers.background import BackgroundScheduler
 
 def get_data():
