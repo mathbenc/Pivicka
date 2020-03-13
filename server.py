@@ -3,6 +3,7 @@ from flask_sslify import SSLify
 import requests
 import schedule
 import time
+import sys
 from apscheduler.schedulers.background import BackgroundScheduler
 
 def get_data():
@@ -10,6 +11,7 @@ def get_data():
     country_response = requests.get("https://restcountries.eu/rest/v2/all")
     corona_response = requests.get("https://lab.isaaclin.cn/nCoV/api/area?")
     print("updated...")
+    sys.stdout.flush()
 
 sched = BackgroundScheduler(deamon=True)
 sched.add_job(get_data,"interval",minutes=1)
