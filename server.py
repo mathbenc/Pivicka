@@ -1,7 +1,6 @@
 from flask import Flask, render_template, jsonify
 from flask_sslify import SSLify
 import requests
-import schedule
 import time
 import sys
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -20,8 +19,6 @@ sched.start()
 app = Flask(__name__)
 #app.config['TEMPLATES_AUTO_RELOAD'] = True
 sslify = SSLify(app)
-
-#schedule.every(1).minutes.do(get_data)
 
 country_response = requests.get("https://restcountries.eu/rest/v2/all")
 corona_response = requests.get("https://lab.isaaclin.cn/nCoV/api/area?")
