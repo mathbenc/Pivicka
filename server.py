@@ -4,13 +4,14 @@ import requests
 import schedule
 import time
 import sys
+from datetime import datetime
 from apscheduler.schedulers.background import BackgroundScheduler
 
 def get_data():
     global corona_response, country_response
     country_response = requests.get("https://restcountries.eu/rest/v2/all")
     corona_response = requests.get("https://lab.isaaclin.cn/nCoV/api/area?")
-    print("updated...")
+    print("API Update complete")
     sys.stdout.flush()
 
 sched = BackgroundScheduler(deamon=True)
