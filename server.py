@@ -17,7 +17,7 @@ sched.start()
 
 app = Flask(__name__)
 #app.config['TEMPLATES_AUTO_RELOAD'] = True
-#sslify = SSLify(app)
+sslify = SSLify(app)
 
 #schedule.every(1).minutes.do(get_data)
 
