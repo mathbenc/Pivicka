@@ -116,10 +116,13 @@
     var coronaData = JSON.parse({{ corona_data| tojson | safe}}).results;
     var countryData = JSON.parse({{ country_data| tojson | safe}});
 
-    //Spremenimo Iran (Islamic State) v Iran
+    //Spremenimo Korea
     for (var i = 0; i < countryData.length; i++) {
-      if (countryData[i].name == "Iran (Islamic Republic of)") {
-        countryData[i].name = "Iran";
+      if (countryData[i].name == "Korea (Republic of)") {
+        countryData[i].name = "Korea";
+      }
+      else if (countryData[i].name == "Korea (Democratic People's Republic of)") {
+        countryData[i].name = "North Korea";
       }
     }
 
@@ -157,10 +160,11 @@
 
     for (var i = 0; i < coronaData.length; i++) {
       for (var j = 0; j < countryData.length; j++) {
-        if (coronaData[i].provinceEnglishName == /^{countryData[j].name}\s(.*Republic.*)$/) {
+        var countryNameRegex = new RegExp("^" + coronaData[i].provinceEnglishName + ".*$");
+        if (countryNameRegex.test(countryData[j].name)) {
 
           // Podatki o državi
-          countries.push(countryData[j].name);
+          countries.push(coronaData[i].provinceEnglishName);
           population.push(formatNumber(countryData[j].population));
 
           // Podatki o Pivu
