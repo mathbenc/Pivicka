@@ -14,7 +14,7 @@ def get_data():
     global corona_response, country_response, data_time
     country_response = requests.get("https://restcountries.eu/rest/v2/all")
     corona_response = requests.get("https://lab.isaaclin.cn/nCoV/api/area?")
-    now = datetime.datetime.now()
+    now = datetime.datetime.now()+datetime.datetime.hour(1)
     data_time = now.strftime("%d.%m.%Y %H:%M")
     print("API Update complete")
     sys.stdout.flush()
