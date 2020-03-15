@@ -290,6 +290,7 @@
     });
         
     function countryDetect () {
+      window.alert("drek");
       $.getJSON("https://api.ipify.org?format=jsonp&callback=?", function(json) {
         window.alert(json.ip);
         console.log(json.ip);
