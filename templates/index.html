@@ -290,15 +290,12 @@
     });
         
     function countryDetect () {
-      window.alert("drek");
       $.getJSON("https://www.cloudflare.com/cdn-cgi/trace", function(json) {
-        window.alert(json.ip);
         console.log(json.ip);
         var ip = json.ip;
         $.getJSON('https://ipapi.co/'+ ip +'/json/', function(data){
           var country = data.country_name;
           console.log(country);
-          window.alert(country);
           var table = $("#dataTable");
           var tbody = table.find("tbody");
           var rows = tbody.find("tr");
