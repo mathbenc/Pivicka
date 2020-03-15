@@ -290,7 +290,7 @@
     });
         
     function countryDetect () {
-      $.getJSON("https://www.cloudflare.com/cdn-cgi/trace", function(json) {
+      $.get("https://www.cloudflare.com/cdn-cgi/trace", function(json) {
         console.log(json.ip);
         var ip = json.ip;
         $.getJSON('https://ipapi.co/'+ ip +'/json/', function(data){
