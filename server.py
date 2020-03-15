@@ -3,13 +3,13 @@ from flask_sslify import SSLify
 import requests
 import time
 import sys
-from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.schedulers.blocking import BlockingScheduler
 
 app = Flask(__name__)
 #app.config['TEMPLATES_AUTO_RELOAD'] = True
 sslify = SSLify(app)
 
-sched = BackgroundScheduler(deamon=True)
+sched = BlockingScheduler()
 
 def get_data():
     global corona_response, country_response
@@ -28,7 +28,7 @@ def index():
         corona_data=corona_response.text, 
         country_data=country_response.text)
 
-sched.add_job(get_data, "cron", minute="*")
+sched.add_job(get_data, "interval", minute=10, max_instances=10)
 sched.start()
 
 if __name__ == '__main__':
