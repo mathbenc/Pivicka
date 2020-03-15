@@ -32,8 +32,9 @@ def index():
         country_data=country_response.text,
         data_time=data_time)
 
+sched = BackgroundScheduler()
+sched.add_job(get_data, "interval", minutes=1, max_instances=10)
+sched.start()
+
 if __name__ == '__main__':
-    sched = BackgroundScheduler()
-    sched.add_job(get_data, "interval", minutes=1, max_instances=10)
-    sched.start()
     app.run()
