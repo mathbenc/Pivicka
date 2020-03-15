@@ -10,7 +10,6 @@ app = Flask(__name__)
 sslify = SSLify(app)
 
 sched = BackgroundScheduler(deamon=True)
-#scheduler = apscheduler.schedulers.blocking.BackgroundScheduler('apscheduler.job_defaults.max_instances': '2')
 
 def get_data():
     global corona_response, country_response
@@ -29,7 +28,7 @@ def index():
         corona_data=corona_response.text, 
         country_data=country_response.text)
 
-sched.add_job(get_data, "cron", minute="*")
+sched.add_job(get_data, "cron", minute="10")
 sched.start()
 
 if __name__ == '__main__':
