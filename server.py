@@ -8,20 +8,20 @@ from apscheduler.schedulers.background import BackgroundScheduler
 
 app = Flask(__name__)
 #app.config['TEMPLATES_AUTO_RELOAD'] = True
-sslify = SSLify(app)
+#sslify = SSLify(app)
 
 def get_data():
     global corona_response, country_response, data_time
     country_response = requests.get("https://restcountries.eu/rest/v2/all")
     corona_response = requests.get("https://lab.isaaclin.cn/nCoV/api/area?")
-    now = datetime.datetime.now()+datetime.datetime.hour(1)
+    now = datetime.datetime.now() + datetime.timedelta(hours=1)
     data_time = now.strftime("%d.%m.%Y %H:%M")
     print("API Update complete")
     sys.stdout.flush()
 
 country_response = requests.get("https://restcountries.eu/rest/v2/all")
 corona_response = requests.get("https://lab.isaaclin.cn/nCoV/api/area?")
-now = datetime.datetime.now()
+now = datetime.datetime.now() + datetime.timedelta(hours=1)
 data_time = now.strftime("%d.%m.%Y %H:%M")
 
 @app.route('/')
