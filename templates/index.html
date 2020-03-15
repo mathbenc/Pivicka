@@ -61,7 +61,7 @@
   </div>
 
   <footer class="footer bg-dark text-center" id="footer">
-    <p class="text-muted">Vir podatkov: <a href="https://lab.isaaclin.cn/nCoV/en" class="text-muted text-decoration-none">lab.isaaclin.cn/nCoV</a></p>
+    <p id="footerP" class="text-muted">Vir podatkov: <a href="https://lab.isaaclin.cn/nCoV/en" class="text-muted text-decoration-none">lab.isaaclin.cn/nCoV</a>. Zadnja posodobitev podatkov: </p>
   </footer>
 
 
@@ -118,6 +118,9 @@
 
     var coronaData = JSON.parse({{ corona_data| tojson | safe}}).results;
     var countryData = JSON.parse({{ country_data| tojson | safe}});
+    var dataTime = {{ data_time }};
+
+    document.getElementById("footerP").innerHTML += dataTime;
 
     //Spremenimo Korea
     for (var i = 0; i < countryData.length; i++) {
@@ -128,40 +131,6 @@
         countryData[i].name = "North Korea";
       }
     }
-
-    /*
-    // Zberemo vse podatke o Kitajski v eno polje
-    var counter = 0;
-    countries.push("China");
-    population.push(1386000000);
-
-    infected.push(0);
-    dead.push(0);
-    cured.push(0);
-
-    var timestamp = 0;
-    for (var i = 0; i < coronaData.length; i++) {
-      if (coronaData[i].countryEnglishName == "China") {
-        // Podatki o Pivu
-        infected[0] = infected[0] + coronaData[i].confirmedCount;
-        dead[0] = dead[0] + coronaData[i].deadCount;
-        cured[0] = cured[0] + coronaData[i].curedCount;
-        if (coronaData[i].updateTime > timestamp) {
-          timestamp = coronaData[i].updateTime;
-        }
-      }
-    }
-
-    updateTime.push(formatDateTime(timestamp));
-    infectedRatio.push(parseFloat((infected[0] * 100 / population[0]).toFixed(5)));
-    deadRatio.push(parseFloat((dead[0] * 100 / infected[0]).toFixed(5)));
-
-    // Formatiramo...
-    infected[0] = formatNumber(infected[0]);
-    dead[0] = formatNumber(dead[0]);
-    cured[0] = formatNumber(cured[0]);
-    population[0] = formatNumber(population[0]);
-    */
 
     for (var i = 0; i < coronaData.length; i++) {
       for (var j = 0; j < countryData.length; j++) {
