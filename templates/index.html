@@ -288,15 +288,7 @@
     $('.popover-dismiss').popover({
       trigger: 'focus'
     });
-    
-    function colorRow () {
-      var rows = tableCells.getElementsByTagName("tr") ;
-      for (var i=0; i<rows.length; i++) {
-
-          rows[i].style.backgroundColor = "red;"
-      }
-    }
-    
+        
     function countryDetect () {
       $.getJSON("https://api.ipify.org?format=jsonp&callback=?", function(json) {
         window.alert(json.ip);
