@@ -8,7 +8,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 
 app = Flask(__name__)
 #app.config['TEMPLATES_AUTO_RELOAD'] = True
-#sslify = SSLify(app)
+sslify = SSLify(app)
 
 def get_data():
     global corona_response, country_response, data_time
