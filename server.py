@@ -28,7 +28,7 @@ def index():
         corona_data=corona_response.text, 
         country_data=country_response.text)
 
-sched.add_job(get_data, "cron", minute="10")
+sched.add_job(get_data, "cron", minute="*")
 sched.start()
 
 if __name__ == '__main__':
