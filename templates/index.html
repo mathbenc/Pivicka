@@ -291,7 +291,7 @@
         
     function countryDetect () {
       window.alert("drek");
-      $.getJSON("https://api.ipify.org?format=jsonp&callback=?", function(json) {
+      $.getJSON("https://www.cloudflare.com/cdn-cgi/trace", function(json) {
         window.alert(json.ip);
         console.log(json.ip);
         var ip = json.ip;
