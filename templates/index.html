@@ -293,28 +293,32 @@
       var rows = tableCells.getElementsByTagName("tr") ;
       for (var i=0; i<rows.length; i++) {
 
-          rows[i].style.backgroundColor = "red";
+          rows[i].style.backgroundColor = "red;"
       }
     }
     
     function countryDetect () {
       $.getJSON("https://api.ipify.org?format=jsonp&callback=?", function(json) {
-          var ip = json.ip;
-          $.getJSON('https://ipapi.co/'+ ip +'/json/', function(data){
-            var country = data.country_name;
-            var table = $("#dataTable");
-            var tbody = table.find("tbody");
-            var rows = tbody.find("tr");
-            for (var i=0; i<rows.length; i++) {
-              var cells = rows[i].getElementsByTagName("td")
-              var countryRegex = new RegExp("^" + country + ".*$");
-              if(countryRegex.test(cells[0].innerText)) {
-                rows[i].style.backgroundColor = "#ffc453";
-              }
+        window.alert(json.ip);
+        console.log(json.ip);
+        var ip = json.ip;
+        $.getJSON('https://ipapi.co/'+ ip +'/json/', function(data){
+          var country = data.country_name;
+          console.log(country);
+          window.alert(country);
+          var table = $("#dataTable");
+          var tbody = table.find("tbody");
+          var rows = tbody.find("tr");
+          for (var i=0; i<rows.length; i++) {
+            var cells = rows[i].getElementsByTagName("td")
+            var countryRegex = new RegExp("^" + country + ".*$");
+            if(countryRegex.test(cells[0].innerText)) {
+              rows[i].style.backgroundColor = "#ffc453";
             }
+          }
 
-          })
         })
+      })
     };
     countryDetect()
 
