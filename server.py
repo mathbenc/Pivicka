@@ -39,7 +39,7 @@ def index():
         data_time=data_time)
 
 sched = BackgroundScheduler()
-sched.add_job(get_data, "interval", minutes=1, max_instances=10)
+sched.add_job(get_data, "interval", minutes=10, max_instances=10)
 sched.start()
 
 if __name__ == '__main__':
