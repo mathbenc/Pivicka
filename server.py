@@ -7,8 +7,8 @@ import sys
 from apscheduler.schedulers.background import BackgroundScheduler
 
 app = Flask(__name__)
-app.config['TEMPLATES_AUTO_RELOAD'] = True
-#sslify = SSLify(app)
+#app.config['TEMPLATES_AUTO_RELOAD'] = True
+sslify = SSLify(app)
 
 def get_data():
     global corona_response, country_response, data_time
@@ -37,4 +37,4 @@ sched.add_job(get_data, "interval", minutes=10, max_instances=10)
 sched.start()
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
