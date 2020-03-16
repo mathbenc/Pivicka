@@ -117,7 +117,6 @@
     var updateTime = [];
 
     var coronaData = JSON.parse({{ corona_data| tojson | safe}}).rawData;
-    console.log(coronaData)
     var countryData = JSON.parse({{ country_data| tojson | safe}});
 
     // Preverimo če je država že dodana...zaradi provinc/stateov
@@ -148,9 +147,6 @@
         coronaData[i]["Country/Region"] = "South Korea"
       }
     }
-
-
-    console.log(coronaData[0]["Country/Region"]);
 
     for (var i = 0; i < coronaData.length; i++) {
       for (var j = 0; j < countryData.length; j++) {
