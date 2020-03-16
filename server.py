@@ -13,20 +13,14 @@ sslify = SSLify(app)
 def get_data():
     global corona_response, country_response, data_time
     country_response = requests.get("https://restcountries.eu/rest/v2/all")
-    corona_data = requests.get("https://coronavirus.m.pipedream.net")
-    if corona_data != "No $respond called in workflow":
-        corona_response = corona_data
-        now = datetime.datetime.now() + datetime.timedelta(hours=1)
-        data_time = now.strftime("%d.%m.%Y %H:%M")
-        print("API Update not possible")
-    else:
-    #corona_response = requests.get("https://lab.isaaclin.cn/nCoV/api/area?")
-        print("API Update complete")
+    corona_response = requests.get("https://coronavirus-19-api.herokuapp.com/countries")
+    now = datetime.datetime.now() + datetime.timedelta(hours=1)
+    data_time = now.strftime("%d.%m.%Y %H:%M")
+    print("API Update complete")
     sys.stdout.flush()
 
 country_response = requests.get("https://restcountries.eu/rest/v2/all")
-corona_response = requests.get("https://coronavirus.m.pipedream.net")
-#corona_response = requests.get("https://lab.isaaclin.cn/nCoV/api/area?")
+corona_response = requests.get("https://coronavirus-19-api.herokuapp.com/countries")
 now = datetime.datetime.now() + datetime.timedelta(hours=1)
 data_time = now.strftime("%d.%m.%Y %H:%M")
 

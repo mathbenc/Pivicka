@@ -84,6 +84,7 @@
 
   <script>
 
+    // Search
     $("#search,#searchMobile").keyup(function () {
       var input, filter, table, tr, td, i, txtValue;
       input = document.getElementById("search");
@@ -110,26 +111,17 @@
     var countries = [];
     var population = [];
     var infected = [];
+    var infectedToday = [];
     var dead = [];
     var cured = [];
     var infectedRatio = [];
     var deadRatio = [];
     var updateTime = [];
 
-    var coronaData = JSON.parse({{ corona_data| tojson | safe}}).rawData;
+    var coronaData = JSON.parse({{ corona_data| tojson | safe}});
     var countryData = JSON.parse({{ country_data| tojson | safe}});
 
-    // Preverimo če je država že dodana...zaradi provinc/stateov
-    function checkCountry(name) {
-      for (var i=0;i<countries.length;i++) {
-        if(countries[i] == name) {
-          return i
-        }
-      }
-      return -1;
-    }
-
-    //Spremenimo Korea
+    //Spremenimo imena držav
     for (var i = 0; i < countryData.length; i++) {
       if (countryData[i].name == "Korea (Republic of)") {
         countryData[i].name = "South Korea";
@@ -140,56 +132,35 @@
     }
 
     for (var i=0; i< coronaData.length; i++) {
-      if(coronaData[i]["Country/Region"] == "US") {
-        coronaData[i]["Country/Region"] = "United States of America"
+      if(coronaData[i]["country"] == "S. Korea") {
+        coronaData[i]["country"] = "South Korea"
       }
-      if(coronaData[i]["Country/Region"] == "Korea, South") {
-        coronaData[i]["Country/Region"] = "South Korea"
+      else if(coronaData[i]["country"] == "UK") {
+        coronaData[i]["country"] = "United Kingdom";
+      }
+      else if(coronaData[i]["country"] == "USA") {
+        coronaData[i]["country"] = "United States of America"
       }
     }
 
     for (var i = 0; i < coronaData.length; i++) {
       for (var j = 0; j < countryData.length; j++) {
-        var countryNameRegex = new RegExp("^" + coronaData[i]["Country/Region"] + ".*$");
+        var countryNameRegex = new RegExp("^" + coronaData[i]["country"] + ".*$");
         if (countryNameRegex.test(countryData[j].name)) {
-          var checkResult = checkCountry(coronaData[i]["Country/Region"]);
-          if(checkResult > -1) {
-            // Podatki o obstoječi državi
+          // Podatki o državi
+          countries.push(coronaData[i]["country"]);
+          population.push((countryData[j].population));
 
-            // Podatki o Pivu
-            infected[checkResult] += parseInt(coronaData[i]["Confirmed"]);
-            dead[checkResult] += parseInt(coronaData[i]["Deaths"]);
-            cured[checkResult] += parseInt(coronaData[i]["Recovered"]);
+          // Podatki o Pivu
+          infected.push(parseInt(coronaData[i]["cases"]));
+          infectedToday.push(parseInt(coronaData[i]["todayCases"]));
+          dead.push(parseInt(coronaData[i]["deaths"]));
+          cured.push(parseInt(coronaData[i]["recovered"]));
 
-            // Moje računanje
-            infectedRatio[checkResult] = parseFloat((infected[checkResult] * 100 / countryData[j].population).toFixed(5));
-            deadRatio[checkResult] = parseFloat((dead[checkResult] * 100 / infected[checkResult]).toFixed(5));
-
-            break;
-          }
-          else {
-            // Podatki o državi
-            //countries.push(coronaData[i].provinceEnglishName);
-            countries.push(coronaData[i]["Country/Region"]);
-            population.push((countryData[j].population));
-
-            // Podatki o Pivu
-            //infected.push(formatNumber(coronaData[i].confirmedCount));
-            //dead.push(formatNumber(coronaData[i].deadCount));
-            //cured.push(formatNumber(coronaData[i].curedCount));
-            infected.push(parseInt(coronaData[i]["Confirmed"]));
-            dead.push(parseInt(coronaData[i]["Deaths"]));
-            cured.push(parseInt(coronaData[i]["Recovered"]));
-
-            // Čas zadnje posodobitve podatkov...moramo pretvoriti format
-            //updateTime.push(formatDateTime(coronaData[i].updateTime));
-            updateTime.push(formatDateTime(coronaData[i]["Last Update"]));
-
-            // Moje računanje
-            infectedRatio.push(parseFloat((coronaData[i]["Confirmed"] * 100 / countryData[j].population).toFixed(5)));
-            deadRatio.push(parseFloat((coronaData[i]["Deaths"] * 100 / coronaData[i]["Confirmed"]).toFixed(5)));
-          }    
-        }
+          // Moje računanje
+          infectedRatio.push(parseFloat((coronaData[i]["cases"] * 100 / countryData[j].population).toFixed(5)));
+          deadRatio.push(parseFloat((coronaData[i]["deaths"] * 100 / coronaData[i]["cases"]).toFixed(5)));
+        }    
       }
     }
 
@@ -205,12 +176,6 @@
 
     function formatDateTime(timestamp) {
       var date = new Date(timestamp);
-      /* var year = date.getFullYear();
-      var month = date.getMonth() + 1;
-      var day = date.getDate();
-      var hours = date.getHours();
-      var minutes = "0" + date.getMinutes();
-      var formattedTime = day + "." + month + "." + year + " " + hours + ":" + minutes.substr(-2); */
       var minutes = "0" + date.getMinutes();
       var month = date.getMonth() + 1;
       var formattedTime = date.getDate() + "." + month  + "." + date.getFullYear() + " " + date.getHours() + ":" + minutes.substr(-2);
@@ -222,8 +187,8 @@
     }
 
     function tableCreate() {
-      var headers = ["Država", "Populacija", "Okuženi", "Obolevnost", "Mrtvi", "Umrljivost", "Ozdraveli", ""];
-      var headersIcons = ["", "", "fas fa-frown-open", "", "fas fa-dizzy", "", "fas fa-smile"];
+      var headers = ["Država", "Populacija", "Okuženi", "Danes", "Obolevnost", "Mrtvi", "Umrljivost", "Ozdraveli"];
+      var headersIcons = ["", "", "fas fa-frown-open", "fas fa-plus-circle", "", "fas fa-dizzy", "", "fas fa-smile",];
       var tbl = document.getElementById('dataTable');
       var tbdy = document.createElement('tbody');
       var thdr = tbl.createTHead();
@@ -237,11 +202,6 @@
         //cell.innerHTML = headers[i];
         if (headers[i] == "Okuženi") {
           cell.setAttribute("data-sort-default", "")
-        } else if (i == headers.length - 1) {
-          cell.setAttribute("data-sort-method", "none")
-          cell.removeAttribute("style");
-          cell.setAttribute("style", "border:none !important;");
-          cell.innerHTML = headers[i];
         }
         if (i != 0) {
           cell.setAttribute("class", "text-right");
@@ -249,10 +209,10 @@
         else {
           cell.innerHTML = headers[i];
         }
-        if (i == 1 || i == 5) {
+        if (i == 1 || i == 4 || i == 6) {
           cell.setAttribute("class", "d-none d-lg-table-cell text-right");
         }
-        if (i == 3) {
+        if (i == 4) {
           cell.setAttribute("class", "d-none d-sm-block d-lg-table-cell text-right");
         }
         row.appendChild(cell);
@@ -270,6 +230,9 @@
         cell.innerHTML = infected[i];
         cell = row.insertCell();
         cell.setAttribute("align", "right");
+        cell.innerHTML = infectedToday[i];
+        cell = row.insertCell();
+        cell.setAttribute("align", "right");
         cell.setAttribute("class", "d-none d-sm-block d-lg-table-cell text-right");
         cell.innerHTML = infectedRatio[i] + "%";
         cell = row.insertCell();
@@ -282,9 +245,6 @@
         cell = row.insertCell();
         cell.setAttribute("align", "right");
         cell.innerHTML = cured[i];
-        cell = row.insertCell();
-        cell.setAttribute("align", "right");
-        cell.innerHTML = '<i class="far fa-question-circle" tabindex="0" data-trigger="focus" data-toggle="popover" data-placement="left" data-content="' + updateTime[i] + '"></i>';
       }
       tbl.appendChild(tbdy);
     }
@@ -297,14 +257,6 @@
 
     // Zaženemo plugin za stickanje headerjev
     $('table').stickyTableHeaders();
-
-    $(function () {
-      $('[data-toggle="popover"]').popover()
-    });
-
-    $('.popover-dismiss').popover({
-      trigger: 'focus'
-    });
         
     function countryDetect () {
       $.getJSON('https://json.geoiplookup.io', function(data){
