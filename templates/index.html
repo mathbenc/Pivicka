@@ -61,8 +61,29 @@
   </div>
 
   <footer class="footer bg-dark text-center" id="footer">
-    <p id="footerP" class="text-muted">Vir: <a href="https://coronavirus.m.pipedream.net" class="text-muted text-decoration-none">coronavirus.m.pipedream.net</a>, zadnja posodobitev: {{ data_time }}</p>
+    <p id="footerP" class="text-muted">Vir: <a href="https://github.com/javieraviles/covidAPI" class="text-muted text-decoration-none">github.com/javieraviles/covidAPI</a>, zadnja posodobitev: {{ data_time }}</p>
   </footer>
+
+  <!-- Modal -->
+  <div class="modal fade" id="countryDetailsModal" tabindex="-1" role="dialog" aria-labelledby="countryDetailsModalTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="countryDetailsModalTitle"></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div id="countryDetailsModalBody" class="modal-body">
+          <div>Populacija<p id="populationModal"></p></div>
+          <div>Okuženi<p id="infectedModal"></p></div>
+          <div>Danes okuženi<p id="infectedTodayModal"></p></div>
+          <div>Umrli<p id="deadModal"></p></div>
+          <div>Ozdravljeni<p id="curedModal"></p></div>
+        </div>
+      </div>
+    </div>
+  </div>
 
 
   <!-- SCRIPTS -->
@@ -209,10 +230,10 @@
         else {
           cell.innerHTML = headers[i];
         }
-        if (i == 1 || i == 4 || i == 6) {
+        if (i == 1 || i == 4 || i == 6 || i == 7) {
           cell.setAttribute("class", "d-none d-lg-table-cell text-right");
         }
-        if (i == 4) {
+        if (i == 4 || i == 7) {
           cell.setAttribute("class", "d-none d-sm-block d-lg-table-cell text-right");
         }
         row.appendChild(cell);
@@ -220,7 +241,10 @@
       for (var i = 0; i < countries.length; i++) {
         var row = tbdy.insertRow();
         var cell = row.insertCell();
-        cell.innerHTML = countries[i];
+        //cell.innerHTML = '<button data-toggle="modal" id="countryButton" data-target="#countryDetailsModal">'+countries[i]+'</button>'
+        cell.setAttribute("class", "countryExpand");
+        cell.setAttribute("id", i);
+        cell.innerHTML = countries[i]
         cell = row.insertCell();
         cell.setAttribute("align", "right");
         cell.setAttribute("class", "d-none d-lg-table-cell text-right");
@@ -244,6 +268,7 @@
         cell.innerHTML = deadRatio[i] + "%";
         cell = row.insertCell();
         cell.setAttribute("align", "right");
+        cell.setAttribute("class", "d-none d-sm-block d-lg-table-cell text-right");
         cell.innerHTML = cured[i];
       }
       tbl.appendChild(tbdy);
@@ -274,6 +299,19 @@
       })
     };
     countryDetect()
+
+    $(".countryExpand").click(function() {
+      var clickedCountryIndex = $(this).attr("id");
+      //Spremenimo modal podatke
+      $("#countryDetailsModalTitle").text(countries[clickedCountryIndex]);
+      $("#populationModal").text(population[clickedCountryIndex]);
+      $("#infectedModal").text(infected[clickedCountryIndex]);
+      $("#infectedTodayModal").text(infectedToday[clickedCountryIndex]);
+      $("#deadModal").text(dead[clickedCountryIndex]);
+      $("#curedModal").text(cured[clickedCountryIndex]);
+
+      $("#countryDetailsModal").modal("show");
+    });
 
   </script>
 </body>

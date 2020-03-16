@@ -9,3 +9,8 @@ footer {
 #searchMobile {
     width: 7rem;
 }
+
+#countryButton {
+    padding: 0px;
+    margin: 0px;
+}
