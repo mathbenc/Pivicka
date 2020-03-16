@@ -78,8 +78,13 @@
           <div>Populacija<p id="populationModal"></p></div>
           <div>Okuženi<p id="infectedModal"></p></div>
           <div>Danes okuženi<p id="infectedTodayModal"></p></div>
+          <div>Delež okuženih<p id="infectedRatioModal"></p></div>
           <div>Umrli<p id="deadModal"></p></div>
+          <div>Danes umrli<p id="deadTodayModal"></p></div>
+          <div>Delež umrlih<p id="deadRatioModal"></p></div>
           <div>Ozdravljeni<p id="curedModal"></p></div>
+          <div>Aktualni<p id="activeModal"></p></div>
+          <div>Kritični<p id="criticalModal"></p></div>
         </div>
       </div>
     </div>
@@ -134,7 +139,10 @@
     var infected = [];
     var infectedToday = [];
     var dead = [];
+    var deadToday = [];
     var cured = [];
+    var active = [];
+    var critical = [];
     var infectedRatio = [];
     var deadRatio = [];
     var updateTime = [];
@@ -176,7 +184,10 @@
           infected.push(parseInt(coronaData[i]["cases"]));
           infectedToday.push(parseInt(coronaData[i]["todayCases"]));
           dead.push(parseInt(coronaData[i]["deaths"]));
+          deadToday.push(parseInt(coronaData[i]["todayDeaths"]));
           cured.push(parseInt(coronaData[i]["recovered"]));
+          active.push(parseInt(coronaData[i]["active"]));
+          critical.push(parseInt(coronaData[i]["critical"]));
 
           // Moje računanje
           infectedRatio.push(parseFloat((coronaData[i]["cases"] * 100 / countryData[j].population).toFixed(5)));
@@ -307,8 +318,13 @@
       $("#populationModal").text(population[clickedCountryIndex]);
       $("#infectedModal").text(infected[clickedCountryIndex]);
       $("#infectedTodayModal").text(infectedToday[clickedCountryIndex]);
+      $("#infectedRatioModal").text(infectedRatio[clickedCountryIndex] + "%");
       $("#deadModal").text(dead[clickedCountryIndex]);
+      $("#deadTodayModal").text(deadToday[clickedCountryIndex]);
+      $("#deadRatioModal").text(deadRatio[clickedCountryIndex] + "%");
       $("#curedModal").text(cured[clickedCountryIndex]);
+      $("#activeModal").text(active[clickedCountryIndex]);
+      $("#criticalModal").text(critical[clickedCountryIndex]);
 
       $("#countryDetailsModal").modal("show");
     });
