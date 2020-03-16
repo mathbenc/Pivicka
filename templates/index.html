@@ -69,22 +69,34 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="countryDetailsModalTitle"></h5>
+          <h4 class="modal-title" id="countryDetailsModalTitle"></h4>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div id="countryDetailsModalBody" class="modal-body">
-          <div>Populacija<p id="populationModal"></p></div>
-          <div>Okuženi<p id="infectedModal"></p></div>
-          <div>Danes okuženi<p id="infectedTodayModal"></p></div>
-          <div>Delež okuženih<p id="infectedRatioModal"></p></div>
-          <div>Umrli<p id="deadModal"></p></div>
-          <div>Danes umrli<p id="deadTodayModal"></p></div>
-          <div>Delež umrlih<p id="deadRatioModal"></p></div>
-          <div>Ozdravljeni<p id="curedModal"></p></div>
-          <div>Aktualni<p id="activeModal"></p></div>
-          <div>Kritični<p id="criticalModal"></p></div>
+        <div id="countryDetailsModalBody" class="modal-body container">
+          <div class="row">
+            <div class="col-sm"><b>Populacija</b><p id="populationModal"></p></div>
+          </div>
+          
+          <div class="row">
+            <div class="col-sm"><b>Okuženi</b><p id="infectedModal"></p></div>
+            <div class="col-sm"><b>Danes okuženi</b><p id="infectedTodayModal"></p></div>
+            <div class="col-sm"><b>Delež okuženih</b><p id="infectedRatioModal"></p></div>
+          </div>
+          
+          <div class="row">
+            <div class="col-sm"><b>Umrli</b><p id="deadModal"></p></div>
+            <div class="col-sm"><b>Danes umrli</b><p id="deadTodayModal"></p></div>
+            <div class="col-sm"><b>Delež umrlih</b><p id="deadRatioModal"></p></div>
+          </div>
+          
+          <div class="row">
+            <div class="col-sm"><b>Ozdravljeni</b><p id="curedModal"></p></div>
+            <div class="col-sm"><b>Aktualni</b><p id="activeModal"></p></div>
+            <div class="col-sm"><b>Kritični</b><p id="criticalModal"></p></div>
+          </div>
+
         </div>
       </div>
     </div>
@@ -107,6 +119,7 @@
     integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
     crossorigin="anonymous"></script>
   <script src="https://unpkg.com/sticky-table-headers"></script>
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
   <script>
 
@@ -145,10 +158,15 @@
     var critical = [];
     var infectedRatio = [];
     var deadRatio = [];
+
+    var populationDeadShare = [];
+    var populationCuredShare = [];
+    var populationHealthyShare = [];
+
     var updateTime = [];
 
-    var coronaData = JSON.parse({{ corona_data| tojson | safe}});
-    var countryData = JSON.parse({{ country_data| tojson | safe}});
+    var coronaData = JSON.parse({{corona_data | tojson | safe}});
+    var countryData = JSON.parse({{country_data | tojson | safe}});
 
     //Spremenimo imena držav
     for (var i = 0; i < countryData.length; i++) {
@@ -192,6 +210,10 @@
           // Moje računanje
           infectedRatio.push(parseFloat((coronaData[i]["cases"] * 100 / countryData[j].population).toFixed(5)));
           deadRatio.push(parseFloat((coronaData[i]["deaths"] * 100 / coronaData[i]["cases"]).toFixed(5)));
+          
+          populationDeadShare.push(parseFloat((coronaData[i]["deaths"] * 100 / countryData[j].population).toFixed(5)))
+          populationHealthyShare.push(parseFloat(((countryData[j].population - coronaData[i]["cases"]) * 100 / countryData[j].population).toFixed(5)));
+          populationCuredShare.push(parseFloat((coronaData[i]["recovered"] * 100 / countryData[j].population).toFixed(5)));
         }    
       }
     }
@@ -200,8 +222,12 @@
       for(var i=0;i<countries.length;i++) {
         population[i] = formatNumber(population[i]);
         infected[i] = formatNumber(infected[i]);
+        infectedToday[i] = formatNumber(infectedToday[i]);
         dead[i] = formatNumber(dead[i]);
+        deadToday[i] = formatNumber(deadToday[i]);
         cured[i] = formatNumber(cured[i]);
+        active[i] = formatNumber(active[i]);
+        critical[i] = formatNumber(critical[i]);
       }
     }
     formatNumbers()
@@ -312,19 +338,21 @@
     countryDetect()
 
     $(".countryExpand").click(function() {
-      var clickedCountryIndex = $(this).attr("id");
+      var i = $(this).attr("id");
       //Spremenimo modal podatke
-      $("#countryDetailsModalTitle").text(countries[clickedCountryIndex]);
-      $("#populationModal").text(population[clickedCountryIndex]);
-      $("#infectedModal").text(infected[clickedCountryIndex]);
-      $("#infectedTodayModal").text(infectedToday[clickedCountryIndex]);
-      $("#infectedRatioModal").text(infectedRatio[clickedCountryIndex] + "%");
-      $("#deadModal").text(dead[clickedCountryIndex]);
-      $("#deadTodayModal").text(deadToday[clickedCountryIndex]);
-      $("#deadRatioModal").text(deadRatio[clickedCountryIndex] + "%");
-      $("#curedModal").text(cured[clickedCountryIndex]);
-      $("#activeModal").text(active[clickedCountryIndex]);
-      $("#criticalModal").text(critical[clickedCountryIndex]);
+      $("#countryDetailsModalTitle").text(countries[i]);
+      $("#populationModal").text(population[i]);
+      $("#infectedModal").text(infected[i]);
+      $("#infectedTodayModal").text(infectedToday[i]);
+      $("#infectedRatioModal").text(infectedRatio[i] + "%");
+      $("#deadModal").text(dead[i]);
+      $("#deadTodayModal").text(deadToday[i]);
+      $("#deadRatioModal").text(deadRatio[i] + "%");
+      $("#curedModal").text(cured[i]);
+      $("#activeModal").text(active[i]);
+      $("#criticalModal").text(critical[i]);
+      //console.log(infectedRatio[i], populationDeadShare[i], populationCuredShare[i], populationHealthyShare[i]);
+      //makeChart(infectedRatio[i], populationDeadShare[i], populationCuredShare[i], populationHealthyShare[i]);
 
       $("#countryDetailsModal").modal("show");
     });
