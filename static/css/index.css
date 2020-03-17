@@ -1,3 +1,13 @@
 .navbar { 
     box-shadow: none !important; 
 }
+
+h1 img {
+    height: 30px !important;
+    margin: 0 0 5px 0 !important;
+}
+
+h1 {
+    font-size: 20pt !important;
+    margin-top: 8px !important;
+}

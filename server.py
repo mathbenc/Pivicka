@@ -85,7 +85,7 @@ def process_data():
                 cured.append(int(corona_data[i]["recovered"]))
                 active.append(int(corona_data[i]["active"]))
                 critical.append(int(corona_data[i]["critical"]))
-
+                
                 # Statistika
                 infectedRatio.append(round(float(corona_data[i]["cases"] * 100 / country_data[j]["population"]), 5))
                 deadRatio.append(round(float(corona_data[i]["deaths"] * 100 / corona_data[i]["cases"]), 5))
