@@ -147,102 +147,23 @@
       }
     });
 
-    var countries = [];
-    var population = [];
-    var infected = [];
-    var infectedToday = [];
-    var dead = [];
-    var deadToday = [];
-    var cured = [];
-    var active = [];
-    var critical = [];
-    var infectedRatio = [];
-    var deadRatio = [];
+    var countries = {{ countries | tojson | safe }};
+    var population = {{ population | tojson | safe }};
+    var infected = {{ infected | tojson | safe }};
+    var infectedToday = {{ infectedToday | tojson | safe }};
+    var dead = {{ dead | tojson | safe }};
+    var deadToday = {{ deadToday | tojson | safe }};
+    var cured = {{ cured | tojson | safe }};
+    var active = {{ active | tojson | safe }};
+    var critical = {{ critical | tojson | safe }};
+    var infectedRatio = {{ infectedRatio | tojson | safe }};
+    var deadRatio = {{ deadRatio | tojson | safe }};
 
-    var populationDeadShare = [];
-    var populationCuredShare = [];
-    var populationHealthyShare = [];
-
-    var updateTime = [];
+    var populationDeadShare = {{ populationDeadShare | tojson | safe }};
+    var populationCuredShare = {{ populationCuredShare | tojson | safe }};
+    var populationHealthyShare = {{ populationHealthyShare | tojson | safe }};
 
     var coronaData = JSON.parse({{corona_data | tojson | safe}});
-    var countryData = JSON.parse({{country_data | tojson | safe}});
-
-    //Spremenimo imena držav
-    for (var i = 0; i < countryData.length; i++) {
-      if (countryData[i].name == "Korea (Republic of)") {
-        countryData[i].name = "South Korea";
-      }
-      else if (countryData[i].name == "Korea (Democratic People's Republic of)") {
-        countryData[i].name = "North Korea";
-      }
-    }
-
-    for (var i=0; i< coronaData.length; i++) {
-      if(coronaData[i]["country"] == "S. Korea") {
-        coronaData[i]["country"] = "South Korea"
-      }
-      else if(coronaData[i]["country"] == "UK") {
-        coronaData[i]["country"] = "United Kingdom";
-      }
-      else if(coronaData[i]["country"] == "USA") {
-        coronaData[i]["country"] = "United States of America"
-      }
-    }
-
-    for (var i = 0; i < coronaData.length; i++) {
-      for (var j = 0; j < countryData.length; j++) {
-        var countryNameRegex = new RegExp("^" + coronaData[i]["country"] + ".*$");
-        if (countryNameRegex.test(countryData[j].name)) {
-          // Podatki o državi
-          countries.push(coronaData[i]["country"]);
-          population.push((countryData[j].population));
-
-          // Podatki o Pivu
-          infected.push(parseInt(coronaData[i]["cases"]));
-          infectedToday.push(parseInt(coronaData[i]["todayCases"]));
-          dead.push(parseInt(coronaData[i]["deaths"]));
-          deadToday.push(parseInt(coronaData[i]["todayDeaths"]));
-          cured.push(parseInt(coronaData[i]["recovered"]));
-          active.push(parseInt(coronaData[i]["active"]));
-          critical.push(parseInt(coronaData[i]["critical"]));
-
-          // Moje računanje
-          infectedRatio.push(parseFloat((coronaData[i]["cases"] * 100 / countryData[j].population).toFixed(5)));
-          deadRatio.push(parseFloat((coronaData[i]["deaths"] * 100 / coronaData[i]["cases"]).toFixed(5)));
-          
-          populationDeadShare.push(parseFloat((coronaData[i]["deaths"] * 100 / countryData[j].population).toFixed(5)))
-          populationHealthyShare.push(parseFloat(((countryData[j].population - coronaData[i]["cases"]) * 100 / countryData[j].population).toFixed(5)));
-          populationCuredShare.push(parseFloat((coronaData[i]["recovered"] * 100 / countryData[j].population).toFixed(5)));
-        }    
-      }
-    }
-
-    function formatNumbers() {
-      for(var i=0;i<countries.length;i++) {
-        population[i] = formatNumber(population[i]);
-        infected[i] = formatNumber(infected[i]);
-        infectedToday[i] = formatNumber(infectedToday[i]);
-        dead[i] = formatNumber(dead[i]);
-        deadToday[i] = formatNumber(deadToday[i]);
-        cured[i] = formatNumber(cured[i]);
-        active[i] = formatNumber(active[i]);
-        critical[i] = formatNumber(critical[i]);
-      }
-    }
-    formatNumbers()
-
-    function formatDateTime(timestamp) {
-      var date = new Date(timestamp);
-      var minutes = "0" + date.getMinutes();
-      var month = date.getMonth() + 1;
-      var formattedTime = date.getDate() + "." + month  + "." + date.getFullYear() + " " + date.getHours() + ":" + minutes.substr(-2);
-      return formattedTime
-    }
-
-    function formatNumber(num) {
-      return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
-    }
 
     function tableCreate() {
       var headers = ["Država", "Populacija", "Okuženi", "Danes okuženi", "Obolevnost", "Umrli", "Umrljivost", "Ozdraveli"];
