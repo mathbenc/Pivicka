@@ -28,7 +28,6 @@ populationDeadShare = []
 populationCuredShare = []
 populationHealthyShare = []
 
-
 def process_data():
     global countries, population, infected, infectedToday, dead, deadToday, cured, active, critical, infectedRatio, deadRatio, populationCuredShare, populationDeadShare, populationHealthyShare, country_response, corona_response
     countries.clear()

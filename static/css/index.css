@@ -1,11 +1,3 @@
-@font-face {
-    font-family: 'Nobile';
-    font-style: italic;
-    font-weight: 400;
-    src: local('Nobile Italic'), local('Nobile-Italic'), url(https://fonts.gstatic.com/s/nobile/v10/m8JRjflSeaOVl1iGXJ3aULFvbGOC5dI.woff2) format('woff2');
-    font-display: fallback;
-  }  
-
 footer p{
     margin-bottom: 0px !important;
 }
