@@ -1,5 +1,8 @@
 flask
 flask_sslify
+flask_compress
+flask_cdn
+json
 requests
 gunicorn
 waitress
