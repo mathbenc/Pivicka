@@ -1,5 +1,7 @@
 from flask import Flask, render_template, jsonify
 from flask_sslify import SSLify
+from flask_cdn import CDN
+from flask_compress import Compress
 import requests
 import json
 import time
@@ -8,6 +10,9 @@ import sys
 from apscheduler.schedulers.background import BackgroundScheduler
 
 app = Flask(__name__)
+Compress(app)
+app.config["CDN_DOMAIN"] = "pivicka.bencik.si"
+CDN(app)
 #app.config['TEMPLATES_AUTO_RELOAD'] = True
 sslify = SSLify(app)
 
@@ -29,6 +34,21 @@ populationHealthyShare = []
 
 def process_data():
     global countries, population, infected, infectedToday, dead, deadToday, cured, active, critical, infectedRatio, deadRatio, populationCuredShare, populationDeadShare, populationHealthyShare, country_response, corona_response
+    countries.clear()
+    population.clear()
+    infected.clear()
+    infectedToday.clear()
+    dead.clear()
+    deadToday.clear()
+    cured.clear()
+    active.clear()
+    critical.clear()
+    infectedRatio.clear()
+    deadRatio.clear()
+    populationCuredShare.clear()
+    populationDeadShare.clear()
+    populationHealthyShare.clear()
+    
     country_data = json.loads(country_response.text)
     corona_data = json.loads(corona_response.text)
 
