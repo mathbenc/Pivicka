@@ -1,6 +1,5 @@
 from flask import Flask, render_template, jsonify
 from flask_sslify import SSLify
-from flask_cdn import CDN
 from flask_compress import Compress
 import requests
 import json
@@ -11,8 +10,6 @@ from apscheduler.schedulers.background import BackgroundScheduler
 
 app = Flask(__name__)
 Compress(app)
-app.config["CDN_DOMAIN"] = "pivicka.bencik.si"
-CDN(app)
 #app.config['TEMPLATES_AUTO_RELOAD'] = True
 sslify = SSLify(app)
 
