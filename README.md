@@ -1,4 +1,4 @@
-# Pivicka
+# Pivicka - https://pivicka.bencik.si
 
 Web app for tracking Coronavirus (COVID-19).
 
