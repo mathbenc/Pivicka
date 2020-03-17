@@ -12,7 +12,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 app = Flask(__name__)
 Compress(app)
 #app.config['TEMPLATES_AUTO_RELOAD'] = True
-#sslify = SSLify(app)
+sslify = SSLify(app)
 
 countries = []
 population = []
@@ -141,4 +141,4 @@ sched.add_job(get_data, "interval", minutes=10, max_instances=10)
 sched.start()
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
