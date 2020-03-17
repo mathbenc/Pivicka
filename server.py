@@ -6,12 +6,10 @@ import time
 import datetime
 import sys
 from apscheduler.schedulers.background import BackgroundScheduler
-from decimal import getcontext, Decimal
 
 app = Flask(__name__)
 #app.config['TEMPLATES_AUTO_RELOAD'] = True
-#sslify = SSLify(app)
-getcontext().prec = 5
+sslify = SSLify(app)
 
 countries = []
 population = []
@@ -125,4 +123,4 @@ sched.add_job(get_data, "interval", minutes=10, max_instances=10)
 sched.start()
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
