@@ -71,7 +71,7 @@
   </nav>
 
   <div class="table-responsive">
-    <table id="dataTable" class="table table-striped table-hover" style="margin-bottom: 0px !important;"></table>
+    <table id="dataTable" class="table table-striped table-hover table-elegant-color" style="margin-bottom: 0px !important;"></table>
   </div>
 
   <!-- Footer -->
@@ -222,8 +222,8 @@
       for (var i = 0; i < countries.length; i++) {
         var row = tbdy.insertRow();
         var cell = row.insertCell();
-        cell.setAttribute("class", "countryExpand");
-        cell.setAttribute("id", i);
+        row.setAttribute("class", "countryExpand");
+        row.setAttribute("id", i);
         cell.setAttribute("style", "cursor: pointer;")
         cell.innerHTML = countries[i]
         cell = row.insertCell();
