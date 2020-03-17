@@ -1,3 +1,8 @@
 .navbar { 
     box-shadow: none !important; 
 }
+
+table {
+	padding-bottom: 0px !important;
+	margin-bottom: 0px !important;
+}
