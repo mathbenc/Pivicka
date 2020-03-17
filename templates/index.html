@@ -166,7 +166,7 @@
     var coronaData = JSON.parse({{corona_data | tojson | safe}});
 
     function tableCreate() {
-      var headers = ["Država", "Populacija", "Okuženi", "Danes okuženi", "Obolevnost", "Umrli", "Umrljivost", "Ozdraveli"];
+      var headers = ["Država", "Populacija", "Okuženi", "Novo okuženi", "Obolevnost", "Umrli", "Umrljivost", "Ozdraveli"];
       var headersIcons = ["", "", "fas fa-frown-open", "fas fa-plus-circle", "", "fas fa-dizzy", "", "fas fa-smile",];
       var tbl = document.getElementById('dataTable');
       var tbdy = document.createElement('tbody');

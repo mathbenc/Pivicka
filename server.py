@@ -6,12 +6,13 @@ import json
 import time
 import datetime
 import sys
+import re
 from apscheduler.schedulers.background import BackgroundScheduler
 
 app = Flask(__name__)
 Compress(app)
 #app.config['TEMPLATES_AUTO_RELOAD'] = True
-sslify = SSLify(app)
+#sslify = SSLify(app)
 
 countries = []
 population = []
@@ -65,7 +66,8 @@ def process_data():
     #? Polnimo podatke v naše sezname
     for i in range(len(corona_data)):
         for j in range(len(country_data)):
-            if corona_data[i]["country"] == country_data[j]["name"]:
+            regex = re.search("^"+corona_data[i]["country"]+".*$", country_data[j]["name"])
+            if regex != None:
                 # Podatki o državi
                 countries.append(corona_data[i]["country"])
                 population.append(country_data[j]["population"])
@@ -139,4 +141,4 @@ sched.add_job(get_data, "interval", minutes=10, max_instances=10)
 sched.start()
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
