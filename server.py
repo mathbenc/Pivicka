@@ -78,7 +78,7 @@ def process_data():
                 infected.append(int(corona_data[i]["cases"]))
                 infectedToday.append(int(corona_data[i]["todayCases"]))
                 dead.append(int(corona_data[i]["deaths"]))
-                if type(corona_data[i]["todayDeaths"]) != type(None):
+                if corona_data[i]["todayDeaths"] != None:
                     deadToday.append(int(corona_data[i]["todayDeaths"]))
                 else:
                     deadToday.append(int(0))
