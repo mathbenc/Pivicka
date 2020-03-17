@@ -1,5 +1,6 @@
 from flask import Flask, render_template, jsonify
 from flask_sslify import SSLify
+from flask_sitemap import Sitemap
 from flask_compress import Compress
 import requests
 import json
@@ -10,9 +11,10 @@ import re
 from apscheduler.schedulers.background import BackgroundScheduler
 
 app = Flask(__name__)
+ext = Sitemap(app=app)
 Compress(app)
-#app.config['TEMPLATES_AUTO_RELOAD'] = True
-sslify = SSLify(app)
+app.config['TEMPLATES_AUTO_RELOAD'] = True
+#sslify = SSLify(app)
 
 countries = []
 population = []
@@ -135,6 +137,10 @@ def index():
         populationDeadShare=populationDeadShare,
         populationCuredShare=populationCuredShare,
         populationHealthyShare=populationHealthyShare)
+
+@ext.register_generator
+def sitemap():
+    yield 'index', {}
 
 sched = BackgroundScheduler()
 sched.add_job(get_data, "interval", minutes=10, max_instances=10)
