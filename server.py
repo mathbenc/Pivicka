@@ -9,6 +9,7 @@ import datetime
 import sys
 import re
 from apscheduler.schedulers.background import BackgroundScheduler
+from googletrans import Translator
 
 app = Flask(__name__)
 ext = Sitemap(app=app)
@@ -16,10 +17,13 @@ Compress(app)
 #app.config['TEMPLATES_AUTO_RELOAD'] = True
 sslify = SSLify(app)
 
+translator = Translator()
+
 # API za risanje grafa poteka okužbe
 #https://coronavirus-tracker-api.herokuapp.com/all
 
 countries = []
+countriesTranslated = []
 population = []
 infected = []
 infectedToday = []
@@ -57,8 +61,6 @@ def process_data():
     
     country_data = json.loads(country_response.text)
     corona_data = json.loads(corona_response.text)
-
-    print(len(corona_data))
 
     if len(corona_data) == 0:
         good_response = False
@@ -116,6 +118,7 @@ def process_data():
         active[i] = '{:,}'.format(active[i])
         critical[i] = '{:,}'.format(critical[i])
         population[i] = '{:,}'.format(population[i])
+        countriesTranslated.append(translator.translate(countries[i], src="en", dest="sl").text)
 
     print("Data process complete")
     sys.stdout.flush()
@@ -139,6 +142,7 @@ def index():
         corona_data = corona_response.text,
         data_time=data_time,
         countries=countries,
+        countriesTranslated=countriesTranslated,
         population=population,
         infected=infected,
         infectedToday=infectedToday,

@@ -189,7 +189,10 @@
       }
     });
 
+    var coronaData = JSON.parse({{corona_data | tojson | safe}});
+
     var countries = {{ countries | tojson | safe }};
+    var countriesTranslated = {{ countriesTranslated | tojson | safe }};
     var population = {{ population | tojson | safe }};
     var infected = {{ infected | tojson | safe }};
     var infectedToday = {{ infectedToday | tojson | safe }};
@@ -204,8 +207,6 @@
     var populationDeadShare = {{ populationDeadShare | tojson | safe }};
     var populationCuredShare = {{ populationCuredShare | tojson | safe }};
     var populationHealthyShare = {{ populationHealthyShare | tojson | safe }};
-
-    var coronaData = JSON.parse({{corona_data | tojson | safe}});
     
     var goodResponse = "{{ goodResponse }}"
 
@@ -244,7 +245,8 @@
         row.setAttribute("class", "countryExpand");
         row.setAttribute("id", i);
         row.setAttribute("style", "cursor: pointer;")
-        cell.innerHTML = countries[i]
+        cell.innerHTML = countriesTranslated[i]
+        cell.setAttribute("id", countries[i])
         cell = row.insertCell();
         cell.setAttribute("align", "right");
         cell.setAttribute("class", "d-none d-lg-table-cell text-right");
@@ -302,7 +304,7 @@
         for (var i=0; i<rows.length; i++) {
           var cells = rows[i].getElementsByTagName("td")
           var countryRegex = new RegExp("^" + country + ".*$");
-          if(countryRegex.test(cells[0].innerText)) {
+          if(countryRegex.test(cells[0].getAttribute("id"))) {
             rows[i].style.backgroundColor = "#ffc453";
           }
         }
@@ -313,7 +315,7 @@
     $(".countryExpand").click(function() {
       var i = $(this).attr("id");
       //Spremenimo modal podatke
-      $("#countryDetailsModalTitle").text(countries[i]);
+      $("#countryDetailsModalTitle").text(countriesTranslated[i]);
       $("#populationModal").text(population[i]);
       $("#infectedModal").text(infected[i]);
       $("#infectedTodayModal").text(infectedToday[i]);
