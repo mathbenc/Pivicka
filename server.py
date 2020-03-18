@@ -130,7 +130,7 @@ def process_data():
             except json.decoder.JSONDecodeError:
                 result = countries[i]
                 """
-        countriesTranslated.append(countries[0])
+        countriesTranslated.append(countries[i])
 
     print("Data process complete")
     sys.stdout.flush()
