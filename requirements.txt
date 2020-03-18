@@ -7,4 +7,3 @@ gunicorn
 waitress
 apscheduler
 datetime
-googletrans

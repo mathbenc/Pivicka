@@ -9,7 +9,6 @@ import datetime
 import sys
 import re
 from apscheduler.schedulers.background import BackgroundScheduler
-from googletrans import Translator
 
 app = Flask(__name__)
 ext = Sitemap(app=app)
@@ -21,6 +20,7 @@ sslify = SSLify(app)
 #https://coronavirus-tracker-api.herokuapp.com/all
 
 countries = []
+countriesA3Codes = []
 countriesTranslated = []
 population = []
 infected = []
@@ -39,6 +39,9 @@ populationHealthyShare = []
 country_response = None
 corona_response = None
 good_response = True
+
+with open("static/pivicka.json") as json_file:
+    country_translations = json.load(json_file)
 
 def process_data():
     global countries, population, infected, infectedToday, dead, deadToday, cured, active, critical, infectedRatio, deadRatio, populationCuredShare, populationDeadShare, populationHealthyShare, country_response, corona_response, good_response
@@ -86,6 +89,7 @@ def process_data():
             if regex != None:
                 # Podatki o državi
                 countries.append(corona_data[i]["country"])
+                countriesA3Codes.append(country_data[j]["alpha3Code"])
                 population.append(country_data[j]["population"])
 
                 # Podatki o pivu
@@ -116,21 +120,11 @@ def process_data():
         active[i] = '{:,}'.format(active[i])
         critical[i] = '{:,}'.format(critical[i])
         population[i] = '{:,}'.format(population[i])
-        """
-        if countries[i] == "Turkey":
-            countriesTranslated.append("Turčija")
-        elif countries[i] == "Togo":
-            countriesTranslated.append("Togo")
-        elif countries[i] == "Japan":
-            countriesTranslated.append("Japonska")
-        else:
-            translator = Translator()
-            try:
-                result = translator.translate(countries[i], src="en", dest="sl").text
-            except json.decoder.JSONDecodeError:
-                result = countries[i]
-                """
-        countriesTranslated.append(countries[i])
+
+    for i in range(len(countries)):
+        for j in range(len(country_translations)):
+            if countriesA3Codes[i] == country_translations[j]["COUNTRY_ALPHA3_CODE"]:
+                countriesTranslated.append(country_translations[j]["COUNTRY_NAME"])
 
     print("Data process complete")
     sys.stdout.flush()
