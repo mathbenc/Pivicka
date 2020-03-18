@@ -17,8 +17,6 @@ Compress(app)
 #app.config['TEMPLATES_AUTO_RELOAD'] = True
 sslify = SSLify(app)
 
-translator = Translator()
-
 # API za risanje grafa poteka okužbe
 #https://coronavirus-tracker-api.herokuapp.com/all
 
@@ -118,7 +116,21 @@ def process_data():
         active[i] = '{:,}'.format(active[i])
         critical[i] = '{:,}'.format(critical[i])
         population[i] = '{:,}'.format(population[i])
-        countriesTranslated.append(translator.translate(countries[i], src="en", dest="sl").text)
+        """
+        if countries[i] == "Turkey":
+            countriesTranslated.append("Turčija")
+        elif countries[i] == "Togo":
+            countriesTranslated.append("Togo")
+        elif countries[i] == "Japan":
+            countriesTranslated.append("Japonska")
+        else:
+            translator = Translator()
+            try:
+                result = translator.translate(countries[i], src="en", dest="sl").text
+            except json.decoder.JSONDecodeError:
+                result = countries[i]
+                """
+        countriesTranslated.append(countries[0])
 
     print("Data process complete")
     sys.stdout.flush()
