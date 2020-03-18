@@ -1,4 +1,4 @@
-
+/*
 (function() {
   if('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
@@ -50,7 +50,7 @@ window.addEventListener('appinstalled', (evt) => {
 
 
 
-/*
+*/
 let deferredPrompt;
 const addBtn = document.querySelector("#btnAdd"); 
 
@@ -78,5 +78,3 @@ window.addEventListener('beforeinstallprompt', (e) => {
       });
   });
 });
-
-*/
