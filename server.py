@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, send_from_directory, make_response
 from flask_sslify import SSLify
 from flask_sitemap import Sitemap
 from flask_compress import Compress
@@ -144,6 +144,16 @@ def index():
 @ext.register_generator
 def sitemap():
     yield 'index', {}
+
+@app.route("/manifest.json")
+def manifest():
+    return send_from_directory("static", "manifest.json")
+
+@app.route("/sw.js")
+def service_worker():
+    response = make_response(send_from_directory('static', 'sw.js'))
+    response.headers['Cache-Control'] = 'no-cache'
+    return response
 
 sched = BackgroundScheduler()
 sched.add_job(get_data, "interval", minutes=10, max_instances=10)
