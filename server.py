@@ -13,8 +13,8 @@ from apscheduler.schedulers.background import BackgroundScheduler
 app = Flask(__name__)
 ext = Sitemap(app=app)
 Compress(app)
-app.config['TEMPLATES_AUTO_RELOAD'] = True
-#sslify = SSLify(app)
+#app.config['TEMPLATES_AUTO_RELOAD'] = True
+sslify = SSLify(app)
 
 countries = []
 population = []
