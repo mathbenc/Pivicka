@@ -1,0 +1,17 @@
+{
+    "name": "Pivička",
+    "short_name": "Pivička",
+    "description": "Koronavirus po svetu v številkah",
+    "lang": "sl_SI",
+    "start_url": "/",
+    "display": "standalone",
+    "theme_color": "#2E2E2E",
+    "icons": [
+        {
+        "src": "/static/icon-512x512.png",
+        "sizes": "512x512",
+        "type": "image/png"
+        }
+    ],
+    "background_color": "#fff"
+}
