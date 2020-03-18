@@ -1,4 +1,4 @@
-/*
+
 (function() {
   if('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
@@ -25,11 +25,11 @@ window.addEventListener('beforeinstallprompt', (e) => {
   console.log('beforeinstallprompt event fired');
   e.preventDefault();
   deferredPrompt = e;
-  btnAdd.style.display = 'show';
+  btnAdd.style.display = 'block';
 });
 
 btnAdd.addEventListener('click', (e) => {
-  btnAdd.style.display = 'hide';
+  btnAdd.style.display = 'none';
   deferredPrompt.prompt();
   deferredPrompt.userChoice
     .then((choiceResult) => {
@@ -46,8 +46,10 @@ window.addEventListener('appinstalled', (evt) => {
   console.log("Inštaliramo")
   app.logEvent('app', 'installed');
 });
-*/
 
+
+
+/*
 let deferredPrompt;
 const addBtn = document.querySelector("#btnAdd"); 
 
@@ -75,3 +77,5 @@ window.addEventListener('beforeinstallprompt', (e) => {
       });
   });
 });
+
+*/
