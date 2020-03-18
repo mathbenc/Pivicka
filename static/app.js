@@ -19,17 +19,18 @@
 
 let deferredPrompt;
 const btnAdd = document.querySelector('#btnAdd');
-console.log(btnAdd.innerHTML);
+const btnAddDiv = document.querySelector("#btnAddDiv");
 
 window.addEventListener('beforeinstallprompt', (e) => {
   console.log('beforeinstallprompt event fired');
   e.preventDefault();
   deferredPrompt = e;
-  btnAdd.style.display = 'block';
+  btnAddDiv.style.display = 'block';
 });
 
+console.log(btnAdd)
 btnAdd.addEventListener('click', (e) => {
-  btnAdd.style.display = 'none';
+  btnAddDiv.style.display = 'none';
   deferredPrompt.prompt();
   deferredPrompt.userChoice
     .then((choiceResult) => {
