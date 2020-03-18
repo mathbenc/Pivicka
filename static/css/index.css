@@ -13,6 +13,5 @@ h1 {
 }
 
 #btnAdd {
-    display: inline-block !important;
-    display: hide;
+    display: none !important;
 }

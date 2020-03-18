@@ -160,4 +160,4 @@ sched.add_job(get_data, "interval", minutes=10, max_instances=10)
 sched.start()
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
