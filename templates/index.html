@@ -62,7 +62,7 @@
     <!-- Navbar brand -->
     <a class="navbar-brand" href="#" onClick="window.location.reload();">
       <img src="/static/images/beer_emoji.png" width="30" height="30" class="d-inline-block align-top" alt="pivicka">&nbsp
-      Na zdrav(ljen)je!
+      <b>Na zdrav</b>(ljen)<b>je!</b>
     </a>
 
     <!-- Collapse button -->
@@ -86,12 +86,12 @@
       <button id="btnAdd" class="btn btn-block btn-warning">Namesti aplikacijo</button>
   </nav>
 
-  <div class="table-responsive">
+  <div class="table-responsive" id="mainDiv">
     <table id="dataTable" class="table table-striped table-hover table-elegant-color" style="margin-bottom: 0px !important;"></table>
   </div>
 
   <!-- Footer -->
-    <footer class="page-footer elegant-color text-center">
+    <footer class="page-footer elegant-color text-center" id="footerDiv">
       <div class="container">
         <div class="row">
           <div class="col text-center">
@@ -206,6 +206,8 @@
     var populationHealthyShare = {{ populationHealthyShare | tojson | safe }};
 
     var coronaData = JSON.parse({{corona_data | tojson | safe}});
+    
+    var goodResponse = "{{ goodResponse }}"
 
     function tableCreate() {
       var headers = ["Država", "Populacija", "Okuženi", "Danes okuženi", "Obolevnost", "Umrli", "Umrljivost", "Ozdraveli"];
@@ -271,7 +273,17 @@
       }
       tbl.appendChild(tbdy);
     }
-    tableCreate();
+
+    if(goodResponse == "True") {
+      tableCreate();  
+    }
+    else {
+      var mainDiv = document.getElementById("mainDiv");
+      mainDiv.innerHTML = '<div class="text-center" style="margin-top: 50px !important;"><h1>Dostop do podatkov trenutno ni mogoč! 😟</h1><p class="lead">Uporabite alternativne spletne aplikacije za pregled podatkov.<br>👉 <a href="https://www.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6">COVID-19 Tracker by CSSE</a></p></div>';
+      var footerDiv = document.getElementById("footerDiv")
+      footerDiv.setAttribute("style", "position: fixed; bottom: 0; width: 100%;")
+    }
+    
 
     // Zaženemo plugin za sortiranje
     new Tablesort(document.getElementById("dataTable"), {

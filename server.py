@@ -16,6 +16,9 @@ Compress(app)
 #app.config['TEMPLATES_AUTO_RELOAD'] = True
 sslify = SSLify(app)
 
+# API za risanje grafa poteka okužbe
+#https://coronavirus-tracker-api.herokuapp.com/all
+
 countries = []
 population = []
 infected = []
@@ -31,8 +34,12 @@ populationDeadShare = []
 populationCuredShare = []
 populationHealthyShare = []
 
+country_response = None
+corona_response = None
+good_response = True
+
 def process_data():
-    global countries, population, infected, infectedToday, dead, deadToday, cured, active, critical, infectedRatio, deadRatio, populationCuredShare, populationDeadShare, populationHealthyShare, country_response, corona_response
+    global countries, population, infected, infectedToday, dead, deadToday, cured, active, critical, infectedRatio, deadRatio, populationCuredShare, populationDeadShare, populationHealthyShare, country_response, corona_response, good_response
     countries.clear()
     population.clear()
     infected.clear()
@@ -50,6 +57,13 @@ def process_data():
     
     country_data = json.loads(country_response.text)
     corona_data = json.loads(corona_response.text)
+
+    print(len(corona_data))
+
+    if len(corona_data) == 0:
+        good_response = False
+        return
+    good_response = True
 
     #? Prilagodimo imena držav
     for i in range(len(country_data)):
@@ -103,12 +117,8 @@ def process_data():
         critical[i] = '{:,}'.format(critical[i])
         population[i] = '{:,}'.format(population[i])
 
-country_response = requests.get("https://restcountries.eu/rest/v2/all")
-corona_response = requests.get("https://coronavirus-19-api.herokuapp.com/countries")
-now = datetime.datetime.now() + datetime.timedelta(hours=1)
-data_time = now.strftime("%d.%m.%Y %H:%M")
-
-process_data()
+    print("Data process complete")
+    sys.stdout.flush()
 
 def get_data():
     global corona_response, country_response, data_time
@@ -119,6 +129,8 @@ def get_data():
     process_data()
     print("API Update complete")
     sys.stdout.flush()
+
+get_data()
 
 @app.route('/')
 def index():
@@ -139,7 +151,8 @@ def index():
         deadRatio=deadRatio,
         populationDeadShare=populationDeadShare,
         populationCuredShare=populationCuredShare,
-        populationHealthyShare=populationHealthyShare)
+        populationHealthyShare=populationHealthyShare,
+        goodResponse=good_response)
 
 @ext.register_generator
 def sitemap():
