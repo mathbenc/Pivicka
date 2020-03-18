@@ -11,3 +11,8 @@ h1 {
     font-size: 20pt !important;
     margin-top: 8px !important;
 }
+
+#btnAdd {
+    display: inline-block !important;
+    display: hide;
+}

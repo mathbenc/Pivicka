@@ -17,19 +17,18 @@
 })();
 
 let deferredPrompt;
-const btnAdd = document.querySelector('.add-button');
-const btnAddDiv = document.querySelector(".add-button-div")
-
+const btnAdd = document.querySelector('#btnAdd');
+console.log(btnAdd.innerHTML);
 
 window.addEventListener('beforeinstallprompt', (e) => {
   console.log('beforeinstallprompt event fired');
   e.preventDefault();
   deferredPrompt = e;
-  btnAddDiv.style.visibility = 'visible';
+  btnAdd.style.display = 'show';
 });
 
 btnAdd.addEventListener('click', (e) => {
-  btnAddDiv.style.visibility = 'hidden';
+  btnAdd.style.display = 'hide';
   deferredPrompt.prompt();
   deferredPrompt.userChoice
     .then((choiceResult) => {
@@ -43,5 +42,6 @@ btnAdd.addEventListener('click', (e) => {
 });
 
 window.addEventListener('appinstalled', (evt) => {
+  console.log("Inštaliramo")
   app.logEvent('app', 'installed');
 });
