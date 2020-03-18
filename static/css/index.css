@@ -1,3 +1,17 @@
+html, body {
+    height: 100%;
+}
+
+.wrapper {
+    min-height: 100%;
+    margin-bottom: -103px;
+    padding-bottom: 103px;
+}
+
+footer {
+    height: 103px;
+}
+
 .navbar { 
     box-shadow: none !important; 
 }
@@ -10,4 +24,8 @@ h1 img {
 h1 {
     font-size: 20pt !important;
     margin-top: 8px !important;
+}
+
+.alt {
+    background-color: #ddd;
 }

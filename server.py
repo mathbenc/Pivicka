@@ -16,9 +16,6 @@ Compress(app)
 #app.config['TEMPLATES_AUTO_RELOAD'] = True
 sslify = SSLify(app)
 
-# API za risanje grafa poteka okužbe
-#https://coronavirus-tracker-api.herokuapp.com/all
-
 countries = []
 countriesA3Codes = []
 countriesTranslated = []
