@@ -25,7 +25,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
   console.log('beforeinstallprompt event fired');
   e.preventDefault();
   deferredPrompt = e;
-  btnAddDiv.style.display = 'none';
+  btnAddDiv.style.display = 'block';
 });
 
 console.log(btnAdd)
