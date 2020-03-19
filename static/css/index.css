@@ -41,3 +41,8 @@ th:hover {
 #countryFlag {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
+
+input:focus {
+    border-bottom: 1px solid #ffbb33 !important;
+    box-shadow: 0 1px 0 0 #ffbb33 !important;
+}
