@@ -331,8 +331,8 @@
         var cells = rows[i].getElementsByTagName("td")
         var countryRegex = new RegExp("^" + country + ".*$");
         if(countryRegex.test(cells[0].getAttribute("id"))) {
-          rows[i].style.backgroundColor = "#ffc453";
-          rows[i].style.fontWeight = "bold";
+          rows[i].style.backgroundColor = "#ffbb33";
+          rows[i].style.color = "white";
         }
       }
     };
