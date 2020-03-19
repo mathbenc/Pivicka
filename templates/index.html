@@ -140,8 +140,10 @@
       </div>
     </div>
     <!-- Copyright -->
-    <div class="footer-copyright font-small text-center py-3">Zadnja posodobitev: {{ data_time }}, vir: 
-      <a href="https://github.com/javieraviles/covidAPI">github.com/javieraviles/covidAPI</a>
+    <div class="footer-copyright font-small text-center py-3">
+      Zadnja posodobitev: {{ data_time }}
+      <br>
+      Vir: <a href="https://github.com/javieraviles/covidAPI">github.com/javieraviles/covidAPI</a>
     </div>
     <!-- Copyright -->
   </footer>
@@ -203,6 +205,7 @@
 
     var countries = {{ countries | tojson | safe }};
     var countriesTranslated = {{ countriesTranslated | tojson | safe }};
+    var countriesFlags = {{ countriesFlags | tojson | safe }};
     var population = {{ population | tojson | safe }};
     var infected = {{ infected | tojson | safe }};
     var infectedToday = {{ infectedToday | tojson | safe }};
@@ -325,7 +328,7 @@
     $(".countryExpand").click(function() {
       var i = $(this).attr("id");
       //Spremenimo modal podatke
-      $("#countryDetailsModalTitle").text(countriesTranslated[i]);
+      $("#countryDetailsModalTitle").html(countriesTranslated[i] + "&nbsp<img height='15px' src="+countriesFlags[i]+">");
       $("#populationModal").text(population[i]);
       $("#infectedModal").text(infected[i]);
       $("#infectedTodayModal").text(infectedToday[i]);

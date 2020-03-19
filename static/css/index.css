@@ -4,12 +4,12 @@ html, body {
 
 .wrapper {
     min-height: 100%;
-    margin-bottom: -103px;
-    padding-bottom: 103px;
+    margin-bottom: -150px;
+    padding-bottom: 150px;
 }
 
 footer {
-    height: 103px;
+    height: 150px;
 }
 
 .navbar { 
@@ -17,12 +17,12 @@ footer {
 }
 
 h1 img {
-    height: 30px !important;
+    height: 25px !important;
     margin: 0 0 5px 0 !important;
 }
 
 h1 {
-    font-size: 20pt !important;
+    font-size: 15pt !important;
     margin-top: 8px !important;
 }
 

@@ -17,6 +17,7 @@ Compress(app)
 sslify = SSLify(app)
 
 countries = []
+countriesFlags = []
 countriesA3Codes = []
 countriesTranslated = []
 population = []
@@ -68,25 +69,70 @@ def process_data():
     #? Prilagodimo imena držav
     for i in range(len(country_data)):
         if country_data[i]["name"] == "Korea (Republic of)":
-            country_data[i]["name"] = "South Korea"
+            country_data[i]["name"] = "S. Korea"
         elif country_data[i]["name"] == "Korea (Democratic People's Republic of)":
             country_data[i]["name"] = "North Korea"
-    for i in range(len(corona_data)):
-        if corona_data[i]["country"] == "S. Korea":
-            corona_data[i]["country"] = "South Korea"
-        elif corona_data[i]["country"] == "UK":
-            corona_data[i]["country"] = "United Kingdom"
-        elif corona_data[i]["country"] == "USA":
-            corona_data[i]["country"] = "United States of America"
+        elif country_data[i]["name"] == "Iran (Islamic Republic of)":
+            country_data[i]["name"] = "Iran"
+        elif country_data[i]["name"] == "United Kingdom of Great Britain and Northern Ireland":
+            country_data[i]["name"] = "UK"
+        elif country_data[i]["name"] == "Russian Federation":
+            country_data[i]["name"] = "Russia"
+        elif country_data[i]["name"] == "Viet Nam":
+            country_data[i]["name"] = "Vietnam"
+        elif country_data[i]["name"] == "Brunei Darussalam":
+            country_data[i]["name"] = "Brunei"
+        elif country_data[i]["name"] == "Faroe Islands":
+            country_data[i]["name"] = "Faeroe Islands"
+        elif country_data[i]["name"] == "Palestine, State of":
+            country_data[i]["name"] = "Palestine"
+        elif country_data[i]["name"] == "United States of America":
+            country_data[i]["name"] = "USA"
+        elif country_data[i]["name"] == "Czech Republic":
+            country_data[i]["name"] = "Czechia"
+        elif country_data[i]["name"] == "United Arab Emirates":
+            country_data[i]["name"] = "UAE"
+        elif country_data[i]["name"] == "Macedonia (the former Yugoslav Republic of)":
+            country_data[i]["name"] = "North Macedonia"
+        elif country_data[i]["name"] == "Moldova (Republic of)":
+            country_data[i]["name"] = "Moldova"
+        elif country_data[i]["name"] == "Venezuela (Bolivarian Republic of)":
+            country_data[i]["name"] = "Venezuela"
+        elif country_data[i]["name"] == "Congo (Democratic Republic of the)":
+            country_data[i]["name"] = "DRC"
+        elif country_data[i]["name"] == "Bolivia (Plurinational State of)":
+            country_data[i]["name"] = "Bolivia"
+        elif country_data[i]["name"] == "Côte d'Ivoire":
+            country_data[i]["name"] = "Ivory Coast"
+        elif country_data[i]["name"] == "Tanzania, United Republic of":
+            country_data[i]["name"] = "Tanzania"
+        elif country_data[i]["name"] == "Saint Barthélemy":
+            country_data[i]["name"] = "St. Barth"
+        elif country_data[i]["name"] == "Saint Martin (French part)":
+            country_data[i]["name"] = "Saint Martin"
+        elif country_data[i]["name"] == "Virgin Islands (U.S.)":
+            country_data[i]["name"] = "U.S. Virgin Islands"
+        elif country_data[i]["name"] == "Central African Republic":
+            country_data[i]["name"] = "CAR"
+        elif country_data[i]["name"] == "Holy See":
+            country_data[i]["name"] = "Vatican City"
+        elif country_data[i]["name"] == "Saint Vincent and the Grenadines":
+            country_data[i]["name"] = "St. Vincent Grenadines"
+        elif country_data[i]["name"] == "Sint Maarten (Dutch part)":
+            country_data[i]["name"] = "Sint Maarten"
+        elif country_data[i]["name"] == "Swaziland":
+            country_data[i]["name"] = "Eswatini"
  
     #? Polnimo podatke v naše sezname
     for i in range(len(corona_data)):
         for j in range(len(country_data)):
-            regex = re.search("^"+corona_data[i]["country"]+".*$", country_data[j]["name"])
-            if regex != None:
+            #regex = re.search("^"+corona_data[i]["country"]+".*$", country_data[j]["name"])
+            #if regex != None:
+            if corona_data[i]["country"] == country_data[j]["name"]: 
                 # Podatki o državi
                 countries.append(corona_data[i]["country"])
                 countriesA3Codes.append(country_data[j]["alpha3Code"])
+                countriesFlags.append(country_data[j]["flag"])
                 population.append(country_data[j]["population"])
 
                 # Podatki o pivu
@@ -118,10 +164,31 @@ def process_data():
         critical[i] = '{:,}'.format(critical[i])
         population[i] = '{:,}'.format(population[i])
 
+    missingCountries = len(corona_data) - len(infected)
+    if missingCountries > 7:
+        print("MANJKAJO DRZAVE!!!! ->", missingCountries)
+        sys.stdout.flush()
+
+    """
+    missingCountries = []
+    for i in range(len(corona_data)):
+        found = False
+        for j in range(len(countries)):
+            if corona_data[i]["country"] == countries[j]:
+                found = True
+                break
+        
+        if not found:
+            missingCountries.append(corona_data[i]["country"])
+
+    print("Manjka: ", len(missingCountries), " -> ", missingCountries)
+    """
+
     for i in range(len(countries)):
         for j in range(len(country_translations)):
             if countriesA3Codes[i] == country_translations[j]["COUNTRY_ALPHA3_CODE"]:
                 countriesTranslated.append(country_translations[j]["COUNTRY_NAME"])
+                break
 
     print("Data process complete")
     sys.stdout.flush()
@@ -146,6 +213,7 @@ def index():
         data_time=data_time,
         countries=countries,
         countriesTranslated=countriesTranslated,
+        countriesFlags=countriesFlags,
         population=population,
         infected=infected,
         infectedToday=infectedToday,
