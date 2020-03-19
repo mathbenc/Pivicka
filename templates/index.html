@@ -196,6 +196,13 @@
           }
         }
       }
+      stripeTable()
+      colorCountry(country)
+    })
+
+    $("thead").click(stripeTable());
+
+    function stripeTable() {
       var i = 0;
       $("#dataTable tbody tr").each(function (index) {
         $(this).css("background-color", "inherit");
@@ -206,8 +213,7 @@
           i++;
         }
       })
-      colorCountry(country)
-    })
+    };
 
     var coronaData = JSON.parse({{corona_data | tojson | safe}});
 

@@ -5,7 +5,7 @@ from flask_compress import Compress
 import requests
 import json
 import time
-import datetime
+from datetime import datetime, timedelta, timezone
 import sys
 import re
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -13,15 +13,15 @@ from apscheduler.schedulers.background import BackgroundScheduler
 app = Flask(__name__)
 ext = Sitemap(app=app)
 Compress(app)
-#app.config['TEMPLATES_AUTO_RELOAD'] = True
-sslify = SSLify(app)
+app.config['TEMPLATES_AUTO_RELOAD'] = True
+#sslify = SSLify(app)
 
 countries = []
 countriesFlags = []
 countriesA2Codes = []
 countriesA3Codes = []
 countriesTranslated = []
-graphData = [[]]
+graphData = []
 population = []
 infected = []
 infectedToday = []
@@ -73,7 +73,7 @@ def process_data():
         return
     good_response = True
 
-    #? Prilagodimo imena držav
+    # Prilagodimo imena držav
     for i in range(len(country_data)):
         if country_data[i]["name"] == "Korea (Republic of)":
             country_data[i]["name"] = "S. Korea"
@@ -130,7 +130,7 @@ def process_data():
         elif country_data[i]["name"] == "Swaziland":
             country_data[i]["name"] = "Eswatini"
  
-    #? Polnimo podatke v naše sezname
+    # Polnimo podatke v naše sezname
     for i in range(len(corona_data)):
         for j in range(len(country_data)):
             #regex = re.search("^"+corona_data[i]["country"]+".*$", country_data[j]["name"])
@@ -171,34 +171,49 @@ def process_data():
         active[i] = '{:,}'.format(active[i])
         critical[i] = '{:,}'.format(critical[i])
         population[i] = '{:,}'.format(population[i])
-        # Dodajmo podatke za graf
-        # Za vsako dodano državo moremo narediti request za podatke,
-        # če so podatki dolžine 1 jih uporabimo, drugače vnesemo dummy string.
-        #graph_data_response = json.loads(requests.get("https://coronavirus-tracker-api.herokuapp.com/v2/locations?country_code="+countriesA2Codes[i]+"&timelines=true").text)
-        #if len(graph_data_response["locations"]) == 1:
-            #print(graph_data_response["locations"][0]["timelines"]["confirmed"]["timeline"])
-         #   pass
+        
+        """
+        graph_data_response = json.loads(requests.get("https://coronavirus-tracker-api.herokuapp.com/v2/locations?country_code="+countriesA2Codes[i]+"&timelines=true").text)
+        if len(graph_data_response["locations"]) == 1:
+            graphData.append(graph_data_response["locations"][0]["timelines"]["confirmed"]["timeline"])
+        else:
+            graphData.append("none")
 
+    #Nimamo zadosti točnih podatkov!!!!
+
+    
+    graph_data_response = json.loads(requests.get("https://coronavirus-tracker-api.herokuapp.com/v2/locations?country_code=si&timelines=true").text)
+    graphData.append(graph_data_response["locations"][0]["timelines"]["confirmed"]["timeline"])
+
+    for i in range(len(graphData[0])):
+        dt = datetime(2020, 1, 22, 0, 0, 0, 0, tzinfo=timezone.utc) + timedelta(days=i)
+        dt = str(dt).replace(" ", "T")[:-6]+"Z"
+        print(dt, "->", graphData[0][dt])
+
+    # Zdaj ko imamo podatke za vsako državo, moramo izluščiti le število in datum.
+
+    print(graphData[0]["2020-01-22T00:00:00Z"])
+    """
+
+    # Preverimo razliko števila držav
     missingCountries = len(corona_data) - len(infected)
     if missingCountries > 7:
         print("MANJKAJO DRZAVE!!!! ->", missingCountries)
+        missingCountries = []
+        for i in range(len(corona_data)):
+            found = False
+            for j in range(len(countries)):
+                if corona_data[i]["country"] == countries[j]:
+                    found = True
+                    break
+            
+            if not found:
+                missingCountries.append(corona_data[i]["country"])
+
+        print("Manjka: ", len(missingCountries), " -> ", missingCountries)
         sys.stdout.flush()
 
-    """
-    missingCountries = []
-    for i in range(len(corona_data)):
-        found = False
-        for j in range(len(countries)):
-            if corona_data[i]["country"] == countries[j]:
-                found = True
-                break
-        
-        if not found:
-            missingCountries.append(corona_data[i]["country"])
-
-    print("Manjka: ", len(missingCountries), " -> ", missingCountries)
-    """
-
+    # Prevedemo imena držav
     for i in range(len(countries)):
         for j in range(len(country_translations)):
             if countriesA3Codes[i] == country_translations[j]["COUNTRY_ALPHA3_CODE"]:
@@ -215,7 +230,7 @@ def get_data():
     global corona_response, country_response, data_time
     country_response = requests.get("https://restcountries.eu/rest/v2/all")
     corona_response = requests.get("https://coronavirus-19-api.herokuapp.com/countries")
-    now = datetime.datetime.now() + datetime.timedelta(hours=1)
+    now = datetime.now() + timedelta(hours=1)
     data_time = now.strftime("%d.%m.%Y %H:%M")
     process_data()
     print("API Update complete")
