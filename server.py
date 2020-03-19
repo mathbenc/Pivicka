@@ -18,8 +18,10 @@ sslify = SSLify(app)
 
 countries = []
 countriesFlags = []
+countriesA2Codes = []
 countriesA3Codes = []
 countriesTranslated = []
+graphData = [[]]
 population = []
 infected = []
 infectedToday = []
@@ -131,6 +133,7 @@ def process_data():
             if corona_data[i]["country"] == country_data[j]["name"]: 
                 # Podatki o državi
                 countries.append(corona_data[i]["country"])
+                countriesA2Codes.append(country_data[j]["alpha2Code"])
                 countriesA3Codes.append(country_data[j]["alpha3Code"])
                 countriesFlags.append(country_data[j]["flag"])
                 population.append(country_data[j]["population"])
@@ -163,6 +166,13 @@ def process_data():
         active[i] = '{:,}'.format(active[i])
         critical[i] = '{:,}'.format(critical[i])
         population[i] = '{:,}'.format(population[i])
+        # Dodajmo podatke za graf
+        # Za vsako dodano državo moremo narediti request za podatke,
+        # če so podatki dolžine 1 jih uporabimo, drugače vnesemo dummy string.
+        #graph_data_response = json.loads(requests.get("https://coronavirus-tracker-api.herokuapp.com/v2/locations?country_code="+countriesA2Codes[i]+"&timelines=true").text)
+        #if len(graph_data_response["locations"]) == 1:
+            #print(graph_data_response["locations"][0]["timelines"]["confirmed"]["timeline"])
+         #   pass
 
     missingCountries = len(corona_data) - len(infected)
     if missingCountries > 7:
@@ -192,6 +202,9 @@ def process_data():
 
     print("Data process complete")
     sys.stdout.flush()
+
+    print(len(countries))
+    print(len(countriesTranslated))
 
 def get_data():
     global corona_response, country_response, data_time
