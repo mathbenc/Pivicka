@@ -169,6 +169,13 @@
   <script src="{{ url_for('static', filename='app.js') }}"></script>
 
   <script>
+    var country = "";
+    $.getJSON('https://json.geoiplookup.io', function(data) {
+    })
+    .done(function(data) {
+      country = data.country_name
+      colorCountry(country);
+    })
 
     // Search
     $("#search,#searchMobile").keyup(function () {
@@ -199,6 +206,7 @@
           i++;
         }
       })
+      colorCountry(country)
     })
 
     var coronaData = JSON.parse({{corona_data | tojson | safe}});
@@ -308,22 +316,21 @@
     // Zaženemo plugin za stickanje headerjev
     $('table').stickyTableHeaders();
         
-    function countryDetect () {
-      $.getJSON('https://json.geoiplookup.io', function(data){
-        var country = data.country_name;
-        var table = $("#dataTable");
-        var tbody = table.find("tbody");
-        var rows = tbody.find("tr");
-        for (var i=0; i<rows.length; i++) {
-          var cells = rows[i].getElementsByTagName("td")
-          var countryRegex = new RegExp("^" + country + ".*$");
-          if(countryRegex.test(cells[0].getAttribute("id"))) {
-            rows[i].style.backgroundColor = "#ffc453";
-          }
+    var country;
+
+
+    function colorCountry(country) {
+      var table = $("#dataTable");
+      var tbody = table.find("tbody");
+      var rows = tbody.find("tr");
+      for (var i=0; i<rows.length; i++) {
+        var cells = rows[i].getElementsByTagName("td")
+        var countryRegex = new RegExp("^" + country + ".*$");
+        if(countryRegex.test(cells[0].getAttribute("id"))) {
+          rows[i].style.backgroundColor = "#ffc453";
         }
-      })
+      }
     };
-    countryDetect()
 
     $(".countryExpand").click(function() {
       var i = $(this).attr("id");
