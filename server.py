@@ -13,11 +13,10 @@ from apscheduler.schedulers.background import BackgroundScheduler
 app = Flask(__name__)
 ext = Sitemap(app=app)
 Compress(app)
-#app.config['TEMPLATES_AUTO_RELOAD'] = True
-sslify = SSLify(app)
 
 countries = []
 countriesFlags = []
+countriesCapitals = []
 countriesA2Codes = []
 countriesA3Codes = []
 countriesTranslated = []
@@ -47,6 +46,7 @@ def process_data():
     global countries, population, infected, infectedToday, dead, deadToday, cured, active, critical, infectedRatio, deadRatio, populationCuredShare, populationDeadShare, populationHealthyShare, country_response, corona_response, good_response
     countries.clear()
     countriesFlags.clear()
+    countriesCapitals.clear()
     countriesA2Codes.clear()
     countriesA3Codes.clear()
     countriesTranslated.clear()
@@ -141,6 +141,7 @@ def process_data():
                 countriesA2Codes.append(country_data[j]["alpha2Code"])
                 countriesA3Codes.append(country_data[j]["alpha3Code"])
                 countriesFlags.append(country_data[j]["flag"])
+                countriesCapitals.append(country_data[j]["capital"])
                 population.append(country_data[j]["population"])
 
                 # Podatki o pivu
@@ -247,6 +248,7 @@ def index():
         countries=countries,
         countriesTranslated=countriesTranslated,
         countriesFlags=countriesFlags,
+        countriesCapitals=countriesCapitals,
         population=population,
         infected=infected,
         infectedToday=infectedToday,
@@ -279,6 +281,9 @@ def service_worker():
 sched = BackgroundScheduler()
 sched.add_job(get_data, "interval", minutes=10, max_instances=10)
 sched.start()
+
+#app.config['TEMPLATES_AUTO_RELOAD'] = True
+sslify = SSLify(app)
 
 if __name__ == '__main__':
     app.run()

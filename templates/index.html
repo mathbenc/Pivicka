@@ -82,47 +82,46 @@
 
     </nav>
 
-    <!--
-    <nav class="navbar navbar-expand-lg navbar-dark elegant-color" id="btnAddDiv">
-        <button id="btnAdd" class="btn btn-block btn-warning">Namesti aplikacijo</button>
-    </nav>
-    -->
-
+    <!-- Tabela -->
     <div class="table-responsive" id="mainDiv">
       <table id="dataTable" class="table table-striped table-hover table-elegant-color" style="margin-bottom: 0px !important;"></table>
     </div>
 
     <!-- Modal -->
     <div class="modal fade bottom" id="countryDetailsModal" tabindex="-1" role="dialog" aria-labelledby="countryDetailsModal" aria-hidden="true">
-      <div class="modal-dialog modal-full-height modal-bottom" role="document">
+      <div class="modal-dialog modal-full-height modal-bottom modal-notify modal-warning" role="document">
         <div class="modal-content">
+          
           <div class="modal-header" id="countryDetailsModalHeader">
-            <h5 class="modal-title"><b id="countryDetailsModalTitle"></b></h5>
+            <p class="heading lead modal-title"><b id="countryDetailsModalTitle"></b></p>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
+              <span aria-hidden="true" class="white-text">&times;</span>
             </button>  
           </div>
+
           <div id="countryDetailsModalBody" class="modal-body container">
             <div class="row">
-              <div class="col-sm"><b>Populacija</b><p id="populationModal"></p></div>
-            </div>
-            
-            <div class="row">
-              <div class="col-sm"><b>Okuženi</b><p id="infectedModal"></p></div>
-              <div class="col-sm"><b>Danes okuženi</b><p id="infectedTodayModal"></p></div>
-              <div class="col-sm"><b>Obolevnost</b><p id="infectedRatioModal"></p></div>
-            </div>
-            
-            <div class="row">
-              <div class="col-sm"><b>Umrli</b><p id="deadModal"></p></div>
-              <div class="col-sm"><b>Danes umrli</b><p id="deadTodayModal"></p></div>
-              <div class="col-sm"><b>Umrljivost</b><p id="deadRatioModal"></p></div>
-            </div>
-            
-            <div class="row">
-              <div class="col-sm"><b>Ozdraveli</b><p id="curedModal"></p></div>
-              <div class="col-sm"><b>Odprti primeri</b><p id="activeModal"></p></div>
-              <div class="col-sm"><b>Kritični primeri</b><p id="criticalModal"></p></div>
+              <div class="col-4"><b>Populacija</b><p id="populationModal"></p></div>
+              <div class="col-4"><b>Zastava</b><p><img height="24px" id="countryFlag"></img></p></div>
+              <div class="col-4"><b>Glavno mesto</b><p id="countryCapitals"></p></div>
+ 
+              <div class="w-100"></div>
+
+              <div class="col-4"><b>Okuženi</b><p id="infectedModal"></p></div>
+              <div class="col-4"><b>Danes okuženi</b><p id="infectedTodayModal"></p></div>
+              <div class="col-4"><b>Obolevnost</b><p id="infectedRatioModal"></p></div>
+
+              <div class="w-100"></div>
+
+              <div class="col-4"><b>Umrli</b><p id="deadModal"></p></div>
+              <div class="col-4"><b>Danes umrli</b><p id="deadTodayModal"></p></div>
+              <div class="col-4"><b>Umrljivost</b><p id="deadRatioModal"></p></div>
+
+              <div class="w-100"></div>
+
+              <div class="col-4"><b>Ozdraveli</b><p id="curedModal"></p></div>
+              <div class="col-4"><b>Odprti primeri</b><p id="activeModal"></p></div>
+              <div class="col-4"><b>Kritični primeri</b><p id="criticalModal"></p></div>
             </div>
           </div>
         </div>
@@ -169,6 +168,7 @@
   <script src="{{ url_for('static', filename='app.js') }}"></script>
 
   <script>
+
     var country = "";
     $.getJSON('https://json.geoiplookup.io', function(data) {
     })
@@ -220,6 +220,7 @@
     var countries = {{ countries | tojson | safe }};
     var countriesTranslated = {{ countriesTranslated | tojson | safe }};
     var countriesFlags = {{ countriesFlags | tojson | safe }};
+    var countriesCapitals = {{ countriesCapitals | tojson | safe }};
     var population = {{ population | tojson | safe }};
     var infected = {{ infected | tojson | safe }};
     var infectedToday = {{ infectedToday | tojson | safe }};
@@ -238,8 +239,8 @@
     var goodResponse = "{{ goodResponse }}"
 
     function tableCreate() {
-      var headers = ["Država", "Populacija", "Okuženi", "Danes okuženi", "Obolevnost", "Umrli", "Umrljivost", "Ozdraveli"];
-      var headersIcons = ["", "", "fas fa-frown-open", "fas fa-plus-circle", "", "fas fa-dizzy", "", "fas fa-smile",];
+      var headers = ["Država", "Populacija", "Okuženi", "Danes", "Obolevnost", "Umrli", "Umrljivost", "Ozdraveli"];
+      var headersIcons = ["fas fa-flag", "", "fas fa-biohazard", "fas fa-calendar-day", "", "fas fa-book-dead", "", "fas fa-smile",];
       var tbl = document.getElementById('dataTable');
       var tbdy = document.createElement('tbody');
       var thdr = tbl.createTHead();
@@ -249,7 +250,7 @@
         var cell = document.createElement("th");
         cell.setAttribute("style", "border:none !important; cursor: pointer;");
         cell.innerHTML = '<div class="d-none d-sm-block">' + headers[i] + '</div><div class="d-sm-none"><i class="' + headersIcons[i] + '"></i></div>'
-        if (headers[i] == "Okuženi") {
+        if (i == 2) {
           cell.setAttribute("data-sort-default", "")
         }
         if (i != 0) {
@@ -322,9 +323,6 @@
     // Zaženemo plugin za stickanje headerjev
     $('table').stickyTableHeaders();
         
-    var country;
-
-
     function colorCountry(country) {
       var table = $("#dataTable");
       var tbody = table.find("tbody");
@@ -334,6 +332,7 @@
         var countryRegex = new RegExp("^" + country + ".*$");
         if(countryRegex.test(cells[0].getAttribute("id"))) {
           rows[i].style.backgroundColor = "#ffc453";
+          rows[i].style.fontWeight = "bold";
         }
       }
     };
@@ -341,7 +340,7 @@
     $(".countryExpand").click(function() {
       var i = $(this).attr("id");
       //Spremenimo modal podatke
-      $("#countryDetailsModalTitle").html(countriesTranslated[i] + "&nbsp<img height='15px' src="+countriesFlags[i]+">");
+      $("#countryDetailsModalTitle").text(countriesTranslated[i]);
       $("#populationModal").text(population[i]);
       $("#infectedModal").text(infected[i]);
       $("#infectedTodayModal").text(infectedToday[i]);
@@ -352,13 +351,15 @@
       $("#curedModal").text(cured[i]);
       $("#activeModal").text(active[i]);
       $("#criticalModal").text(critical[i]);
+      $("#countryFlag").attr("src", countriesFlags[i])
+      $("#countryCapitals").text(countriesCapitals[i])
       //console.log(infectedRatio[i], populationDeadShare[i], populationCuredShare[i], populationHealthyShare[i]);
       //makeChart(infectedRatio[i], populationDeadShare[i], populationCuredShare[i], populationHealthyShare[i]);
-
       $("#countryDetailsModal").modal("show");
     });
 
   </script>
+
 </body>
 
 </html>
