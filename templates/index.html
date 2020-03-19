@@ -84,22 +84,22 @@
 
     <!-- Tabela -->
     <div class="table-responsive" id="mainDiv">
-      <table id="dataTable" class="table table-striped table-hover table-elegant-color" style="margin-bottom: 0px !important;"></table>
+      <table id="dataTable" class="table table-striped table-hover" style="margin-bottom: 0px !important;"></table>
     </div>
 
     <!-- Modal -->
     <div class="modal fade bottom" id="countryDetailsModal" tabindex="-1" role="dialog" aria-labelledby="countryDetailsModal" aria-hidden="true">
-      <div class="modal-dialog modal-full-height modal-bottom modal-notify modal-warning" role="document">
+      <div class="modal-dialog modal-dialog-scrollable modal-full-height modal-bottom modal-notify modal-warning" role="document">
+        
         <div class="modal-content">
-          
           <div class="modal-header" id="countryDetailsModalHeader">
-            <p class="heading lead modal-title"><b id="countryDetailsModalTitle"></b></p>
+            <p class="heading lead modal-title w-100"><b id="countryDetailsModalTitle"></b></p>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true" class="white-text">&times;</span>
             </button>  
           </div>
 
-          <div id="countryDetailsModalBody" class="modal-body container">
+          <div id="countryDetailsModalBody" class="modal-body container text-center">
             <div class="row">
               <div class="col-4"><b>Populacija</b><p id="populationModal"></p></div>
               <div class="col-4"><b>Zastava</b><p><img height="24px" id="countryFlag"></img></p></div>
@@ -338,7 +338,7 @@
       $("#countryCapitals").text(countriesCapitals[i])
       $("#countryDetailsModal").modal("show");
     });
-
+    
   </script>
 
 </body>
