@@ -1,11 +1,3 @@
-body {
-    padding-top: 50px;
-}
-
-thead {
-    position: fixed !important;
-}
-
 .wrapper {
     min-height: 100%;
     margin-bottom: -150px;

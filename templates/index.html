@@ -57,7 +57,7 @@
 <body>
   <div class="wrapper">
     <!-- Navbar -->
-    <nav class="navbar fixed-top navbar-expand-lg navbar-dark elegant-color">
+    <nav class="navbar navbar-expand-lg navbar-dark elegant-color">
       
       <!-- Navbar brand -->
       <a class="navbar-brand" href="#" onClick="window.location.reload();">
@@ -304,8 +304,17 @@
       descending: true
     });
 
+    var cell = $('#dataTable th');
+    cell = cell[0];
+    var height = cell.clientHeight;
+
+    for (var i=0;i<cell.length;i++) {
+      cell[i].style.height = height;
+    }
+
+
     // Zaženemo plugin za stickanje headerjev
-    //$('table').stickyTableHeaders();
+    $('table').stickyTableHeaders();
         
     function colorCountry(country) {
       var table = $("#dataTable");
