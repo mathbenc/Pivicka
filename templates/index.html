@@ -258,10 +258,10 @@
           cell.innerHTML = headers[i];
         }
         if (i == 1 || i == 6) {
-          cell.setAttribute("class", "d-none d-lg-table-cell text-right");
+          cell.setAttribute("class", "d-none d-md-table-cell text-right");
         }
         if (i == 4 || i == 7) {
-          cell.setAttribute("class", "d-none d-md-table-cell text-right");
+          cell.setAttribute("class", "d-none d-sm-table-cell text-right");
         }
         row.appendChild(cell);
       }
@@ -275,7 +275,7 @@
         cell.setAttribute("id", countries[i])
         cell = row.insertCell();
         cell.setAttribute("align", "right");
-        cell.setAttribute("class", "d-none d-lg-table-cell text-right");
+        cell.setAttribute("class", "d-none d-md-table-cell text-right");
         cell.innerHTML = population[i];
         cell = row.insertCell();
         cell.setAttribute("align", "right");
@@ -285,18 +285,18 @@
         cell.innerHTML = infectedToday[i];
         cell = row.insertCell();
         cell.setAttribute("align", "right");
-        cell.setAttribute("class", "d-none d-md-table-cell text-right");
+        cell.setAttribute("class", "d-none d-sm-table-cell text-right");
         cell.innerHTML = infectedRatio[i] + "%";
         cell = row.insertCell();
         cell.setAttribute("align", "right");
         cell.innerHTML = dead[i];
         cell = row.insertCell();
         cell.setAttribute("align", "right");
-        cell.setAttribute("class", "d-none d-lg-table-cell text-right");
+        cell.setAttribute("class", "d-none d-md-table-cell text-right");
         cell.innerHTML = deadRatio[i] + "%";
         cell = row.insertCell();
         cell.setAttribute("align", "right");
-        cell.setAttribute("class", "d-none d-md-table-cell text-right");
+        cell.setAttribute("class", "d-none d-sm-table-cell text-right");
         cell.innerHTML = cured[i];
       }
       tbl.appendChild(tbdy);

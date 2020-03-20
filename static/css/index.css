@@ -20,6 +20,10 @@ footer {
     height: 150px;
 }
 
+tbody {
+    border-top: 2px solid #2E2E2E;
+}
+
 .navbar { 
     box-shadow: none !important; 
 }
