@@ -189,7 +189,6 @@
 
     $("tr").click(stripeTable());
 
-    themeSetter();
     function themeSetter() {
       var today = new Date();
       var h = today.getHours();
@@ -197,6 +196,20 @@
         $("#dataTable").toggleClass("table-dark elegant-color-dark");
         $(".modal-content").toggleClass("elegant-color");
         $(".modal-body").toggleClass("text-white");
+        
+        // Navbar
+        $(".navbar").removeClass("elegant-color");
+        $(".navbar").addClass("black")
+
+        // Thead
+        $("thead").removeClass("elegant-color");
+        $("thead").addClass("black")
+
+        // Footer
+        $(".page-footer").removeClass("elegant-color");
+        $(".page-footer").addClass("black")
+        $(".footer-copyright").removeClass("elegant-color");
+        $(".footer-copyright").addClass("black")
       }
     }
 
@@ -246,7 +259,6 @@
       for (var i = 0; i < headers.length; i++) {
         var cell = document.createElement("th");
         cell.setAttribute("style", "border:none !important; cursor: pointer;");
-        cell.setAttribute("class", "col")
         cell.innerHTML = '<div class="d-none d-sm-block">' + headers[i] + '</div><div class="d-sm-none"><i class="' + headersIcons[i] + '"></i></div>'
         if (i == 2) {
           cell.setAttribute("data-sort-default", "")
@@ -311,6 +323,8 @@
       var footerDiv = document.getElementById("footerDiv")
       footerDiv.setAttribute("style", "position: fixed; bottom: 0; width: 100%;")
     }
+
+    themeSetter();
     
     // Zaženemo plugin za sortiranje
     new Tablesort(document.getElementById("dataTable"), {
