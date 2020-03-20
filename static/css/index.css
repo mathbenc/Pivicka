@@ -1,9 +1,5 @@
-body {
-    padding-top: 50px;
-}
-
-thead {
-    position: fixed !important;
+html, body {
+    height: 100%;
 }
 
 .wrapper {
