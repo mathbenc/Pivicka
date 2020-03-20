@@ -215,7 +215,7 @@
       */
     };
 
-    var coronaData = JSON.parse({{corona_data | tojson | safe}});
+    var coronaData = JSON.parse({{corona_data | tojson | safe }});
     var countries = {{ countries | tojson | safe }};
     var countriesTranslated = {{ countriesTranslated | tojson | safe }};
     var countriesFlags = {{ countriesFlags | tojson | safe }};
@@ -233,7 +233,7 @@
     var populationDeadShare = {{ populationDeadShare | tojson | safe }};
     var populationCuredShare = {{ populationCuredShare | tojson | safe }};
     var populationHealthyShare = {{ populationHealthyShare | tojson | safe }};
-    var goodResponse = "{{ goodResponse }}"
+    var goodResponse = "{{ goodResponse }}";
 
     function tableCreate() {
       var headers = ["Država", "Populacija", "Okuženi", "Danes", "Obolevnost", "Umrli", "Umrljivost", "Ozdraveli"];
@@ -261,7 +261,7 @@
           cell.setAttribute("class", "d-none d-lg-table-cell text-right");
         }
         if (i == 4 || i == 7) {
-          cell.setAttribute("class", "d-none d-sm-block d-lg-table-cell text-right");
+          cell.setAttribute("class", "d-none d-md-table-cell text-right");
         }
         row.appendChild(cell);
       }
@@ -285,7 +285,7 @@
         cell.innerHTML = infectedToday[i];
         cell = row.insertCell();
         cell.setAttribute("align", "right");
-        cell.setAttribute("class", "d-none d-sm-block d-lg-table-cell text-right");
+        cell.setAttribute("class", "d-none d-md-table-cell text-right");
         cell.innerHTML = infectedRatio[i] + "%";
         cell = row.insertCell();
         cell.setAttribute("align", "right");
@@ -296,7 +296,7 @@
         cell.innerHTML = deadRatio[i] + "%";
         cell = row.insertCell();
         cell.setAttribute("align", "right");
-        cell.setAttribute("class", "d-none d-sm-block d-lg-table-cell text-right");
+        cell.setAttribute("class", "d-none d-md-table-cell text-right");
         cell.innerHTML = cured[i];
       }
       tbl.appendChild(tbdy);
