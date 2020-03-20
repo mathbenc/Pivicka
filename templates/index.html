@@ -84,7 +84,7 @@
 
     <!-- Tabela -->
     <div class="table-responsive" id="mainDiv">
-      <table id="dataTable" class="table table-striped table-hover" style="margin-bottom: 0px !important;"></table>
+      <table id="dataTable" class="table table-hover" style="margin-bottom: 0px !important;"></table>
     </div>
 
     <!-- Modal -->
@@ -102,7 +102,7 @@
           <div id="countryDetailsModalBody" class="modal-body container text-center">
             <div class="row">
               <div class="col-4"><b>Populacija</b><p id="populationModal"></p></div>
-              <div class="col-4"><b>Zastava</b><p><img height="24px" id="countryFlag"></img></p></div>
+              <div class="col-4"><b>Zastava</b><br><img height="24px" id="countryFlag"></img></div>
               <div class="col-4"><b>Glavno mesto</b><p id="countryCapitals"></p></div>
  
               <div class="w-100"></div>
@@ -139,7 +139,7 @@
       </div>
     </div>
     <!-- Copyright -->
-    <div class="footer-copyright font-small text-center py-3">
+    <div class="footer-copyright elegant-color font-small text-center py-3">
       Zadnja posodobitev: {{ data_time }}
       <br>
       Vir: <a href="https://github.com/javieraviles/covidAPI">github.com/javieraviles/covidAPI</a>
@@ -189,7 +189,19 @@
 
     $("tr").click(stripeTable());
 
+    themeSetter();
+    function themeSetter() {
+      var today = new Date();
+      var h = today.getHours();
+      if (h > 20 || h < 7) {
+        $("#dataTable").toggleClass("table-dark elegant-color-dark");
+        $(".modal-content").toggleClass("elegant-color");
+        $(".modal-body").toggleClass("text-white");
+      }
+    }
+
     function stripeTable() {
+      /*
       var i = 0;
       $("#dataTable tbody tr").each(function (index) {
         $(this).css("background-color", "inherit");
@@ -200,6 +212,7 @@
           i++;
         }
       })
+      */
     };
 
     var coronaData = JSON.parse({{corona_data | tojson | safe}});

@@ -8,6 +8,14 @@ html, body {
     padding-bottom: 150px;
 }
 
+.text-white b {
+    color: white;
+}
+
+.text-white p {
+    opacity: 0.5;
+}
+
 footer {
     height: 150px;
 }
@@ -40,6 +48,7 @@ th:hover {
 
 #countryFlag {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    opacity: 1 !important;
 }
 
 input:focus {
