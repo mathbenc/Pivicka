@@ -196,6 +196,10 @@ def index():
 def sitemap():
     yield 'index', {}
 
+@app.route("/robots.txt")
+def robots():
+    return send_from_directory("static", "robots.txt")
+
 @app.route("/manifest.json")
 def manifest():
     return send_from_directory("static", "manifest.json")

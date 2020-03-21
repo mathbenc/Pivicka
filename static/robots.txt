@@ -1,0 +1,5 @@
+User-Agent: *
+Disallow: /static/
+Disallow: /templates/
+
+Sitemap: https://pivicka.eu/sitemap.xml
