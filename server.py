@@ -192,9 +192,9 @@ def index():
         data_time=data_time,
         goodResponse=good_response)
 
-@ext.register_generator
+@app.route("/sitemap.xml")
 def sitemap():
-    yield 'index', {}
+    return send_from_directory("static", "sitemap.xml")
 
 @app.route("/robots.txt")
 def robots():
