@@ -256,6 +256,7 @@
       for (var i = 0; i < headers.length; i++) {
         var cell = document.createElement("th");
         cell.setAttribute("style", "border:none !important; cursor: pointer;");
+        cell.setAttribute("class", "col")
         console.log(headers[i], headersIcons[i])
         cell.innerHTML = '<div class="d-none d-sm-block">' + headers[i] + '</div><div class="d-sm-none"><i class="' +
           headersIcons[i] + '"></i></div>'
