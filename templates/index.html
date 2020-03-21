@@ -352,8 +352,6 @@
       $(".page-footer").show();
     }
 
-
-
     // Zaženemo plugin za stickanje headerjev
     $('table').stickyTableHeaders({cacheHeaderHeight: true});
 
@@ -363,8 +361,7 @@
       var rows = tbody.find("tr");
       for (var i = 0; i < rows.length; i++) {
         var cells = rows[i].getElementsByTagName("td")
-        var countryRegex = new RegExp("^" + country + ".*$");
-        if (countryRegex.test(cells[0].getAttribute("id"))) {
+        if (cells[0].getAttribute("id")==country) {
           rows[i].style.backgroundColor = "#ffbb33";
           rows[i].style.color = "white";
         }
