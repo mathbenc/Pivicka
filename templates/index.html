@@ -340,9 +340,10 @@
         '<div class="text-center" style="margin-top: 50px !important;"><h1>Dostop do podatkov trenutno ni mogoč! 😟</h1><p class="lead">Uporabite alternativne spletne aplikacije za pregled podatkov.<br>👉 <a href="https://www.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6">COVID-19 Tracker by CSSE</a></p></div>';
       var footerDiv = document.getElementById("footerDiv")
     }
-    var table = document.getElementById('dataTable');
-    var sort = new Tablesort(table);
-    sort.refresh();
+      // Zaženemo plugin za sortiranje
+    new Tablesort(document.getElementById("dataTable"), {
+      descending: true
+    });
     themeSetter();
     showFooter();
     stripeTable();
@@ -351,10 +352,7 @@
       $(".page-footer").show();
     }
 
-    // Zaženemo plugin za sortiranje
-    new Tablesort(document.getElementById("dataTable"), {
-      descending: true
-    });
+
 
     // Zaženemo plugin za stickanje headerjev
     $('table').stickyTableHeaders({cacheHeaderHeight: true});
