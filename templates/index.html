@@ -201,23 +201,6 @@
   <script src="{{ url_for('static', filename='app.js') }}"></script>
 
   <script>
-    var country = "";
-    $.getJSON('https://json.geoiplookup.io', function (data) {})
-      .done(function (data) {
-        country = data.country_name
-        colorCountry(country);
-      })
-
-    // Search
-    $("#search").on("keyup", function () {
-      var value = $(this).val().toLowerCase();
-      $("#dataTable tbody tr").filter(function () {
-        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-      });
-      stripeTable()
-      colorCountry(country)
-    });
-
     function themeSetter() {
       var today = new Date();
       var h = today.getHours();
@@ -241,6 +224,24 @@
         $(".footer-copyright").addClass("black")
       }
     }
+    themeSetter();
+
+    var country = "";
+    $.getJSON('https://json.geoiplookup.io', function (data) {})
+      .done(function (data) {
+        country = data.country_name
+        colorCountry(country);
+      })
+
+    // Search
+    $("#search").on("keyup", function () {
+      var value = $(this).val().toLowerCase();
+      $("#dataTable tbody tr").filter(function () {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+      });
+      stripeTable()
+      colorCountry(country)
+    });
 
     var data = JSON.parse({{ data | tojson | safe }});
     var goodResponse = "{{ goodResponse }}";
