@@ -57,7 +57,7 @@
 <body>
   <div class="wrapper">
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark elegant-color">
+    <nav class="navbar navbar-expand-sm navbar-dark elegant-color">
       
       <!-- Navbar brand -->
       <a class="navbar-brand" href="#" onClick="window.location.reload();">
@@ -250,7 +250,7 @@
     var goodResponse = "{{ goodResponse }}";
 
     function tableCreate() {
-      var headers = ["Država", "Populacija", "Gostota", "Okuženi", "Danes", "Obolevnost", "Umrli", "Umrljivost", "Ozdraveli"];
+      var headers = ["Država", "Populacija", "Gostota prebivalstva", "Okuženi", "Okuženi", "Obolevnost", "Umrli", "Umrljivost", "Ozdraveli"];
       var headersIcons = ["fas fa-flag", "", "", "fas fa-biohazard", "fas fa-calendar-day", "", "fas fa-book-dead", "", "fas fa-smile"];
       var tbl = document.getElementById('dataTable');
       var tbdy = document.createElement('tbody');

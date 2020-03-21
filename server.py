@@ -36,6 +36,7 @@ deadRatio = []
 populationDeadShare = []
 populationCuredShare = []
 populationHealthyShare = []
+whole_data = []
 
 country_response = None
 corona_response = None
@@ -45,7 +46,7 @@ with open("static/pivicka.json") as json_file:
     country_translations = json.load(json_file)
 
 def process_data():
-    global countries, countriesFlags, countriesA2Codes, countriesA3Codes, countriesCapitals, countriesTranslated, countriesArea, countriesDensity, population, infected, infectedToday, dead, deadToday, cured, active, critical, infectedRatio, deadRatio, populationCuredShare, populationDeadShare, populationHealthyShare, country_response, corona_response, good_response
+    global whole_data, countries, countriesFlags, countriesA2Codes, countriesA3Codes, countriesCapitals, countriesTranslated, countriesArea, countriesDensity, population, infected, infectedToday, dead, deadToday, cured, active, critical, infectedRatio, deadRatio, populationCuredShare, populationDeadShare, populationHealthyShare, country_response, corona_response, good_response
     countries.clear()
     countriesFlags.clear()
     countriesCapitals.clear()
@@ -68,6 +69,7 @@ def process_data():
     populationCuredShare.clear()
     populationDeadShare.clear()
     populationHealthyShare.clear()
+    whole_data.clear()
     
     country_data = json.loads(country_response.text)
     corona_data = json.loads(corona_response.text)
@@ -79,70 +81,18 @@ def process_data():
 
     # DODAJ DVA SEZNAMA, PRAVILNIH IN NAPAČNIH IMEN, DA SE IZOGNEŠ ELIFOM!!!
 
-    wrongNames = ["Korea (Republic of)", "Korea (Democratic People's Republic of)", "Iran (Islamic Republic of)"]
+    wrongNames = ["Korea (Republic of)", "Korea (Democratic People's Republic of)", "Iran (Islamic Republic of)", "United Kingdom of Great Britain and Northern Ireland", "Russian Federation", "Viet Nam", "Brunei Darussalam", "Faroe Islands", "Palestine, State of", "United States of America", "Czech Republic", "United Arab Emirates", "Macedonia (the former Yugoslav Republic of)", "Moldova (Republic of)", "Venezuela (Bolivarian Republic of)", "Congo (Democratic Republic of the)", "Bolivia (Plurinational State of)", "Côte d'Ivoire", "Tanzania, United Republic of", "Saint Barthélemy", "Saint Martin (French part)", "Virgin Islands (U.S.)", "Central African Republic", "Holy See", "Saint Vincent and the Grenadines", "Sint Maarten (Dutch part)", "Swaziland"]
+    correctNames = ["S. Korea", "North Korea", "Iran", "UK", "Russia", "Vietnam", "Brunei", "Faeroe Islands", "Palestine", "USA", "Czechia", "UAE", "North Macedonia", "Moldova", "Venezuela", "DRC", "Bolivia", "Ivory Coast", "Tanzania", "St. Barth", "Saint Martin", "U.S. Virgin Islands", "CAR", "Vatican City", "St. Vincent Grenadines", "Sint Maarten", "Eswatini"]
 
     # Prilagodimo imena držav
     for i in range(len(country_data)):
-        if country_data[i]["name"] == "Korea (Republic of)":
-            country_data[i]["name"] = "S. Korea"
-        elif country_data[i]["name"] == "Korea (Democratic People's Republic of)":
-            country_data[i]["name"] = "North Korea"
-        elif country_data[i]["name"] == "Iran (Islamic Republic of)":
-            country_data[i]["name"] = "Iran"
-        elif country_data[i]["name"] == "United Kingdom of Great Britain and Northern Ireland":
-            country_data[i]["name"] = "UK"
-        elif country_data[i]["name"] == "Russian Federation":
-            country_data[i]["name"] = "Russia"
-        elif country_data[i]["name"] == "Viet Nam":
-            country_data[i]["name"] = "Vietnam"
-        elif country_data[i]["name"] == "Brunei Darussalam":
-            country_data[i]["name"] = "Brunei"
-        elif country_data[i]["name"] == "Faroe Islands":
-            country_data[i]["name"] = "Faeroe Islands"
-        elif country_data[i]["name"] == "Palestine, State of":
-            country_data[i]["name"] = "Palestine"
-        elif country_data[i]["name"] == "United States of America":
-            country_data[i]["name"] = "USA"
-        elif country_data[i]["name"] == "Czech Republic":
-            country_data[i]["name"] = "Czechia"
-        elif country_data[i]["name"] == "United Arab Emirates":
-            country_data[i]["name"] = "UAE"
-        elif country_data[i]["name"] == "Macedonia (the former Yugoslav Republic of)":
-            country_data[i]["name"] = "North Macedonia"
-        elif country_data[i]["name"] == "Moldova (Republic of)":
-            country_data[i]["name"] = "Moldova"
-        elif country_data[i]["name"] == "Venezuela (Bolivarian Republic of)":
-            country_data[i]["name"] = "Venezuela"
-        elif country_data[i]["name"] == "Congo (Democratic Republic of the)":
-            country_data[i]["name"] = "DRC"
-        elif country_data[i]["name"] == "Bolivia (Plurinational State of)":
-            country_data[i]["name"] = "Bolivia"
-        elif country_data[i]["name"] == "Côte d'Ivoire":
-            country_data[i]["name"] = "Ivory Coast"
-        elif country_data[i]["name"] == "Tanzania, United Republic of":
-            country_data[i]["name"] = "Tanzania"
-        elif country_data[i]["name"] == "Saint Barthélemy":
-            country_data[i]["name"] = "St. Barth"
-        elif country_data[i]["name"] == "Saint Martin (French part)":
-            country_data[i]["name"] = "Saint Martin"
-        elif country_data[i]["name"] == "Virgin Islands (U.S.)":
-            country_data[i]["name"] = "U.S. Virgin Islands"
-        elif country_data[i]["name"] == "Central African Republic":
-            country_data[i]["name"] = "CAR"
-        elif country_data[i]["name"] == "Holy See":
-            country_data[i]["name"] = "Vatican City"
-        elif country_data[i]["name"] == "Saint Vincent and the Grenadines":
-            country_data[i]["name"] = "St. Vincent Grenadines"
-        elif country_data[i]["name"] == "Sint Maarten (Dutch part)":
-            country_data[i]["name"] = "Sint Maarten"
-        elif country_data[i]["name"] == "Swaziland":
-            country_data[i]["name"] = "Eswatini"
+        for j in range(len(wrongNames)):
+            if country_data[i]["name"] == wrongNames[j]:
+                country_data[i]["name"] = correctNames[j]
  
     # Polnimo podatke v naše sezname
     for i in range(len(corona_data)):
         for j in range(len(country_data)):
-            #regex = re.search("^"+corona_data[i]["country"]+".*$", country_data[j]["name"])
-            #if regex != None:
             if corona_data[i]["country"] == country_data[j]["name"]: 
                 # Podatki o državi
                 countries.append(corona_data[i]["country"])
@@ -186,27 +136,6 @@ def process_data():
         critical[i] = '{:,}'.format(critical[i])
         population[i] = '{:,}'.format(population[i])
 
-    """
-        graph_data_response = json.loads(requests.get("https://coronavirus-tracker-api.herokuapp.com/v2/locations?country_code="+countriesA2Codes[i]+"&timelines=true").text)
-        if len(graph_data_response["locations"]) == 1:
-            graphData.append(graph_data_response["locations"][0]["timelines"]["confirmed"]["timeline"])
-        else:
-            graphData.append("none")
-
-    #Nimamo zadosti točnih podatkov!!!!
-    
-    graph_data_response = json.loads(requests.get("https://coronavirus-tracker-api.herokuapp.com/v2/locations?country_code=si&timelines=true").text)
-    graphData.append(graph_data_response["locations"][0]["timelines"]["confirmed"]["timeline"])
-
-    for i in range(len(graphData[0])):
-        dt = datetime(2020, 1, 22, 0, 0, 0, 0, tzinfo=timezone.utc) + timedelta(days=i)
-        dt = str(dt).replace(" ", "T")[:-6]+"Z"
-        print(dt, "->", graphData[0][dt])
-
-    # Zdaj ko imamo podatke za vsako državo, moramo izluščiti le število in datum.
-
-    print(graphData[0]["2020-01-22T00:00:00Z"])
-    """
 
     # Preverimo razliko števila držav
     missingCountries = len(corona_data) - len(infected)
