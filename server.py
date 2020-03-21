@@ -20,6 +20,8 @@ countriesCapitals = []
 countriesA2Codes = []
 countriesA3Codes = []
 countriesTranslated = []
+countriesArea = []
+countriesDensity = []
 graphData = []
 population = []
 infected = []
@@ -43,13 +45,15 @@ with open("static/pivicka.json") as json_file:
     country_translations = json.load(json_file)
 
 def process_data():
-    global countries, population, infected, infectedToday, dead, deadToday, cured, active, critical, infectedRatio, deadRatio, populationCuredShare, populationDeadShare, populationHealthyShare, country_response, corona_response, good_response
+    global countries, countriesFlags, countriesA2Codes, countriesA3Codes, countriesCapitals, countriesTranslated, countriesArea, countriesDensity, population, infected, infectedToday, dead, deadToday, cured, active, critical, infectedRatio, deadRatio, populationCuredShare, populationDeadShare, populationHealthyShare, country_response, corona_response, good_response
     countries.clear()
     countriesFlags.clear()
     countriesCapitals.clear()
     countriesA2Codes.clear()
     countriesA3Codes.clear()
     countriesTranslated.clear()
+    countriesArea.clear()
+    countriesDensity.clear()
     graphData.clear()
     population.clear()
     infected.clear()
@@ -72,6 +76,10 @@ def process_data():
         good_response = False
         return
     good_response = True
+
+    # DODAJ DVA SEZNAMA, PRAVILNIH IN NAPAČNIH IMEN, DA SE IZOGNEŠ ELIFOM!!!
+
+    wrongNames = ["Korea (Republic of)", "Korea (Democratic People's Republic of)", "Iran (Islamic Republic of)"]
 
     # Prilagodimo imena držav
     for i in range(len(country_data)):
@@ -143,6 +151,7 @@ def process_data():
                 countriesFlags.append(country_data[j]["flag"])
                 countriesCapitals.append(country_data[j]["capital"])
                 population.append(country_data[j]["population"])
+                countriesArea.append(country_data[j]["area"])
 
                 # Podatki o pivu
                 infected.append(int(corona_data[i]["cases"]))
@@ -162,6 +171,10 @@ def process_data():
                 populationDeadShare.append(round(float(corona_data[i]["deaths"] * 100 / country_data[j]["population"]), 5))
                 populationHealthyShare.append(round(float((country_data[j]["population"] - corona_data[i]["cases"]) * 100 / country_data[j]["population"]), 5))
                 populationCuredShare.append(round(float(corona_data[i]["recovered"] * 100 / country_data[j]["population"]), 5))
+                if country_data[j]["area"] != None:
+                    countriesDensity.append(round(float(country_data[j]["population"] / country_data[j]["area"])))
+                else:
+                    countriesDensity.append("0")
 
     for i in range(len(infected)):
         infected[i] = '{:,}'.format(infected[i])
@@ -172,8 +185,8 @@ def process_data():
         active[i] = '{:,}'.format(active[i])
         critical[i] = '{:,}'.format(critical[i])
         population[i] = '{:,}'.format(population[i])
-        
-        """
+
+    """
         graph_data_response = json.loads(requests.get("https://coronavirus-tracker-api.herokuapp.com/v2/locations?country_code="+countriesA2Codes[i]+"&timelines=true").text)
         if len(graph_data_response["locations"]) == 1:
             graphData.append(graph_data_response["locations"][0]["timelines"]["confirmed"]["timeline"])
@@ -181,7 +194,6 @@ def process_data():
             graphData.append("none")
 
     #Nimamo zadosti točnih podatkov!!!!
-
     
     graph_data_response = json.loads(requests.get("https://coronavirus-tracker-api.herokuapp.com/v2/locations?country_code=si&timelines=true").text)
     graphData.append(graph_data_response["locations"][0]["timelines"]["confirmed"]["timeline"])
@@ -249,6 +261,7 @@ def index():
         countriesTranslated=countriesTranslated,
         countriesFlags=countriesFlags,
         countriesCapitals=countriesCapitals,
+        countriesDensity=countriesDensity,
         population=population,
         infected=infected,
         infectedToday=infectedToday,

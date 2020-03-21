@@ -233,6 +233,7 @@
     var countriesTranslated = {{ countriesTranslated | tojson | safe }};
     var countriesFlags = {{ countriesFlags | tojson | safe }};
     var countriesCapitals = {{ countriesCapitals | tojson | safe }};
+    var countriesDensity = {{ countriesDensity | tojson | safe }};
     var population = {{ population | tojson | safe }};
     var infected = {{ infected | tojson | safe }};
     var infectedToday = {{ infectedToday | tojson | safe }};
@@ -249,8 +250,8 @@
     var goodResponse = "{{ goodResponse }}";
 
     function tableCreate() {
-      var headers = ["Država", "Populacija", "Okuženi", "Danes", "Obolevnost", "Umrli", "Umrljivost", "Ozdraveli"];
-      var headersIcons = ["fas fa-flag", "", "fas fa-biohazard", "fas fa-calendar-day", "", "fas fa-book-dead", "", "fas fa-smile",];
+      var headers = ["Država", "Populacija", "Gostota", "Okuženi", "Danes", "Obolevnost", "Umrli", "Umrljivost", "Ozdraveli"];
+      var headersIcons = ["fas fa-flag", "", "", "fas fa-biohazard", "fas fa-calendar-day", "", "fas fa-book-dead", "", "fas fa-smile"];
       var tbl = document.getElementById('dataTable');
       var tbdy = document.createElement('tbody');
       var thdr = tbl.createTHead();
@@ -259,8 +260,9 @@
       for (var i = 0; i < headers.length; i++) {
         var cell = document.createElement("th");
         cell.setAttribute("style", "border:none !important; cursor: pointer;");
+        console.log(headers[i], headersIcons[i])
         cell.innerHTML = '<div class="d-none d-sm-block">' + headers[i] + '</div><div class="d-sm-none"><i class="' + headersIcons[i] + '"></i></div>'
-        if (i == 2) {
+        if (i == 3) {
           cell.setAttribute("data-sort-default", "")
         }
         if (i != 0) {
@@ -269,10 +271,10 @@
         else {
           cell.innerHTML = headers[i];
         }
-        if (i == 1 || i == 6) {
+        if (i == 1 || i == 2 || i == 7) {
           cell.setAttribute("class", "d-none d-md-table-cell text-right");
         }
-        if (i == 4 || i == 7) {
+        if (i == 5 || i == 8) {
           cell.setAttribute("class", "d-none d-sm-table-cell text-right");
         }
         row.appendChild(cell);
@@ -289,6 +291,10 @@
         cell.setAttribute("align", "right");
         cell.setAttribute("class", "d-none d-md-table-cell text-right");
         cell.innerHTML = population[i];
+        cell = row.insertCell();
+        cell.setAttribute("align", "right");
+        cell.setAttribute("class", "d-none d-md-table-cell text-right");
+        cell.innerHTML = countriesDensity[i];
         cell = row.insertCell();
         cell.setAttribute("align", "right");
         cell.innerHTML = infected[i];
