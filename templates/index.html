@@ -75,17 +75,20 @@
 
       <!-- Collapsible content -->
       <div class="collapse navbar-collapse" id="navbarNav">
-        <form class="form-inline ml-auto" id="searchContainer">
-          <div class="md-form my-0 active-pink active-pink-2">
-            <input class="form-control mr-sm-2" type="text" aria-label="Išči državo" id="search"
-              placeholder="Išči državo">
-          </div>
-        </form>
+        <div class="ml-auto">
+          <form class="form-inline ml-auto" id="searchContainer">
+            <div class="md-form my-0 active-pink active-pink-2">
+              <input class="form-control mr-sm-2" type="text" aria-label="Išči državo" id="search"
+                placeholder="Išči državo">
+            </div>
+          </form>
+        </div>
       </div>
 
     </nav>
 
     <!-- Tabela -->
+
     <div class="table-responsive" id="mainDiv">
       <table id="dataTable" class="table table-hover" style="margin-bottom: 0px !important;"></table>
     </div>
@@ -157,7 +160,7 @@
   </div>
 
   <!-- Footer -->
-  <footer class="page-footer elegant-color text-center" id="footerDiv">
+  <footer class="page-footer elegant-color text-center" style="display: none;" id="footerDiv">
     <div class="container">
       <div class="row">
         <div class="col text-center">
@@ -211,6 +214,7 @@
       $("#dataTable tbody tr").filter(function () {
         $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
       });
+      stripeTable()
       colorCountry(country)
     });
 
@@ -242,37 +246,38 @@
     var goodResponse = "{{ goodResponse }}";
 
     function tableCreate() {
-      var headers = ["Država", "Populacija", "Poseljenost", "Okuženi", "Danes", "Obolevnost", "Umrli", "Umrljivost",
+      var headers = ["Država", "Populacija", "Okuženi", "Danes okuženi", "Obolevnost", "Umrli", "Danes umrli", "Umrljivost",
         "Ozdraveli"
       ];
-      var headersIcons = ["fas fa-flag", "", "", "fas fa-biohazard", "fas fa-calendar-day", "", "fas fa-book-dead", "",
+      var headersIcons = ["fas fa-flag", "", "fas fa-biohazard", "fas fa-calendar-day", "", "fas fa-book-dead", "", "",
         "fas fa-smile"
       ];
       var tbl = document.getElementById('dataTable');
       var tbdy = document.createElement('tbody');
       var thdr = tbl.createTHead();
-      thdr.setAttribute("class", "elegant-color white-text");
+      thdr.setAttribute("class", "elegant-color white-text mat-elevation-z6");
       var row = thdr.insertRow();
       for (var i = 0; i < headers.length; i++) {
         var cell = document.createElement("th");
-        cell.setAttribute("style", "border:none !important; cursor: pointer;");
-        cell.setAttribute("class", "col")
         console.log(headers[i], headersIcons[i])
         cell.innerHTML = '<div class="d-none d-sm-block">' + headers[i] + '</div><div class="d-sm-none"><i class="' +
           headersIcons[i] + '"></i></div>'
-        if (i == 3) {
+        if (headers[i] == "Okuženi") {
           cell.setAttribute("data-sort-default", "")
         }
         if (i != 0) {
-          cell.setAttribute("class", "text-right");
+          cell.setAttribute("class", "text-right col");
         } else {
           cell.innerHTML = headers[i];
         }
-        if (i == 1 || i == 2 || i == 7) {
-          cell.setAttribute("class", "d-none d-md-table-cell text-right");
+        if (headers[i] == "Ozdraveli" || headers[i] == "Umrljivost") {
+          cell.setAttribute("class", "d-none d-md-table-cell text-right col");
         }
-        if (i == 5 || i == 8) {
-          cell.setAttribute("class", "d-none d-sm-table-cell text-right");
+        if (headers[i] == "Obolevnost" || headers[i] == "Danes umrli") {
+          cell.setAttribute("class", "d-none d-sm-table-cell text-right col");
+        }
+        if (headers[i] == "Populacija") {
+          cell.setAttribute("class", "d-none d-lg-table-cell text-right col");
         }
         row.appendChild(cell);
       }
@@ -281,17 +286,12 @@
         var cell = row.insertCell();
         row.setAttribute("class", "countryExpand");
         row.setAttribute("id", i);
-        row.setAttribute("style", "cursor: pointer;")
         cell.innerHTML = data[i]["slovenianName"]
         cell.setAttribute("id", data[i]["name"])
         cell = row.insertCell();
         cell.setAttribute("align", "right");
-        cell.setAttribute("class", "d-none d-md-table-cell text-right");
+        cell.setAttribute("class", "d-none d-lg-table-cell text-right");
         cell.innerHTML = data[i]["countryPopulation"];
-        cell = row.insertCell();
-        cell.setAttribute("align", "right");
-        cell.setAttribute("class", "d-none d-md-table-cell text-right");
-        cell.innerHTML = data[i]["density"];
         cell = row.insertCell();
         cell.setAttribute("align", "right");
         cell.innerHTML = data[i]["infected"];
@@ -307,11 +307,15 @@
         cell.innerHTML = data[i]["dead"];
         cell = row.insertCell();
         cell.setAttribute("align", "right");
+        cell.setAttribute("class", "d-none d-sm-table-cell text-right");
+        cell.innerHTML = data[i]["deadToday"];
+        cell = row.insertCell();
+        cell.setAttribute("align", "right");
         cell.setAttribute("class", "d-none d-md-table-cell text-right");
         cell.innerHTML = data[i]["deadRatio"] + "%";
         cell = row.insertCell();
         cell.setAttribute("align", "right");
-        cell.setAttribute("class", "d-none d-sm-table-cell text-right");
+        cell.setAttribute("class", "d-none d-md-table-cell text-right");
         cell.innerHTML = data[i]["cured"];
       }
       tbl.appendChild(tbdy);
@@ -324,9 +328,17 @@
       mainDiv.innerHTML =
         '<div class="text-center" style="margin-top: 50px !important;"><h1>Dostop do podatkov trenutno ni mogoč! 😟</h1><p class="lead">Uporabite alternativne spletne aplikacije za pregled podatkov.<br>👉 <a href="https://www.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6">COVID-19 Tracker by CSSE</a></p></div>';
       var footerDiv = document.getElementById("footerDiv")
-      footerDiv.setAttribute("style", "position: fixed; bottom: 0; width: 100%;")
     }
+    var table = document.getElementById('dataTable');
+    var sort = new Tablesort(table);
+    sort.refresh();
     themeSetter();
+    showFooter();
+    stripeTable();
+
+    function showFooter() {
+      $(".page-footer").show();
+    }
 
     // Zaženemo plugin za sortiranje
     new Tablesort(document.getElementById("dataTable"), {
@@ -334,7 +346,7 @@
     });
 
     // Zaženemo plugin za stickanje headerjev
-    $('table').stickyTableHeaders();
+    $('table').stickyTableHeaders({cacheHeaderHeight: true});
 
     function colorCountry(country) {
       var table = $("#dataTable");
@@ -364,9 +376,36 @@
       $("#activeModal").text(data[i]["active"]);
       $("#criticalModal").text(data[i]["critical"]);
       $("#countryFlag").attr("src", data[i]["flag"])
-      $("#countryDensity").text(data[i]["density"])
+      $("#countryDensity").text(data[i]["density"] + " P/Km²")
       $("#countryDetailsModal").modal("show");
     });
+
+    $("tr").on("click", function() {
+      stripeTable()
+    });
+
+    function unstripeTable() {
+      $("#dataTable tbody tr").each(function() {
+        $(this).css("background-color", "inherit");
+      })
+    };
+
+    function stripeTable() {
+      var color = "#f3f3f3";
+      if($("thead").hasClass("black")){
+        color = "#2b2b2b";
+      }
+      var i = 0;
+      $("#dataTable tbody tr").each(function() {
+        $(this).css("background-color", "inherit");
+        if($(this).css("display") != "none") {
+          if ( i % 2 == 0) {
+            $(this).css("background-color", color);
+          }
+          i++;
+        }
+      })
+    };
   </script>
 
 </body>

@@ -21,8 +21,12 @@ footer {
     height: 150px;
 }
 
-tbody {
-    border-top: 2px solid #2E2E2E;
+.mat-elevation-z6 {
+    box-shadow:0 3px 5px -1px rgba(0,0,0,.2),0 6px 10px 0 rgba(0,0,0,.14),0 1px 18px 0 rgba(0,0,0,.12) !important;
+}
+
+table thead > tr > th {
+    border-bottom: 3px solid #ffbb33 !important;
 }
 
 .navbar {
@@ -49,6 +53,10 @@ th[aria-sort]:not(.no-sort) {
 
 th:hover {
     opacity: 1;
+}
+
+tr {
+    cursor: pointer;
 }
 
 #countryFlag {
