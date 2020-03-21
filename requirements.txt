@@ -2,6 +2,6 @@ flask
 flask_sslify
 flask_compress
 requests
-gunicorn
+waitress
 apscheduler
 datetime
