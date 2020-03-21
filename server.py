@@ -15,7 +15,7 @@ ext = Sitemap(app=app)
 Compress(app)
 
 data_time = None
-data = []
+data = None
 good_response = True
 
 with open("static/pivicka.json") as json_file:
@@ -44,7 +44,7 @@ def process_data(corona_data, country_data):
     population_cured_share = []
     population_dead_share = []
     population_healthy_share = []
-    data.clear()
+    data = []
 
     country_data = json.loads(country_data.text)
     corona_data = json.loads(corona_data.text)
@@ -181,7 +181,7 @@ def get_data():
 get_data()
 
 sched = BackgroundScheduler()
-sched.add_job(get_data, "interval", minutes=10, max_instances=10)
+sched.add_job(get_data, "interval", minutes=1, max_instances=10)
 sched.start()
 
 @app.route('/')
