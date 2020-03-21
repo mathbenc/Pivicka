@@ -1,4 +1,5 @@
-html, body {
+html,
+body {
     height: 100%;
 }
 
@@ -24,8 +25,8 @@ tbody {
     border-top: 2px solid #2E2E2E;
 }
 
-.navbar { 
-    box-shadow: none !important; 
+.navbar {
+    box-shadow: none !important;
 }
 
 h1 img {
@@ -43,7 +44,7 @@ th {
 }
 
 th[aria-sort]:not(.no-sort) {
-	opacity: 1;
+    opacity: 1;
 }
 
 th:hover {

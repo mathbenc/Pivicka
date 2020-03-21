@@ -37,7 +37,8 @@
   <meta name="msapplication-starturl" content="/">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
   <link rel="icon" type="image/png" sizes="512x512" href="{{ url_for('static', filename='images/icon-512x512.png') }}">
-  <link rel="apple-touch-icon" type="image/png" sizes="512x512" href="{{ url_for('static', filename='images/icon-512x512.png') }}">
+  <link rel="apple-touch-icon" type="image/png" sizes="512x512"
+    href="{{ url_for('static', filename='images/icon-512x512.png') }}">
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
@@ -58,10 +59,11 @@
   <div class="wrapper">
     <!-- Navbar -->
     <nav class="navbar navbar-expand-sm navbar-dark elegant-color">
-      
+
       <!-- Navbar brand -->
       <a class="navbar-brand" href="#" onClick="window.location.reload();">
-        <img src="/static/images/beer_emoji.png" width="30" height="30" class="d-inline-block align-top" alt="pivicka">&nbsp
+        <img src="/static/images/beer_emoji.png" width="30" height="30" class="d-inline-block align-top"
+          alt="pivicka">&nbsp
         <b>Na zdrav</b>(ljen)<b>je!</b>
       </a>
 
@@ -75,7 +77,8 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <form class="form-inline ml-auto" id="searchContainer">
           <div class="md-form my-0 active-pink active-pink-2">
-            <input class="form-control mr-sm-2" type="text" aria-label="Išči državo" id="search" placeholder="Išči državo">
+            <input class="form-control mr-sm-2" type="text" aria-label="Išči državo" id="search"
+              placeholder="Išči državo">
           </div>
         </form>
       </div>
@@ -88,40 +91,64 @@
     </div>
 
     <!-- Modal -->
-    <div class="modal fade bottom" id="countryDetailsModal" tabindex="-1" role="dialog" aria-labelledby="countryDetailsModal" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-scrollable modal-full-height modal-bottom modal-notify modal-warning" role="document">
-        
+    <div class="modal fade bottom" id="countryDetailsModal" tabindex="-1" role="dialog"
+      aria-labelledby="countryDetailsModal" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-scrollable modal-full-height modal-bottom modal-notify modal-warning"
+        role="document">
+
         <div class="modal-content">
           <div class="modal-header" id="countryDetailsModalHeader">
             <p class="heading lead modal-title w-100"><b id="countryDetailsModalTitle"></b></p>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true" class="white-text">&times;</span>
-            </button>  
+            </button>
           </div>
 
           <div id="countryDetailsModalBody" class="modal-body container text-center">
             <div class="row">
-              <div class="col-4"><b>Populacija</b><p id="populationModal"></p></div>
               <div class="col-4"><b>Zastava</b><br><img height="24px" id="countryFlag"></img></div>
-              <div class="col-4"><b>Glavno mesto</b><p id="countryCapitals"></p></div>
- 
-              <div class="w-100"></div>
-
-              <div class="col-4"><b>Okuženi</b><p id="infectedModal"></p></div>
-              <div class="col-4"><b>Danes okuženi</b><p id="infectedTodayModal"></p></div>
-              <div class="col-4"><b>Obolevnost</b><p id="infectedRatioModal"></p></div>
-
-              <div class="w-100"></div>
-
-              <div class="col-4"><b>Umrli</b><p id="deadModal"></p></div>
-              <div class="col-4"><b>Danes umrli</b><p id="deadTodayModal"></p></div>
-              <div class="col-4"><b>Umrljivost</b><p id="deadRatioModal"></p></div>
+              <div class="col-4"><b>Populacija</b>
+                <p id="populationModal"></p>
+              </div>
+              <div class="col-4"><b>Poseljenost</b>
+                <p id="countryDensity"></p>
+              </div>
 
               <div class="w-100"></div>
 
-              <div class="col-4"><b>Ozdraveli</b><p id="curedModal"></p></div>
-              <div class="col-4"><b>Odprti primeri</b><p id="activeModal"></p></div>
-              <div class="col-4"><b>Kritični primeri</b><p id="criticalModal"></p></div>
+              <div class="col-4"><b>Okuženi</b>
+                <p id="infectedModal"></p>
+              </div>
+              <div class="col-4"><b>Danes okuženi</b>
+                <p id="infectedTodayModal"></p>
+              </div>
+              <div class="col-4"><b>Obolevnost</b>
+                <p id="infectedRatioModal"></p>
+              </div>
+
+              <div class="w-100"></div>
+
+              <div class="col-4"><b>Umrli</b>
+                <p id="deadModal"></p>
+              </div>
+              <div class="col-4"><b>Danes umrli</b>
+                <p id="deadTodayModal"></p>
+              </div>
+              <div class="col-4"><b>Umrljivost</b>
+                <p id="deadRatioModal"></p>
+              </div>
+
+              <div class="w-100"></div>
+
+              <div class="col-4"><b>Ozdraveli</b>
+                <p id="curedModal"></p>
+              </div>
+              <div class="col-4"><b>Odprti primeri</b>
+                <p id="activeModal"></p>
+              </div>
+              <div class="col-4"><b>Kritični primeri</b>
+                <p id="criticalModal"></p>
+              </div>
             </div>
           </div>
         </div>
@@ -134,7 +161,8 @@
     <div class="container">
       <div class="row">
         <div class="col text-center">
-          <h1><img src="/static/images/beer_emoji.png" class="img-fluid" alt="pivicka">&nbsp Pivička - Koronavirus po svetu v številkah.</h1>
+          <h1><img src="/static/images/beer_emoji.png" class="img-fluid" alt="pivicka">&nbsp Pivička - Koronavirus po
+            svetu v številkah.</h1>
         </div>
       </div>
     </div>
@@ -152,13 +180,15 @@
   <!-- SCRIPTS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.1.0/tablesort.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.1.0/sorts/tablesort.number.min.js"></script>
-  
+
   <!-- JQuery -->
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <!-- Bootstrap tooltips -->
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js">
+  </script>
   <!-- Bootstrap core JavaScript -->
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
+  <script type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
   <!-- MDB core JavaScript -->
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.14.1/js/mdb.min.js"></script>
   <!-- MDBootstrap Datatables  -->
@@ -168,26 +198,21 @@
   <script src="{{ url_for('static', filename='app.js') }}"></script>
 
   <script>
-
     var country = "";
-    $.getJSON('https://json.geoiplookup.io', function(data) {
-    })
-    .done(function(data) {
-      country = data.country_name
-      colorCountry(country);
-    })
+    $.getJSON('https://json.geoiplookup.io', function (data) {})
+      .done(function (data) {
+        country = data.country_name
+        colorCountry(country);
+      })
 
     // Search
-    $("#search").on("keyup", function() {
+    $("#search").on("keyup", function () {
       var value = $(this).val().toLowerCase();
-      $("#dataTable tbody tr").filter(function() {
+      $("#dataTable tbody tr").filter(function () {
         $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
       });
-      stripeTable()
       colorCountry(country)
     });
-
-    $("tr").click(stripeTable());
 
     function themeSetter() {
       var today = new Date();
@@ -196,7 +221,7 @@
         $("#dataTable").toggleClass("table-dark elegant-color-dark");
         $(".modal-content").toggleClass("elegant-color");
         $(".modal-body").toggleClass("text-white");
-        
+
         // Navbar
         $(".navbar").removeClass("elegant-color");
         $(".navbar").addClass("black")
@@ -213,45 +238,16 @@
       }
     }
 
-    function stripeTable() {
-      /*
-      var i = 0;
-      $("#dataTable tbody tr").each(function (index) {
-        $(this).css("background-color", "inherit");
-        if($(this).css("display") != "none") {
-          if ( i % 2 == 0) {
-            $(this).css("background-color", "#f3f3f3");
-          }
-          i++;
-        }
-      })
-      */
-    };
-
-    var coronaData = JSON.parse({{corona_data | tojson | safe }});
-    var countries = {{ countries | tojson | safe }};
-    var countriesTranslated = {{ countriesTranslated | tojson | safe }};
-    var countriesFlags = {{ countriesFlags | tojson | safe }};
-    var countriesCapitals = {{ countriesCapitals | tojson | safe }};
-    var countriesDensity = {{ countriesDensity | tojson | safe }};
-    var population = {{ population | tojson | safe }};
-    var infected = {{ infected | tojson | safe }};
-    var infectedToday = {{ infectedToday | tojson | safe }};
-    var dead = {{ dead | tojson | safe }};
-    var deadToday = {{ deadToday | tojson | safe }};
-    var cured = {{ cured | tojson | safe }};
-    var active = {{ active | tojson | safe }};
-    var critical = {{ critical | tojson | safe }};
-    var infectedRatio = {{ infectedRatio | tojson | safe }};
-    var deadRatio = {{ deadRatio | tojson | safe }};
-    var populationDeadShare = {{ populationDeadShare | tojson | safe }};
-    var populationCuredShare = {{ populationCuredShare | tojson | safe }};
-    var populationHealthyShare = {{ populationHealthyShare | tojson | safe }};
+    var data = JSON.parse({{ data | tojson | safe }});
     var goodResponse = "{{ goodResponse }}";
 
     function tableCreate() {
-      var headers = ["Država", "Populacija", "Poseljenost", "Okuženi", "Danes", "Obolevnost", "Umrli", "Umrljivost", "Ozdraveli"];
-      var headersIcons = ["fas fa-flag", "", "", "fas fa-biohazard", "fas fa-calendar-day", "", "fas fa-book-dead", "", "fas fa-smile"];
+      var headers = ["Država", "Populacija", "Poseljenost", "Okuženi", "Danes", "Obolevnost", "Umrli", "Umrljivost",
+        "Ozdraveli"
+      ];
+      var headersIcons = ["fas fa-flag", "", "", "fas fa-biohazard", "fas fa-calendar-day", "", "fas fa-book-dead", "",
+        "fas fa-smile"
+      ];
       var tbl = document.getElementById('dataTable');
       var tbdy = document.createElement('tbody');
       var thdr = tbl.createTHead();
@@ -261,14 +257,14 @@
         var cell = document.createElement("th");
         cell.setAttribute("style", "border:none !important; cursor: pointer;");
         console.log(headers[i], headersIcons[i])
-        cell.innerHTML = '<div class="d-none d-sm-block">' + headers[i] + '</div><div class="d-sm-none"><i class="' + headersIcons[i] + '"></i></div>'
+        cell.innerHTML = '<div class="d-none d-sm-block">' + headers[i] + '</div><div class="d-sm-none"><i class="' +
+          headersIcons[i] + '"></i></div>'
         if (i == 3) {
           cell.setAttribute("data-sort-default", "")
         }
         if (i != 0) {
           cell.setAttribute("class", "text-right");
-        }
-        else {
+        } else {
           cell.innerHTML = headers[i];
         }
         if (i == 1 || i == 2 || i == 7) {
@@ -279,99 +275,97 @@
         }
         row.appendChild(cell);
       }
-      for (var i = 0; i < countries.length; i++) {
+      for (var i = 0; i < data.length; i++) {
         var row = tbdy.insertRow();
         var cell = row.insertCell();
         row.setAttribute("class", "countryExpand");
         row.setAttribute("id", i);
         row.setAttribute("style", "cursor: pointer;")
-        cell.innerHTML = countriesTranslated[i]
-        cell.setAttribute("id", countries[i])
+        cell.innerHTML = data[i]["slovenianName"]
+        cell.setAttribute("id", data[i]["name"])
         cell = row.insertCell();
         cell.setAttribute("align", "right");
         cell.setAttribute("class", "d-none d-md-table-cell text-right");
-        cell.innerHTML = population[i];
+        cell.innerHTML = data[i]["countryPopulation"];
         cell = row.insertCell();
         cell.setAttribute("align", "right");
         cell.setAttribute("class", "d-none d-md-table-cell text-right");
-        cell.innerHTML = countriesDensity[i];
+        cell.innerHTML = data[i]["density"];
         cell = row.insertCell();
         cell.setAttribute("align", "right");
-        cell.innerHTML = infected[i];
+        cell.innerHTML = data[i]["infected"];
         cell = row.insertCell();
         cell.setAttribute("align", "right");
-        cell.innerHTML = infectedToday[i];
+        cell.innerHTML = data[i]["infectedToday"];
         cell = row.insertCell();
         cell.setAttribute("align", "right");
         cell.setAttribute("class", "d-none d-sm-table-cell text-right");
-        cell.innerHTML = infectedRatio[i] + "%";
+        cell.innerHTML = data[i]["infectedRatio"] + "%";
         cell = row.insertCell();
         cell.setAttribute("align", "right");
-        cell.innerHTML = dead[i];
+        cell.innerHTML = data[i]["dead"];
         cell = row.insertCell();
         cell.setAttribute("align", "right");
         cell.setAttribute("class", "d-none d-md-table-cell text-right");
-        cell.innerHTML = deadRatio[i] + "%";
+        cell.innerHTML = data[i]["deadRatio"] + "%";
         cell = row.insertCell();
         cell.setAttribute("align", "right");
         cell.setAttribute("class", "d-none d-sm-table-cell text-right");
-        cell.innerHTML = cured[i];
+        cell.innerHTML = data[i]["cured"];
       }
       tbl.appendChild(tbdy);
     }
 
-    if(goodResponse == "True") {
-      tableCreate();  
-    }
-    else {
+    if (goodResponse == "True") {
+      tableCreate();
+    } else {
       var mainDiv = document.getElementById("mainDiv");
-      mainDiv.innerHTML = '<div class="text-center" style="margin-top: 50px !important;"><h1>Dostop do podatkov trenutno ni mogoč! 😟</h1><p class="lead">Uporabite alternativne spletne aplikacije za pregled podatkov.<br>👉 <a href="https://www.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6">COVID-19 Tracker by CSSE</a></p></div>';
+      mainDiv.innerHTML =
+        '<div class="text-center" style="margin-top: 50px !important;"><h1>Dostop do podatkov trenutno ni mogoč! 😟</h1><p class="lead">Uporabite alternativne spletne aplikacije za pregled podatkov.<br>👉 <a href="https://www.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6">COVID-19 Tracker by CSSE</a></p></div>';
       var footerDiv = document.getElementById("footerDiv")
       footerDiv.setAttribute("style", "position: fixed; bottom: 0; width: 100%;")
     }
-
     themeSetter();
-    
+
     // Zaženemo plugin za sortiranje
     new Tablesort(document.getElementById("dataTable"), {
       descending: true
     });
-    
+
     // Zaženemo plugin za stickanje headerjev
     $('table').stickyTableHeaders();
-        
+
     function colorCountry(country) {
       var table = $("#dataTable");
       var tbody = table.find("tbody");
       var rows = tbody.find("tr");
-      for (var i=0; i<rows.length; i++) {
+      for (var i = 0; i < rows.length; i++) {
         var cells = rows[i].getElementsByTagName("td")
         var countryRegex = new RegExp("^" + country + ".*$");
-        if(countryRegex.test(cells[0].getAttribute("id"))) {
+        if (countryRegex.test(cells[0].getAttribute("id"))) {
           rows[i].style.backgroundColor = "#ffbb33";
           rows[i].style.color = "white";
         }
       }
     };
 
-    $(".countryExpand").click(function() {
+    $(".countryExpand").click(function () {
       var i = $(this).attr("id");
-      $("#countryDetailsModalTitle").text(countriesTranslated[i]);
-      $("#populationModal").text(population[i]);
-      $("#infectedModal").text(infected[i]);
-      $("#infectedTodayModal").text(infectedToday[i]);
-      $("#infectedRatioModal").text(infectedRatio[i] + "%");
-      $("#deadModal").text(dead[i]);
-      $("#deadTodayModal").text(deadToday[i]);
-      $("#deadRatioModal").text(deadRatio[i] + "%");
-      $("#curedModal").text(cured[i]);
-      $("#activeModal").text(active[i]);
-      $("#criticalModal").text(critical[i]);
-      $("#countryFlag").attr("src", countriesFlags[i])
-      $("#countryCapitals").text(countriesCapitals[i])
+      $("#countryDetailsModalTitle").text(data[i]["slovenianName"]);
+      $("#populationModal").text(data[i]["countryPopulation"]);
+      $("#infectedModal").text(data[i]["infected"]);
+      $("#infectedTodayModal").text(data[i]["infectedToday"]);
+      $("#infectedRatioModal").text(data[i]["infectedRatio"] + "%");
+      $("#deadModal").text(data[i]["dead"]);
+      $("#deadTodayModal").text(data[i]["deadToday"]);
+      $("#deadRatioModal").text(data[i]["deadRatio"] + "%");
+      $("#curedModal").text(data[i]["cured"]);
+      $("#activeModal").text(data[i]["active"]);
+      $("#criticalModal").text(data[i]["critical"]);
+      $("#countryFlag").attr("src", data[i]["flag"])
+      $("#countryDensity").text(data[i]["density"])
       $("#countryDetailsModal").modal("show");
     });
-    
   </script>
 
 </body>
