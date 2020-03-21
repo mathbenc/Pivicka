@@ -1,9 +1,7 @@
 flask
 flask_sslify
 flask_compress
-flask_sitemap
 requests
 gunicorn
-waitress
 apscheduler
 datetime

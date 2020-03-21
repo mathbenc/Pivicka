@@ -1,6 +1,5 @@
 from flask import Flask, render_template, jsonify, send_from_directory, make_response
 from flask_sslify import SSLify
-from flask_sitemap import Sitemap
 from flask_compress import Compress
 import requests
 import json
@@ -11,7 +10,6 @@ import re
 from apscheduler.schedulers.background import BackgroundScheduler
 
 app = Flask(__name__)
-ext = Sitemap(app=app)
 Compress(app)
 
 data_time = None
