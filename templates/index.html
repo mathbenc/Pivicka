@@ -236,7 +236,6 @@
         // ...
       }
     }
-    themeSetter();
 
     var country = "";
     $.getJSON('https://json.geoiplookup.io', function (data) {})
@@ -252,7 +251,6 @@
         $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
       });
       stripeTable()
-      colorCountry(country)
     });
 
     var data = JSON.parse({{ data | tojson | safe }});
@@ -416,6 +414,7 @@
           i++;
         }
       })
+      colorCountry(country);
     };
   </script>
 
