@@ -112,3 +112,7 @@ table {
     color: black !important;
     font-family: "Roboto Mono", monospace !important;
 }
+
+#countryDetailsModalBody .row {
+    font-size: 11pt !important;
+}
