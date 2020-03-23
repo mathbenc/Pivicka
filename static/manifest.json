@@ -8,7 +8,7 @@
     "theme_color": "#ffeb3b",
     "icons": [
         {
-        "src": "./images/icon-apple.png",
+        "src": "./images/icon-android.png",
         "sizes": "512x512",
         "type": "image/png"
         }
