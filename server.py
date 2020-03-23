@@ -107,22 +107,28 @@ def process_data(corona_data, country_data, corona_global_data, graph_data_respo
                 else:
                     country_density.append(0)
 
+    dates_og = list(graph_data_response["confirmed"]["locations"][0]["history"].keys())
+    dates = dates_og.copy()
+    for k in range(len(dates_og)):
+        dates[k] = datetime.strptime(dates_og[k], "%m/%d/%y")
+    dates.sort()
+    
+
     for i in range(len(graph_data_response["confirmed"]["locations"])):
         for j in range(len(country_a2_code)):
             if graph_data_response["confirmed"]["locations"][i]["country_code"] == country_a2_code[j]:
                 # Če obstaja, posodobimo številke
                 if graph_data_response["confirmed"]["locations"][i]["country_code"] in graph_countries:
                     index = graph_countries.index(graph_data_response["confirmed"]["locations"][i]["country_code"])
-                    pass
-                    #! NE POZABI NA TO
+                    for k in range(len(dates)):
+                        key = dates[k].strftime("X%m/X%d/X%y").replace("X0", "X").replace("X", "")            
+                        graph_data_confirmed[index][k] = graph_data_confirmed[index][k] + graph_data_response["confirmed"]["locations"][i]["history"][key]
+                        graph_data_dead[index][k] = graph_data_dead[index][k] + graph_data_response["deaths"]["locations"][i]["history"][key]
+                        graph_data_recovered[index][k] = graph_data_recovered[index][k] + graph_data_response["recovered"]["locations"][i]["history"][key]          
 
                 # Drugače dodamo novo
                 else:
                     graph_countries.append(graph_data_response["confirmed"]["locations"][i]["country_code"])
-                    dates = list(graph_data_response["confirmed"]["locations"][i]["history"].keys())
-                    for k in range(len(dates)):
-                        dates[k] = datetime.strptime(dates[k], "%m/%d/%y")
-                    dates.sort()
                     country_graph_data_confirmed = []
                     country_graph_data_dead = []
                     country_graph_data_recovered = []
@@ -136,7 +142,6 @@ def process_data(corona_data, country_data, corona_global_data, graph_data_respo
                     graph_data_confirmed.append(country_graph_data_confirmed)
                     graph_data_dead.append(country_graph_data_dead)
                     graph_data_recovered.append(country_graph_data_recovered)
-
 
     # Številom dodamo vejice
     for i in range(len(infected)):
