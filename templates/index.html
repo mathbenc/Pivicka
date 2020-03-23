@@ -213,7 +213,6 @@
   <script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
 
   <script src="{{ url_for('static', filename='app.js') }}"></script>
-  <script src="https://cdn.jsdelivr.net/npm/body-scroll-lock@3.0.1/lib/bodyScrollLock.min.js"></script>
 
   <script>
     var currentTheme = "light";
@@ -436,9 +435,6 @@
         currentTheme = "light"
       }
     }
-
-    var targetElement = document.querySelector('.fakeThead');
-    bodyScrollLock.disableBodyScroll(targetElement);
 
   </script>
 
