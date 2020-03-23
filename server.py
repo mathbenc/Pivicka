@@ -21,7 +21,7 @@ graph_data = None
 with open("static/pivicka.json") as json_file:
     country_translations = json.load(json_file)
 
-def process_data(corona_data, country_data, corona_global_data):
+def process_data(corona_data, country_data, corona_global_data, graph_data_response):
     global data, good_response, global_data, graph_data
     country = []
     country_flag = []
@@ -51,6 +51,9 @@ def process_data(corona_data, country_data, corona_global_data):
     global_data = json.loads(corona_global_data.text)
     country_data = json.loads(country_data.text)
     corona_data = json.loads(corona_data.text)
+    graph_data = json.loads(graph_data_response.text)
+
+    print(graph_data)
 
     if len(corona_data) == 0:
         good_response = False
@@ -200,9 +203,10 @@ def get_data():
     country_response = requests.get("https://restcountries.eu/rest/v2/all")
     corona_response = requests.get("https://coronavirus-19-api.herokuapp.com/countries")
     corona_global_data = requests.get("https://coronavirus-19-api.herokuapp.com/all")
+    graph_data = requests.get("https://coronavirus-tracker-api.herokuapp.com/all")
     now = datetime.now() + timedelta(hours=1)
     data_time = now.strftime("%d.%m.%Y %H:%M")
-    process_data(corona_response, country_response, corona_global_data)
+    process_data(corona_response, country_response, corona_global_data, graph_data)
     print("API Update complete")
     sys.stdout.flush()
 
