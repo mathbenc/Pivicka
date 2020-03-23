@@ -5,7 +5,7 @@
     "lang": "sl_SI",
     "start_url": "/",
     "display": "standalone",
-    "theme_color": "#2E2E2E",
+    "theme_color": "#ffeb3b",
     "icons": [
         {
         "src": "./images/icon-512x512.png",
@@ -13,5 +13,5 @@
         "type": "image/png"
         }
     ],
-    "background_color": "#fff"
+    "background_color": "#ffeb3b"
 }

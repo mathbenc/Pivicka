@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
   <!-- Google Fonts -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:300,400,500,700&display=swap" rel="stylesheet"> 
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
   <!-- Bootstrap core CSS -->
@@ -15,8 +16,6 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.14.1/css/mdb.min.css" rel="stylesheet">
   <!-- MDBootstrap Datatables  -->
   <link href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" rel="stylesheet">
-
-  <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:300,400,500,700&display=swap" rel="stylesheet"> 
 
   <!-- Primary Meta Tags -->
   <title>Pivička</title>
@@ -39,8 +38,7 @@
   <meta name="msapplication-starturl" content="/">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
   <link rel="icon" type="image/png" sizes="512x512" href="{{ url_for('static', filename='images/icon-512x512.png') }}">
-  <link rel="apple-touch-icon" type="image/png" sizes="512x512"
-    href="{{ url_for('static', filename='images/icon-512x512.png') }}">
+  <link rel="apple-touch-icon" type="image/png" sizes="512x512" href="{{ url_for('static', filename='images/icon-apple.png') }}">
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
@@ -78,13 +76,10 @@
       <!-- Collapsible content -->
       <div class="collapse navbar-collapse" id="navbarNav">
         <div class="ml-auto">
-          <form class="form-inline ml-auto" id="searchContainer">
-            <div id="globalCases"><i class="fas fa-biohazard"></i></div>
-            &nbsp&nbsp&nbsp
-            <div id="globalDeaths"><i class="fas fa-book-dead"></i></div>
-            &nbsp&nbsp&nbsp
-            <div id="globalRecovered"><i class="fas fa-smile-beam"></i></div>
-            &nbsp&nbsp&nbsp
+          <form class="form-inline" id="searchContainer">
+            <div id="globalCases" class="mr-5"><i class="fas fa-biohazard"></i></div>
+            <div id="globalDeaths" class="mr-5"><i class="fas fa-book-dead"></i></div>
+            <div id="globalRecovered" class="mr-5"><i class="fas fa-smile-beam"></i></div>
             <div class="md-form my-0 active-pink active-pink-2">
               <input class="form-control mr-sm-2" type="text" aria-label="Išči državo" id="search"
                 placeholder="Išči državo">
@@ -363,6 +358,7 @@
       for (var i = 0; i < rows.length; i++) {
         var cells = rows[i].getElementsByTagName("td")
         if (cells[0].getAttribute("id")==country) {
+          rows[i].classList.add("myCountry");
           rows[i].style.backgroundColor = "#ffff72";
           rows[i].style.color = "black";
         }
