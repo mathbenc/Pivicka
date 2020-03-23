@@ -14,13 +14,15 @@ Compress(app)
 
 data_time = None
 data = None
+global_data = None
 good_response = True
+graph_data = None
 
 with open("static/pivicka.json") as json_file:
     country_translations = json.load(json_file)
 
-def process_data(corona_data, country_data):
-    global data, good_response
+def process_data(corona_data, country_data, corona_global_data):
+    global data, good_response, global_data, graph_data
     country = []
     country_flag = []
     country_capital = []
@@ -43,7 +45,10 @@ def process_data(corona_data, country_data):
     population_dead_share = []
     population_healthy_share = []
     data = []
+    global_data = []
+    graph_data = []
 
+    global_data = json.loads(corona_global_data.text)
     country_data = json.loads(country_data.text)
     corona_data = json.loads(corona_data.text)
 
@@ -107,7 +112,31 @@ def process_data(corona_data, country_data):
         critical[i] = '{:,}'.format(critical[i])
         country_population[i] = '{:,}'.format(country_population[i])
         country_density[i] = '{:,}'.format(country_density[i])
+    
+    
 
+    """
+        graph_data_response = json.loads(requests.get("https://coronavirus-tracker-api.herokuapp.com/v2/locations?country_code="+country_a2_code[i]+"&timelines=true").text)
+        if len(graph_data_response["locations"]) == 1:
+            graph_data.append(graph_data_response["locations"][0]["timelines"]["confirmed"]["timeline"])
+        else:
+            graph_data.append("none")
+    """
+    #Nimamo zadosti točnih podatkov!!!!
+    """
+    graph_data_response = json.loads(requests.get("https://coronavirus-tracker-api.herokuapp.com/v2/locations?country_code=si&timelines=true").text)
+    graph_data.append(graph_data_response["locations"][0]["timelines"]["confirmed"]["timeline"])
+    for i in range(len(graph_data[0])):
+        dt = datetime(2020, 1, 22, 0, 0, 0, 0, tzinfo=timezone.utc) + timedelta(days=i)
+        dt = str(dt).replace(" ", "T")[:-6]+"Z"
+        print(dt, "->", graph_data[0][dt])
+    # Zdaj ko imamo podatke za vsako državo, moramo izluščiti le število in datum.
+    print(graph_data[0]["2020-01-22T00:00:00Z"])
+    """
+
+    global_data["cases"] = '{:,}'.format(global_data["cases"])
+    global_data["deaths"] = '{:,}'.format(global_data["deaths"])
+    global_data["recovered"] = '{:,}'.format(global_data["recovered"])
 
     # Preverimo razliko števila držav
     missingCountries = len(corona_data) - len(infected)
@@ -170,9 +199,10 @@ def get_data():
     global data_time
     country_response = requests.get("https://restcountries.eu/rest/v2/all")
     corona_response = requests.get("https://coronavirus-19-api.herokuapp.com/countries")
+    corona_global_data = requests.get("https://coronavirus-19-api.herokuapp.com/all")
     now = datetime.now() + timedelta(hours=1)
     data_time = now.strftime("%d.%m.%Y %H:%M")
-    process_data(corona_response, country_response)
+    process_data(corona_response, country_response, corona_global_data)
     print("API Update complete")
     sys.stdout.flush()
 
@@ -187,7 +217,8 @@ def index():
     return render_template("index.html", 
         title="Pivička",
         data=data,
-        data_time=data_time,
+        globalData=global_data,
+        dataTime=data_time,
         goodResponse=good_response)
 
 @app.route("/sitemap.xml")

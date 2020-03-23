@@ -16,6 +16,8 @@
   <!-- MDBootstrap Datatables  -->
   <link href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" rel="stylesheet">
 
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:300,400,500,700&display=swap" rel="stylesheet"> 
+
   <!-- Primary Meta Tags -->
   <title>Pivička</title>
   <meta name="title" content="Pivička">
@@ -31,9 +33,9 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="application-name" content="Pivička">
   <meta name="apple-mobile-web-app-title" content="Pivička">
-  <meta name="theme-color" content="#2E2E2E">
-  <meta name="msapplication-navbutton-color" content="#2E2E2E">
-  <meta name="apple-mobile-web-app-status-bar-style" content="2E2E2E">
+  <meta name="theme-color" content="#ffeb3b">
+  <meta name="msapplication-navbutton-color" content="#ffeb3b">
+  <meta name="apple-mobile-web-app-status-bar-style" content="ffeb3b">
   <meta name="msapplication-starturl" content="/">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
   <link rel="icon" type="image/png" sizes="512x512" href="{{ url_for('static', filename='images/icon-512x512.png') }}">
@@ -58,15 +60,13 @@
 
 <body>
     
-  <div class="wrapper">
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-sm navbar-dark elegant-color">
+    <nav class="navbar fixed-top navbar-expand-lg navbar-light">
 
       <!-- Navbar brand -->
-      <a class="navbar-brand" href="#" onClick="window.location.reload();">
-        <img src="/static/images/beer_emoji.png" width="30" height="30" class="d-inline-block align-top"
-          alt="pivicka">&nbsp
-        <b>Na zdrav</b>(ljen)<b>je!</b>
+      <a class="navbar-brand">
+        <i id="logotip" class="fas fa-beer fa-lg"></i>
+        <span data-toggle="modal" data-target="#infoModal"><b>Na zdrav</b>(ljen)<b>je!</b></span>
       </a>
 
       <!-- Collapse button -->
@@ -79,6 +79,12 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <div class="ml-auto">
           <form class="form-inline ml-auto" id="searchContainer">
+            <div id="globalCases"><i class="fas fa-biohazard"></i></div>
+            &nbsp&nbsp&nbsp
+            <div id="globalDeaths"><i class="fas fa-book-dead"></i></div>
+            &nbsp&nbsp&nbsp
+            <div id="globalRecovered"><i class="fas fa-smile-beam"></i></div>
+            &nbsp&nbsp&nbsp
             <div class="md-form my-0 active-pink active-pink-2">
               <input class="form-control mr-sm-2" type="text" aria-label="Išči državo" id="search"
                 placeholder="Išči državo">
@@ -89,23 +95,25 @@
 
     </nav>
 
-    <!-- Tabela -->
 
-    <div class="table-responsive" id="mainDiv">
+    <!-- Tabela -->
+    <div class="fakeThead"></div>
+    <div class="tableFixHead" id="mainDiv">
       <table id="dataTable" class="table table-hover" style="margin-bottom: 0px !important;"></table>
     </div>
+        
 
     <!-- Modal -->
     <div class="modal fade bottom" id="countryDetailsModal" tabindex="-1" role="dialog"
       aria-labelledby="countryDetailsModal" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-scrollable modal-full-height modal-bottom modal-notify modal-warning"
+      <div class="modal-dialog modal-dialog-scrollable modal-full-height modal-bottom modal-notify"
         role="document">
 
         <div class="modal-content">
           <div class="modal-header" id="countryDetailsModalHeader">
             <p class="heading lead modal-title w-100"><b id="countryDetailsModalTitle"></b></p>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true" class="white-text">&times;</span>
+              <span aria-hidden="true">&times;</span>
             </button>
           </div>
 
@@ -159,28 +167,33 @@
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Footer -->
-  <footer class="page-footer elegant-color text-center" style="display: none;" id="footerDiv">
-    <div class="container">
-      <div class="row">
-        <div class="col text-center">
-          <h1><img src="/static/images/beer_emoji.png" class="img-fluid" alt="pivicka">&nbsp Pivička - Koronavirus po
-            svetu v številkah.</h1>
+
+    <div class="modal fade bottom" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModal" aria-hidden="true">
+      <div class="modal-dialog modal-frame modal-bottom" role="document">
+        <div class="modal-content">
+          <div class="modal-body container text-center">
+            <div class="row">
+              <div class="col">
+                <h1 class="h1-responsive">Pivička - Koronavirus po svetu v številkah</h1>
+                <br>
+                <br>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                Zadnja posodobitev: {{ dataTime }}
+                <br>
+                Vir: <a href="https://github.com/javieraviles/covidAPI">github.com/javieraviles/covidAPI</a>
+                <br>
+                <br>
+                <div>Made by M4thB3nc</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-    <!-- Copyright -->
-    <div class="footer-copyright elegant-color font-small text-center py-3">
-      Zadnja posodobitev: {{ data_time }}
-      <br>
-      Vir: <a href="https://github.com/javieraviles/covidAPI">github.com/javieraviles/covidAPI</a>
-    </div>
-    <!-- Copyright -->
-  </footer>
-  <!-- Footer -->
-
 
   <!-- SCRIPTS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.1.0/tablesort.min.js"></script>
@@ -199,44 +212,30 @@
   <!-- MDBootstrap Datatables  -->
   <script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
 
-  <script src="https://unpkg.com/sticky-table-headers"></script>
   <script src="{{ url_for('static', filename='app.js') }}"></script>
 
   <script>
+    var currentTheme = "light";
     function themeSetter() {
       var today = new Date();
       var h = today.getHours();
       if (h > 20 || h < 7) {
-        document.querySelector('meta[name="theme-color"]').setAttribute("content", "#000000");
-        document.querySelector('meta[name="msapplication-navbutton-color"]').setAttribute("content", "#000000");
-        document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]').setAttribute("content", "#000000");
+        $("html").css("background-color", "#212121")
+        $("body").css("background-color", "#212121")
 
-        $("html").css("background-color", "black")
-        $("body").css("background-color", "black")
+        $("#dataTable").addClass("my-table-dark");
+        $(".fakeThead").css("background-color", "#212121");
+        
+        $("thead th").css("background-color", "#212121")
+        $("thead th").css("color", "white")
 
-        $("#dataTable").addClass("table-dark elegant-color-dark");
-        $(".modal-content").addClass("elegant-color");
+        $(".modal-content").addClass("elegant-color-dark");
         $(".modal-body").addClass("text-white");
 
-        // Navbar
-        $(".navbar").removeClass("elegant-color");
-        $(".navbar").addClass("black")
-
-        // Thead
-        $("thead").removeClass("elegant-color");
-        $("thead").addClass("black")
-
-        // Footer
-        $(".page-footer").removeClass("elegant-color");
-        $(".page-footer").addClass("black")
-        $(".footer-copyright").removeClass("elegant-color");
-        $(".footer-copyright").addClass("black")
-
-        // HTML
-        // ...
+        currentTheme = "dark"
+        
       }
     }
-    themeSetter()
 
     var country = "";
     $.getJSON('https://json.geoiplookup.io', function (data) {})
@@ -251,14 +250,15 @@
       $("#dataTable tbody tr").filter(function () {
         $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
       });
-      stripeTable()
+      colorCountry();
     });
 
     var data = JSON.parse({{ data | tojson | safe }});
+    var globalData = {{ globalData | tojson | safe }};
     var goodResponse = "{{ goodResponse }}";
 
     function tableCreate() {
-      var headers = ["Država", "Populacija", "Okuženi", "Danes okuženi", "Obolevnost", "Umrli", "Danes umrli", "Umrljivost",
+      var headers = ["Država", "Populacija", "Okuženi", "Okuženi danes", "Obolevnost", "Umrli", "Umrli danes", "Umrljivost",
         "Ozdraveli"
       ];
       var headersIcons = ["fas fa-flag", "", "fas fa-biohazard", "fas fa-calendar-day", "", "fas fa-book-dead", "", "",
@@ -267,11 +267,10 @@
       var tbl = document.getElementById('dataTable');
       var tbdy = document.createElement('tbody');
       var thdr = tbl.createTHead();
-      thdr.setAttribute("class", "elegant-color white-text mat-elevation-z6");
+      thdr.setAttribute("id", "tableHead")
       var row = thdr.insertRow();
       for (var i = 0; i < headers.length; i++) {
         var cell = document.createElement("th");
-        console.log(headers[i], headersIcons[i])
         cell.innerHTML = '<div class="d-none d-sm-block">' + headers[i] + '</div><div class="d-sm-none"><i class="' +
           headersIcons[i] + '"></i></div>'
         if (headers[i] == "Okuženi") {
@@ -280,12 +279,13 @@
         if (i != 0) {
           cell.setAttribute("class", "text-right col");
         } else {
-          cell.innerHTML = headers[i];
+          cell.setAttribute("class", "col");
+          cell.innerHTML = '<div>' + headers[i] + '</div>';
         }
         if (headers[i] == "Ozdraveli" || headers[i] == "Umrljivost") {
           cell.setAttribute("class", "d-none d-md-table-cell text-right col");
         }
-        if (headers[i] == "Obolevnost" || headers[i] == "Danes umrli") {
+        if (headers[i] == "Obolevnost" || headers[i] == "Umrli danes") {
           cell.setAttribute("class", "d-none d-sm-table-cell text-right col");
         }
         if (headers[i] == "Populacija") {
@@ -346,15 +346,15 @@
       descending: true
     });
     themeSetter();
-    showFooter();
-    stripeTable();
+    colorCountry();
+    showGlobalData();
 
-    function showFooter() {
-      $(".page-footer").show();
+    function showGlobalData() {
+      $("#globalCases").append(" " + globalData["cases"]);
+      $("#globalDeaths").append(" " + globalData["deaths"]);
+      $("#globalRecovered").append(" " + globalData["recovered"]);
     }
 
-    // Zaženemo plugin za stickanje headerjev
-    $('table').stickyTableHeaders({cacheHeaderHeight: true});
 
     function colorCountry(country) {
       var table = $("#dataTable");
@@ -363,8 +363,8 @@
       for (var i = 0; i < rows.length; i++) {
         var cells = rows[i].getElementsByTagName("td")
         if (cells[0].getAttribute("id")==country) {
-          rows[i].style.backgroundColor = "#ffbb33";
-          rows[i].style.color = "white";
+          rows[i].style.backgroundColor = "#ffff72";
+          rows[i].style.color = "black";
         }
       }
     };
@@ -387,35 +387,55 @@
       $("#countryDetailsModal").modal("show");
     });
 
-    $("tr").on("click", function() {
-      stripeTable()
-    });
-
-    function unstripeTable() {
-      $("#dataTable tbody tr").each(function() {
-        $(this).css("background-color", "inherit");
-      })
-    };
-
-    function stripeTable() {
-      var primaryColor = "#ffffff"
-      var color = "#f3f3f3";
-      if($("thead").hasClass("black")){
-        color = "#2b2b2b";
-        primaryColor = "#212121"
+    
+    $(".tableFixHead").on("scroll", function (event) {
+      var y = $(this).scrollTop(); 
+      if (y > 0) {  
+        $(".fakeThead").addClass('shadows'); 
       }
-      var i = 0;
-      $("#dataTable tbody tr").each(function() {
-        $(this).css("background-color", primaryColor);
-        if($(this).css("display") != "none") {
-          if ( i % 2 == 0) {
-            $(this).css("background-color", color);
-          }
-          i++;
-        }
-      })
-      colorCountry(country);
-    };
+      else { 
+        $(".fakeThead").removeClass('shadows'); 
+      }
+    });
+    
+    $("#logotip").click(function() {
+      switchTheme();
+    })
+
+    function switchTheme() {
+      if (currentTheme == "light") {
+        $("#logotip").css("color", "black");
+        $("html").css("background-color", "#212121")
+        $("body").css("background-color", "#212121")
+
+        $("#dataTable").addClass("my-table-dark");
+        $(".fakeThead").css("background-color", "#212121");
+        
+        $("thead th").css("background-color", "#212121")
+        $("thead th").css("color", "white")
+
+        $(".modal-content").addClass("elegant-color");
+        $(".modal-body").addClass("text-white");
+        currentTheme = "dark"
+      }
+      else {
+        // vklopimo light theme
+        $("#logotip").css("color", "white");
+        $("html").css("background-color", "white")
+        $("body").css("background-color", "white")
+
+        $("#dataTable").removeClass("my-table-dark");
+        $(".fakeThead").css("background-color", "white");
+        
+        $("thead th").css("background-color", "white")
+        $("thead th").css("color", "black")
+
+        $(".modal-content").removeClass("elegant-color");
+        $(".modal-body").removeClass("text-white");
+        currentTheme = "light"
+      }
+    }
+
   </script>
 
 </body>
