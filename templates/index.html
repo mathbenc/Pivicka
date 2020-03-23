@@ -28,6 +28,9 @@
 
   <!-- Web App Tags -->
   <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+  <script async src="https://cdn.jsdelivr.net/npm/pwacompat@2.0.10/pwacompat.min.js"
+    integrity="sha384-I1iiXcTSM6j2xczpDckV+qhhbqiip6FyD6R5CpuqNaWXvyDUvXN5ZhIiyLQ7uuTh"
+    crossorigin="anonymous"></script>
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="application-name" content="Pivička">
@@ -37,8 +40,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="ffeb3b">
   <meta name="msapplication-starturl" content="/">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
-  <link rel="icon" type="image/png" sizes="512x512" href="{{ url_for('static', filename='images/icon-512x512.png') }}">
-  <link rel="apple-touch-icon" type="image/png" sizes="512x512" href="{{ url_for('static', filename='images/icon-apple.png') }}">
+  <!-- <link rel="icon" type="image/png" sizes="512x512" href="{{ url_for('static', filename='images/icon-512x512.png') }}">
+  <link rel="apple-touch-icon" type="image/png" sizes="512x512" href="{{ url_for('static', filename='images/icon-apple.png') }}"> -->
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
