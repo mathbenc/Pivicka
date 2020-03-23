@@ -17,6 +17,8 @@
   <!-- MDBootstrap Datatables  -->
   <link href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" rel="stylesheet">
 
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+
   <!-- Primary Meta Tags -->
   <title>Pivička</title>
   <meta name="title" content="Pivička">
@@ -158,6 +160,13 @@
                 <p id="criticalModal"></p>
               </div>
             </div>
+            <div class="row">
+              <div class="col">
+                <div class="container" id="chartContainer">
+                  <canvas id="lineChart"></canvas>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -193,6 +202,8 @@
   <!-- SCRIPTS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.1.0/tablesort.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.1.0/sorts/tablesort.number.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chartist/0.11.4/chartist.min.js"></script>
 
   <!-- JQuery -->
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -250,6 +261,7 @@
 
     var data = JSON.parse({{ data | tojson | safe }});
     var globalData = {{ globalData | tojson | safe }};
+    var graphData = JSON.parse({{ graphData | tojson | safe }})
     var goodResponse = "{{ goodResponse }}";
 
     function tableCreate() {
@@ -381,6 +393,7 @@
       $("#countryFlag").attr("src", data[i]["flag"])
       $("#countryDensity").text(data[i]["density"] + " P/Km²")
       $("#countryDetailsModal").modal("show");
+      showGraph(data[i]["A2code"]);
     });
 
     
@@ -430,6 +443,75 @@
         $(".modal-body").removeClass("text-white");
         currentTheme = "light"
       }
+    }
+
+
+    var ctxL = document.getElementById("lineChart").getContext('2d');
+    var myLineChart = new Chart(ctxL, {
+      type: 'line',
+      data: {
+        labels: graphData["dates"],
+        datasets: [
+          {
+            label: "Okuženi",
+            data: graphData["SI"]["confirmed"],
+            backgroundColor: [
+              'rgba(0, 137, 132, .2)',
+            ],
+            borderColor: [
+              'rgba(0, 10, 130, .7)',
+            ],
+            borderWidth: 2
+          },
+          {
+            label: "Umrli",
+            data: graphData["SI"]["dead"],
+            backgroundColor: [
+              'rgba(105, 0, 132, .2)',
+            ],
+            borderColor: [
+              'rgba(200, 99, 132, .7)',
+            ],
+            borderWidth: 2
+          },
+
+          {
+            label: "Ozdraveli",
+            data: graphData["SI"]["recovered"],
+            backgroundColor: [
+              'rgba(0, 250, 220, .2)',
+            ],
+            borderColor: [
+              'rgba(0, 213, 132, .7)',
+            ],
+            borderWidth: 2
+          }
+        ] 
+      },
+      options: {
+        responsive: true,
+        scales: {
+          xAxes: [{
+            gridLines: {
+              display:false
+            }
+          }],
+          yAxes: [{
+            gridLines: {
+              display:false
+            }   
+          }]
+        }
+
+      }
+    });
+
+    function showGraph(countryCode) {
+      console.log(countryCode)
+      myLineChart.data.datasets[0].data = graphData[countryCode]["confirmed"]
+      myLineChart.data.datasets[1].data = graphData[countryCode]["dead"]
+      myLineChart.data.datasets[2].data = graphData[countryCode]["recovered"]
+      myLineChart.update();
     }
 
   </script>

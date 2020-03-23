@@ -16,13 +16,13 @@ data_time = None
 data = None
 global_data = None
 good_response = True
-graph_data = None
+graph = None
 
 with open("static/pivicka.json") as json_file:
     country_translations = json.load(json_file)
 
 def process_data(corona_data, country_data, corona_global_data, graph_data_response):
-    global data, good_response, global_data, graph_data
+    global data, good_response, global_data, graph
     country = []
     country_flag = []
     country_capital = []
@@ -46,14 +46,17 @@ def process_data(corona_data, country_data, corona_global_data, graph_data_respo
     population_healthy_share = []
     data = []
     global_data = []
-    graph_data = []
+    graph_data_confirmed = []
+    graph_data_dead = []
+    graph_data_recovered = []
+    graph_countries = []
+    graph_dates = []
+    graph = {}
 
     global_data = json.loads(corona_global_data.text)
     country_data = json.loads(country_data.text)
     corona_data = json.loads(corona_data.text)
-    graph_data = json.loads(graph_data_response.text)
-
-    print(graph_data)
+    graph_data_response = json.loads(graph_data_response.text)
 
     if len(corona_data) == 0:
         good_response = False
@@ -104,6 +107,37 @@ def process_data(corona_data, country_data, corona_global_data, graph_data_respo
                 else:
                     country_density.append(0)
 
+    for i in range(len(graph_data_response["confirmed"]["locations"])):
+        for j in range(len(country_a2_code)):
+            if graph_data_response["confirmed"]["locations"][i]["country_code"] == country_a2_code[j]:
+                # Če obstaja, posodobimo številke
+                if graph_data_response["confirmed"]["locations"][i]["country_code"] in graph_countries:
+                    index = graph_countries.index(graph_data_response["confirmed"]["locations"][i]["country_code"])
+                    pass
+                    #! NE POZABI NA TO
+
+                # Drugače dodamo novo
+                else:
+                    graph_countries.append(graph_data_response["confirmed"]["locations"][i]["country_code"])
+                    dates = list(graph_data_response["confirmed"]["locations"][i]["history"].keys())
+                    for k in range(len(dates)):
+                        dates[k] = datetime.strptime(dates[k], "%m/%d/%y")
+                    dates.sort()
+                    country_graph_data_confirmed = []
+                    country_graph_data_dead = []
+                    country_graph_data_recovered = []
+                    graph_dates = []
+                    for k in range(len(dates)):
+                        key = dates[k].strftime("X%m/X%d/X%y").replace("X0", "X").replace("X", "")
+                        graph_dates.append(key)
+                        country_graph_data_confirmed.append(graph_data_response["confirmed"]["locations"][i]["history"][key])
+                        country_graph_data_dead.append(graph_data_response["deaths"]["locations"][i]["history"][key])
+                        country_graph_data_recovered.append(graph_data_response["recovered"]["locations"][i]["history"][key])
+                    graph_data_confirmed.append(country_graph_data_confirmed)
+                    graph_data_dead.append(country_graph_data_dead)
+                    graph_data_recovered.append(country_graph_data_recovered)
+
+
     # Številom dodamo vejice
     for i in range(len(infected)):
         infected[i] = '{:,}'.format(infected[i])
@@ -115,27 +149,7 @@ def process_data(corona_data, country_data, corona_global_data, graph_data_respo
         critical[i] = '{:,}'.format(critical[i])
         country_population[i] = '{:,}'.format(country_population[i])
         country_density[i] = '{:,}'.format(country_density[i])
-    
-    
-
-    """
-        graph_data_response = json.loads(requests.get("https://coronavirus-tracker-api.herokuapp.com/v2/locations?country_code="+country_a2_code[i]+"&timelines=true").text)
-        if len(graph_data_response["locations"]) == 1:
-            graph_data.append(graph_data_response["locations"][0]["timelines"]["confirmed"]["timeline"])
-        else:
-            graph_data.append("none")
-    """
-    #Nimamo zadosti točnih podatkov!!!!
-    """
-    graph_data_response = json.loads(requests.get("https://coronavirus-tracker-api.herokuapp.com/v2/locations?country_code=si&timelines=true").text)
-    graph_data.append(graph_data_response["locations"][0]["timelines"]["confirmed"]["timeline"])
-    for i in range(len(graph_data[0])):
-        dt = datetime(2020, 1, 22, 0, 0, 0, 0, tzinfo=timezone.utc) + timedelta(days=i)
-        dt = str(dt).replace(" ", "T")[:-6]+"Z"
-        print(dt, "->", graph_data[0][dt])
-    # Zdaj ko imamo podatke za vsako državo, moramo izluščiti le število in datum.
-    print(graph_data[0]["2020-01-22T00:00:00Z"])
-    """
+        
 
     global_data["cases"] = '{:,}'.format(global_data["cases"])
     global_data["deaths"] = '{:,}'.format(global_data["deaths"])
@@ -169,6 +183,22 @@ def process_data(corona_data, country_data, corona_global_data, graph_data_respo
     print("Data process complete")
     sys.stdout.flush()
 
+    # Ustvarimo JSON za graf
+    dates = {
+        "dates": graph_dates
+    }
+    for i in range(len(graph_countries)):
+        content = {
+            graph_countries[i]: {
+                "confirmed": graph_data_confirmed[i],
+                "dead": graph_data_dead[i],
+                "recovered": graph_data_recovered[i]
+            }
+        }
+        graph.update(content)
+    graph.update(dates)
+    graph = json.dumps(graph)
+
     # Ustvarimo JSON
     for i in range(len(country)):
         content = {
@@ -195,7 +225,6 @@ def process_data(corona_data, country_data, corona_global_data, graph_data_respo
             "populationDeadShare": population_dead_share[i]
         }
         data.append(content)
-
     data = json.dumps(data)
 
 def get_data():
@@ -223,6 +252,7 @@ def index():
         data=data,
         globalData=global_data,
         dataTime=data_time,
+        graphData=graph,
         goodResponse=good_response)
 
 @app.route("/sitemap.xml")
