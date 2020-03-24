@@ -145,6 +145,18 @@ def process_data(corona_data, country_data, corona_global_data, graph_data_respo
                     graph_data_dead.append(country_graph_data_dead)
                     graph_data_recovered.append(country_graph_data_recovered)
 
+    # Odstranimo dneve ko še ni bilo okuženih
+    for i in range(len(graph_data_confirmed)):
+        index = 0
+        for j in range(len(graph_data_confirmed[i])):
+            if graph_data_confirmed[i][j] > 0:
+                index = j-1
+                break
+        if index < 0:
+            index = 0
+        graph_data_confirmed[i] = graph_data_confirmed[i][index:]
+        graph_data_dead[i] = graph_data_dead[i][index:]
+        
     # Številom dodamo vejice
     for i in range(len(infected)):
         infected[i] = '{:,}'.format(infected[i])

@@ -6,7 +6,7 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
   <!-- Google Fonts -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
-  <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:300,400,500,700&display=swap" rel="stylesheet"> 
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:300,400,500,700&display=swap" rel="stylesheet">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
   <!-- Bootstrap core CSS -->
@@ -19,7 +19,8 @@
   <!-- Primary Meta Tags -->
   <title>Pivička</title>
   <meta name="title" content="Pivička - Koronavirus po svetu v številkah">
-  <meta name="description" content="Podakti o okuženosti, umrljivosti, novih okužbah in poteku širjenja bolezni COVID-19 za države, ki so zaznale okužbo s SARS-CoV-2.">
+  <meta name="description"
+    content="Podakti o okuženosti, umrljivosti, novih okužbah in poteku širjenja bolezni COVID-19 za države, ki so zaznale okužbo s SARS-CoV-2.">
   <meta name="keywords" content="corona,coronavirus,koronavirus,korona,virus,covid-19,pivicka,sars-cov-2,pivička">
   <meta name="author" content="M4thB3nc">
   <meta http-equiv="content-language" content="sl-sl">
@@ -28,8 +29,8 @@
   <!-- Web App Tags -->
   <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
   <script async src="https://cdn.jsdelivr.net/npm/pwacompat@2.0.10/pwacompat.min.js"
-    integrity="sha384-I1iiXcTSM6j2xczpDckV+qhhbqiip6FyD6R5CpuqNaWXvyDUvXN5ZhIiyLQ7uuTh"
-    crossorigin="anonymous"></script>
+    integrity="sha384-I1iiXcTSM6j2xczpDckV+qhhbqiip6FyD6R5CpuqNaWXvyDUvXN5ZhIiyLQ7uuTh" crossorigin="anonymous">
+  </script>
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="application-name" content="Pivička">
@@ -65,151 +66,153 @@
 </head>
 
 <body>
-    
-    <!-- Navbar -->
-    <nav class="navbar fixed-top navbar-expand-lg navbar-light">
 
-      <!-- Navbar brand -->
-      <a class="navbar-brand">
-        <img id="logotip" src="./static/images/icon-test-alt.png" height="25">
-        <!-- <i id="logotip" class="fas fa-beer fa-lg"></i> -->
-        <span data-toggle="modal" data-target="#infoModal"><b>Pivička</b></span>
-      </a>
+  <!-- Navbar -->
+  <nav class="navbar fixed-top navbar-expand-lg navbar-light">
 
-
-      <!-- Collapse button -->
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      <!-- Collapsible content -->
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ml-auto">
-
-          <li class="nav-item mr-2">
-            <span class="nav-link"><i class="fas fa-biohazard"></i><span id="globalCases">{{ globalData["cases"] }}</span></span>
-          </li>
-          <li class="nav-item mr-2">
-            <span class="nav-link"><i class="fas fa-book-dead"></i><span id="globalDeaths">{{ globalData["deaths"] }}</span></span>
-          </li>
-          <li class="nav-item mr-2">
-            <span class="nav-link"><i class="fas fa-smile-beam"></i><span id="globalRecovered">{{ globalData["recovered"] }}</span></span>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" onclick="modeSwitch()"><i id="globeSwitch" class="fa fa-globe"></i><span id="globeText">&nbspSvet&nbsp&nbsp</span></a>
-          </li>
-
-        </ul>
-
-        <form class="form-inline my-0" id="searchContainer"> 
-          <div class="md-form form-sm my-0 active-pink active-pink-2">
-            <input class="form-control form-control-sm mr-sm-2" type="text" aria-label="Išči državo" id="search"
-              placeholder="Išči državo">
-          </div>
-        </form>
-
-      </div>
-
-    </nav>
+    <!-- Navbar brand -->
+    <a class="navbar-brand">
+      <img id="logotip" src="./static/images/icon-test-alt.png" height="25">
+      <!-- <i id="logotip" class="fas fa-beer fa-lg"></i> -->
+      <span data-toggle="modal" data-target="#infoModal"><b>Pivička</b></span>
+    </a>
 
 
-    <!-- Tabela -->
-    <div class="fakeThead"></div>
-    <div class="tableFixHead" id="mainDiv">
-      <table id="dataTable" class="table table-hover" style="margin-bottom: 0px !important;"></table>
+    <!-- Collapse button -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+
+        <li class="nav-item mr-2">
+          <span class="nav-link"><i class="fas fa-biohazard"></i><span
+              id="globalCases">{{ globalData["cases"] }}</span></span>
+        </li>
+        <li class="nav-item mr-2">
+          <span class="nav-link"><i class="fas fa-book-dead"></i><span
+              id="globalDeaths">{{ globalData["deaths"] }}</span></span>
+        </li>
+        <li class="nav-item mr-2">
+          <span class="nav-link"><i class="fas fa-smile-beam"></i><span
+              id="globalRecovered">{{ globalData["recovered"] }}</span></span>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" onclick="modeSwitch()"><i id="globeSwitch" class="fa fa-globe"></i><span
+              id="globeText">&nbspSvet&nbsp&nbsp</span></a>
+        </li>
+
+      </ul>
+
+      <form class="form-inline my-0" id="searchContainer">
+        <div class="md-form form-sm my-0 active-pink active-pink-2">
+          <input class="form-control form-control-sm mr-sm-2" type="text" aria-label="Išči državo" id="search"
+            placeholder="Išči državo">
+        </div>
+      </form>
+
     </div>
-        
 
-    <!-- Modal -->
-    <div class="modal fade bottom" id="countryDetailsModal" tabindex="-1" role="dialog"
-      aria-labelledby="countryDetailsModal" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-scrollable modal-full-height modal-bottom modal-notify"
-        role="document">
+  </nav>
 
-        <div class="modal-content">
-          <div class="modal-header" id="countryDetailsModalHeader">
-            <p class="heading lead modal-title w-100"><b id="countryDetailsModalTitle"></b></p>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
+  <!-- Tabela -->
+  <div class="fakeThead"></div>
+  <div class="tableFixHead" id="mainDiv">
+    <table id="dataTable" class="table table-hover" style="margin-bottom: 0px !important;"></table>
+  </div>
 
-          <div id="countryDetailsModalBody" class="modal-body container text-center">
-            <div class="row">
-              <!-- <div class="col-3"><b>Zastava</b><br><img height="24px" id="countryFlag"></img></div> -->
-              <div class="col-4"><b>Populacija</b>
-                <p id="populationModal"></p>
-              </div>
-              <div class="col-4"><b>Poseljenost</b>
-                <p id="countryDensity"></p>
-              </div>
-              <div class="col-4"><b>Okuženi</b>
-                <p id="infectedModal"></p>
-              </div>
+  <!-- Modal -->
+  <div class="modal fade bottom" id="countryDetailsModal" tabindex="-1" role="dialog"
+    aria-labelledby="countryDetailsModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-full-height modal-bottom modal-notify" role="document">
 
-              <div class="w-100"></div>
+      <div class="modal-content">
+        <div class="modal-header" id="countryDetailsModalHeader">
+          <p class="heading lead modal-title w-100"><b id="countryDetailsModalTitle"></b></p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
 
-              <div class="col-3"><b>Danes okuženi</b>
-                <p id="infectedTodayModal"></p>
-              </div>
-              <div class="col-3"><b>Obolevnost</b>
-                <p id="infectedRatioModal"></p>
-              </div>
-              <div class="col-3"><b>Umrli</b>
-                <p id="deadModal"></p>
-              </div>
-              <div class="col-3"><b>Danes umrli</b>
-                <p id="deadTodayModal"></p>
-              </div>
-
-              <div class="w-100"></div>
-
-              <div class="col-3"><b>Umrljivost</b>
-                <p id="deadRatioModal"></p>
-              </div>
-              <div class="col-3"><b>Ozdraveli</b>
-                <p id="curedModal"></p>
-              </div>
-              <div class="col-3"><b>Odprti primeri</b>
-                <p id="activeModal"></p>
-              </div>
-              <div class="col-3"><b>Kritični primeri</b>
-                <p id="criticalModal"></p>
-              </div>
+        <div id="countryDetailsModalBody" class="modal-body container text-center">
+          <div class="row">
+            <div class="col-3"><b>Zastava</b><br><img height="24px" id="countryFlag"></img></div>
+            <div class="col-3"><b>Populacija</b>
+              <p id="populationModal"></p>
             </div>
-            <canvas id="lineChart"></canvas>
+            <div class="col-3"><b>Poseljenost</b>
+              <p id="countryDensity"></p>
+            </div>
+            <div class="col-3"><b>Okuženi</b>
+              <p id="infectedModal"></p>
+            </div>
+
+            <div class="w-100"></div>
+
+            <div class="col-3"><b>Danes okuženi</b>
+              <p id="infectedTodayModal"></p>
+            </div>
+            <div class="col-3"><b>Obolevnost</b>
+              <p id="infectedRatioModal"></p>
+            </div>
+            <div class="col-3"><b>Umrli</b>
+              <p id="deadModal"></p>
+            </div>
+            <div class="col-3"><b>Danes umrli</b>
+              <p id="deadTodayModal"></p>
+            </div>
+
+            <div class="w-100"></div>
+
+            <div class="col-3"><b>Umrljivost</b>
+              <p id="deadRatioModal"></p>
+            </div>
+            <div class="col-3"><b>Ozdraveli</b>
+              <p id="curedModal"></p>
+            </div>
+            <div class="col-3"><b>Odprti primeri</b>
+              <p id="activeModal"></p>
+            </div>
+            <div class="col-3"><b>Kritični primeri</b>
+              <p id="criticalModal"></p>
+            </div>
+          </div>
+          <canvas id="lineChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="modal fade bottom" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModal"
+    aria-hidden="true">
+    <div class="modal-dialog modal-frame modal-bottom" role="document">
+      <div class="modal-content">
+        <div class="modal-body container text-center">
+          <div class="row">
+            <div class="col">
+              <h1 class="h1-responsive">Pivička - Koronavirus po svetu v številkah</h1>
+              <br>
+              <br>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              Zadnja posodobitev: {{ dataTime }}
+              <br>
+              <div>Vir: <a href={{ source }}>{{ source[8:] }}</a></div>
+              <br>
+              <br>
+              <div>Made by M4thB3nc</div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-
-
-    <div class="modal fade bottom" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModal" aria-hidden="true">
-      <div class="modal-dialog modal-frame modal-bottom" role="document">
-        <div class="modal-content">
-          <div class="modal-body container text-center">
-            <div class="row">
-              <div class="col">
-                <h1 class="h1-responsive">Pivička - Koronavirus po svetu v številkah</h1>
-                <br>
-                <br>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col">
-                Zadnja posodobitev: {{ dataTime }}
-                <br>
-                <div>Vir: <a href={{ source }}>{{ source[8:] }}</a></div>
-                <br>
-                <br>
-                <div>Made by M4thB3nc</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+  </div>
 
   <!-- SCRIPTS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.1.0/tablesort.min.js"></script>
@@ -239,5 +242,7 @@
   </script>
 
   <script src="/static/app.js"></script>
+
 </body>
+
 </html>

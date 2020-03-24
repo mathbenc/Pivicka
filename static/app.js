@@ -157,7 +157,6 @@ function colorCountry(country) {
 
 $(document).ready(function() {
   $(document).on("click", ".countryExpand" , function() {
-    console.log("drek");
     var i = $(this).attr("id");
     $("#countryDetailsModalTitle").text(data[i]["slovenianName"]);
     $("#populationModal").text(data[i]["countryPopulation"]);
@@ -231,12 +230,11 @@ function switchTheme() {
   }
 }
 
-
 var ctxL = document.getElementById("lineChart").getContext('2d');
 var myLineChart = new Chart(ctxL, {
   type: 'line',
   data: {
-    labels: graphData["dates"],
+    labels: graphData["dates"].slice(-graphData["SI"]["dead"].length),
     datasets: [
       {
         label: "Umrli",
@@ -305,6 +303,7 @@ var myLineChart = new Chart(ctxL, {
 });
 
 function showGraph(countryCode) {
+  myLineChart.data.labels = graphData["dates"].slice(-graphData[countryCode]["confirmed"].length),
   myLineChart.data.datasets[1].data = graphData[countryCode]["confirmed"]
   myLineChart.data.datasets[0].data = graphData[countryCode]["dead"]
   //myLineChart.data.datasets[2].data = graphData[countryCode]["recovered"]
