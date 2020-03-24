@@ -249,7 +249,7 @@
         $("thead th").css("background-color", "#212121")
         $("thead th").css("color", "white")
 
-        $(".modal-content").addClass("elegant-color-dark");
+        $(".modal-content").addClass("elegant-color");
         $(".modal-body").addClass("text-white");
 
         currentTheme = "dark"
@@ -480,27 +480,28 @@
         labels: graphData["dates"],
         datasets: [
           {
-            label: "Okuženi",
-            data: graphData["SI"]["confirmed"],
+            label: "Umrli",
+            data: graphData["SI"]["dead"],
             backgroundColor: [
-              'rgba(0, 137, 132, .2)',
+              'rgba(255, 69, 69, .4)',
             ],
             borderColor: [
-              'rgba(0, 10, 130, .7)',
+              'rgba(255, 69, 69, .8)',
             ],
             borderWidth: 2
           },
           {
-            label: "Umrli",
-            data: graphData["SI"]["dead"],
+            label: "Okuženi",
+            data: graphData["SI"]["confirmed"],
             backgroundColor: [
-              'rgba(105, 0, 132, .2)',
+              'rgba(0, 184, 107, .25)',
             ],
             borderColor: [
-              'rgba(200, 99, 132, .7)',
+              'rgba(0, 184, 107, .5)',
             ],
             borderWidth: 2
           },
+
           /*
           {
             label: "Ozdraveli",
@@ -521,13 +522,21 @@
         scales: {
           xAxes: [{
             gridLines: {
-              display:false
+              color: '#ffeb3b',
+              zeroLineColor: "yellow",
+              display:false,
             }
           }],
           yAxes: [{
             gridLines: {
-              display:false
-            }   
+              color: '#ffeb3b',
+              zeroLineColor: "#ffffff",
+              display:false,
+            },
+            labels: {
+              color: 'yellow',
+              fontColor: 'red'
+            }  
           }]
         },
         legend: {
@@ -537,8 +546,8 @@
     });
 
     function showGraph(countryCode) {
-      myLineChart.data.datasets[0].data = graphData[countryCode]["confirmed"]
-      myLineChart.data.datasets[1].data = graphData[countryCode]["dead"]
+      myLineChart.data.datasets[1].data = graphData[countryCode]["confirmed"]
+      myLineChart.data.datasets[0].data = graphData[countryCode]["dead"]
       //myLineChart.data.datasets[2].data = graphData[countryCode]["recovered"]
       myLineChart.update();
     }
