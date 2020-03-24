@@ -25,6 +25,7 @@ def process_data(corona_data, country_data, corona_global_data, graph_data_respo
     global data, good_response, global_data, graph
     country = []
     country_flag = []
+    country_region = []
     country_capital = []
     country_a2_code = []
     country_a3_code = []
@@ -77,6 +78,7 @@ def process_data(corona_data, country_data, corona_global_data, graph_data_respo
             if corona_data[i]["country"] == country_data[j]["name"]: 
                 # Podatki o državi
                 country.append(corona_data[i]["country"])
+                country_region.append(country_data[j]["region"])
                 country_a2_code.append(country_data[j]["alpha2Code"])
                 country_a3_code.append(country_data[j]["alpha3Code"])
                 country_flag.append(country_data[j]["flag"])
@@ -212,6 +214,7 @@ def process_data(corona_data, country_data, corona_global_data, graph_data_respo
             "area": country_area[i],
             "flag": country_flag[i],
             "capital": country_capital[i],
+            "region": country_region[i],
             "A2code": country_a2_code[i],
             "A3code": country_a3_code[i],
             "slovenianName": country_translated[i],
