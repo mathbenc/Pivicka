@@ -242,11 +242,11 @@ def get_data():
     global data_time, source
     country_response = requests.get("https://restcountries.eu/rest/v2/all") 
     try:
+        corona_response = requests.get("https://coronavirus-19-api.herokuapp.com/countries")
+        source="https://coronavirus-19-api.herokuapp.com/countries"   
+    except Exception:
         corona_response = requests.get("https://corona.lmao.ninja/countries") #https://coronavirus-19-api.herokuapp.com/countries
         source="https://corona.lmao.ninja/countries"
-    except Exception:
-        corona_response = requests.get("https://coronavirus-19-api.herokuapp.com/countries")
-        source="https://coronavirus-19-api.herokuapp.com/countries"
     corona_global_data = requests.get("https://coronavirus-19-api.herokuapp.com/all")
     graph_data = requests.get("https://coronavirus-tracker-api.herokuapp.com/v2/locations?timelines=1") #https://coronavirus-tracker-api.herokuapp.com/all
     now = datetime.now() + timedelta(hours=1)
@@ -258,7 +258,7 @@ def get_data():
 get_data()
 
 sched = BackgroundScheduler()
-sched.add_job(get_data, "interval", minutes=10, max_instances=10)
+sched.add_job(get_data, "interval", minutes=5, max_instances=100)
 sched.start()
 
 @app.route('/')
