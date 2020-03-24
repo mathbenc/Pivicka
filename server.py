@@ -54,7 +54,6 @@ def process_data(corona_data, country_data, corona_global_data, graph_data_respo
     graph_data_dead = []
     graph_data_recovered = []
     graph_countries = []
-    graph_dates = []
     europe_data = {
         "cases": 0,
         "deaths": 0,
