@@ -6,7 +6,6 @@ import json
 import time
 from operator import add
 from datetime import datetime, timedelta, timezone
-import numpy as np
 import sys
 import re
 from apscheduler.schedulers.background import BackgroundScheduler
