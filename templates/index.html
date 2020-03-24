@@ -396,24 +396,27 @@
       }
     };
 
-    $(".countryExpand").click(function () {
-      var i = $(this).attr("id");
-      $("#countryDetailsModalTitle").text(data[i]["slovenianName"]);
-      $("#populationModal").text(data[i]["countryPopulation"]);
-      $("#infectedModal").text(data[i]["infected"]);
-      $("#infectedTodayModal").text(data[i]["infectedToday"]);
-      $("#infectedRatioModal").text(data[i]["infectedRatio"] + "%");
-      $("#deadModal").text(data[i]["dead"]);
-      $("#deadTodayModal").text(data[i]["deadToday"]);
-      $("#deadRatioModal").text(data[i]["deadRatio"] + "%");
-      $("#curedModal").text(data[i]["cured"]);
-      $("#activeModal").text(data[i]["active"]);
-      $("#criticalModal").text(data[i]["critical"]);
-      $("#countryFlag").attr("src", data[i]["flag"])
-      $("#countryDensity").text(data[i]["density"] + " P/Km²")
-      $("#countryDetailsModal").modal("show");
-      showGraph(data[i]["A2code"]);
-    });
+    $(document).ready(function() {
+      $(document).on("click", ".countryExpand" , function() {
+        console.log("drek");
+        var i = $(this).attr("id");
+        $("#countryDetailsModalTitle").text(data[i]["slovenianName"]);
+        $("#populationModal").text(data[i]["countryPopulation"]);
+        $("#infectedModal").text(data[i]["infected"]);
+        $("#infectedTodayModal").text(data[i]["infectedToday"]);
+        $("#infectedRatioModal").text(data[i]["infectedRatio"] + "%");
+        $("#deadModal").text(data[i]["dead"]);
+        $("#deadTodayModal").text(data[i]["deadToday"]);
+        $("#deadRatioModal").text(data[i]["deadRatio"] + "%");
+        $("#curedModal").text(data[i]["cured"]);
+        $("#activeModal").text(data[i]["active"]);
+        $("#criticalModal").text(data[i]["critical"]);
+        $("#countryFlag").attr("src", data[i]["flag"])
+        $("#countryDensity").text(data[i]["density"] + " P/Km²")
+        $("#countryDetailsModal").modal("show");
+        showGraph(data[i]["A2code"]);
+      })
+    })
 
     
     $(".tableFixHead").on("scroll", function (event) {
