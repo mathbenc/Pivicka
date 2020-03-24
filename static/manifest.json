@@ -5,7 +5,7 @@
     "lang": "sl_SI",
     "start_url": "/",
     "display": "standalone",
-    "theme_color": "#ffeb3b",
+    "theme_color": "#ffff72",
     "icons": [
         {
             "src": "/static/images/android-chrome-36x36.png",
