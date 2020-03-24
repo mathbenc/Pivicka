@@ -1,11 +1,6 @@
 {
-    "name": "Pivička",
-    "short_name": "Pivička",
-    "description": "Koronavirus po svetu v številkah",
-    "lang": "sl_SI",
-    "start_url": "/",
-    "display": "standalone",
-    "theme_color": "#ffeb3b",
+    "name": "",
+    "short_name": "",
     "icons": [
         {
             "src": "/static/images/android-chrome-192x192.png?v=47BGjb09Ka",
@@ -18,5 +13,7 @@
             "type": "image/png"
         }
     ],
-    "background_color": "#ffeb3b"
+    "theme_color": "#ffeb3b",
+    "background_color": "#ffeb3b",
+    "display": "standalone"
 }
