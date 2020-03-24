@@ -80,6 +80,10 @@ thead th{
     border-bottom: 0 !important;
 }
 
+tbody {
+    border-top: 0 !important;
+}
+
 table {
     transition: all 0.2s linear;
 }
