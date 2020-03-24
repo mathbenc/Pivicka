@@ -250,8 +250,8 @@ def process_data(corona_data, country_data, corona_global_data, graph_data_respo
 
 def get_data():
     global data_time
-    country_response = requests.get("https://restcountries.eu/rest/v2/all")
-    corona_response = requests.get("https://coronavirus-19-api.herokuapp.com/countries")
+    country_response = requests.get("https://restcountries.eu/rest/v2/all") 
+    corona_response = requests.get("https://corona.lmao.ninja/countries") #https://coronavirus-19-api.herokuapp.com/countries
     corona_global_data = requests.get("https://coronavirus-19-api.herokuapp.com/all")
     graph_data = requests.get("https://coronavirus-tracker-api.herokuapp.com/all")
     now = datetime.now() + timedelta(hours=1)
