@@ -82,13 +82,13 @@
         <ul class="navbar-nav ml-auto">
 
           <li class="nav-item mr-3">
-            <span class="nav-link" id="globalCases"><i class="fas fa-biohazard"></i></span>
+            <span class="nav-link"><i class="fas fa-biohazard"></i><span id="globalCases">{{ globalData["cases"] }}</span></span>
           </li>
           <li class="nav-item mr-3">
-            <span class="nav-link" id="globalDeaths"><i class="fas fa-book-dead"></i></span>
+            <span class="nav-link"><i class="fas fa-book-dead"></i><span id="globalDeaths">{{ globalData["deaths"] }}</span></span>
           </li>
           <li class="nav-item mr-3">
-            <span class="nav-link" id="globalRecovered"><i class="fas fa-smile-beam"></i></span>
+            <span class="nav-link"><i class="fas fa-smile-beam"></i><span id="globalRecovered">{{ globalData["recovered"] }}</span></span>
           </li>
           <li class="nav-item mr-3">
             <a class="nav-link" onclick="modeSwitch()"><i id="globeSwitch" class="fa fa-globe"></i><span id="globeText"> Svet&nbsp&nbsp</span></a>
@@ -269,6 +269,7 @@
 
     var data = JSON.parse({{ data | tojson | safe }});
     var globalData = {{ globalData | tojson | safe }};
+    var europeData = {{ europeData | tojson | safe }};
     var graphData = JSON.parse({{ graphData | tojson | safe }})
     var goodResponse = "{{ goodResponse }}";
 
@@ -371,14 +372,6 @@
     });
     themeSetter();
     colorCountry();
-    showGlobalData();
-
-    function showGlobalData() {
-      $("#globalCases").append(" " + globalData["cases"]);
-      $("#globalDeaths").append(" " + globalData["deaths"]);
-      $("#globalRecovered").append(" " + globalData["recovered"]);
-    }
-
 
     function colorCountry(country) {
       var table = $("#dataTable");
@@ -537,10 +530,16 @@
       if (region == "Europe") {
         region = ""
         $("#globeText").text(" Svet\xa0\xa0");
+        $("#globalDeaths").text(" " + globalData["deaths"]);
+        $("#globalRecovered").text(" " + globalData["recovered"]);
+        $("#globalCases").text(" " + globalData["cases"]);
       }
       else {
-        region = "Europe"
+        region = "Europe";
         $("#globeText").text(" Evropa");
+        $("#globalDeaths").text(" " + europeData["deaths"]);
+        $("#globalRecovered").text(" " + europeData["recovered"]);
+        $("#globalCases").text(" " + europeData["cases"]);
       };
       tableBodyCreate(region)
     }

@@ -15,6 +15,7 @@ Compress(app)
 data_time = None
 data = None
 global_data = None
+europe_data = None
 good_response = True
 graph = None
 
@@ -22,7 +23,7 @@ with open("static/pivicka.json") as json_file:
     country_translations = json.load(json_file)
 
 def process_data(corona_data, country_data, corona_global_data, graph_data_response):
-    global data, good_response, global_data, graph
+    global data, good_response, global_data, graph, europe_data
     country = []
     country_flag = []
     country_region = []
@@ -52,6 +53,11 @@ def process_data(corona_data, country_data, corona_global_data, graph_data_respo
     graph_data_recovered = []
     graph_countries = []
     graph_dates = []
+    europe_data = {
+        "cases": 0,
+        "deaths": 0,
+        "recovered": 0
+    }
     graph = {}
 
     global_data = json.loads(corona_global_data.text)
@@ -97,6 +103,10 @@ def process_data(corona_data, country_data, corona_global_data, graph_data_respo
                 cured.append(int(corona_data[i]["recovered"]))
                 active.append(int(corona_data[i]["active"]))
                 critical.append(int(corona_data[i]["critical"]))
+                if country_data[j]["region"] == "Europe":
+                    europe_data["cases"] += corona_data[i]["cases"]
+                    europe_data["deaths"] += corona_data[i]["deaths"]
+                    europe_data["recovered"] += corona_data[i]["recovered"]
                 
                 # Statistika
                 infected_ratio.append(round(float(corona_data[i]["cases"] * 100 / country_data[j]["population"]), 5))
@@ -156,6 +166,9 @@ def process_data(corona_data, country_data, corona_global_data, graph_data_respo
         critical[i] = '{:,}'.format(critical[i])
         country_population[i] = '{:,}'.format(country_population[i])
         country_density[i] = '{:,}'.format(country_density[i])
+    europe_data["cases"] = '{:,}'.format(europe_data["cases"])
+    europe_data["deaths"] = '{:,}'.format(europe_data["deaths"])
+    europe_data["recovered"] = '{:,}'.format(europe_data["recovered"])
         
 
     global_data["cases"] = '{:,}'.format(global_data["cases"])
@@ -259,6 +272,7 @@ def index():
         title="Pivička",
         data=data,
         globalData=global_data,
+        europeData=europe_data,
         dataTime=data_time,
         graphData=graph,
         goodResponse=good_response)
