@@ -200,7 +200,7 @@
               <div class="col">
                 Zadnja posodobitev: {{ dataTime }}
                 <br>
-                Vir: <a href="https://github.com/javieraviles/covidAPI">github.com/javieraviles/covidAPI</a>
+                Vir: <a href={{ source }}>{{ source }}</a>
                 <br>
                 <br>
                 <div>Made by M4thB3nc</div>
@@ -498,7 +498,7 @@
             ],
             borderWidth: 2
           },
-
+          /*
           {
             label: "Ozdraveli",
             data: graphData["SI"]["recovered"],
@@ -510,6 +510,7 @@
             ],
             borderWidth: 2
           }
+          */
         ] 
       },
       options: {
@@ -535,7 +536,7 @@
     function showGraph(countryCode) {
       myLineChart.data.datasets[0].data = graphData[countryCode]["confirmed"]
       myLineChart.data.datasets[1].data = graphData[countryCode]["dead"]
-      myLineChart.data.datasets[2].data = graphData[countryCode]["recovered"]
+      //myLineChart.data.datasets[2].data = graphData[countryCode]["recovered"]
       myLineChart.update();
     }
 

@@ -4,7 +4,9 @@ from flask_compress import Compress
 import requests
 import json
 import time
+from operator import add
 from datetime import datetime, timedelta, timezone
+import numpy as np
 import sys
 import re
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -18,6 +20,7 @@ global_data = None
 europe_data = None
 good_response = True
 graph = None
+source = None
 
 with open("static/pivicka.json") as json_file:
     country_translations = json.load(json_file)
@@ -119,38 +122,27 @@ def process_data(corona_data, country_data, corona_global_data, graph_data_respo
                 else:
                     country_density.append(0)
 
-    dates_og = list(graph_data_response["confirmed"]["locations"][0]["history"].keys())
-    dates = dates_og.copy()
-    for k in range(len(dates_og)):
-        dates[k] = datetime.strptime(dates_og[k], "%m/%d/%y")
-    dates.sort()
-    
+    # Spremenimo format datuma
+    dates = list(graph_data_response["locations"][0]["timelines"]["confirmed"]["timeline"].keys())
+    for k in range(len(dates)):
+        dates[k] = dates[k][8:10]+"."+dates[k][5:7]+"."+dates[k][:4]
 
-    for i in range(len(graph_data_response["confirmed"]["locations"])):
+    for i in range(len(graph_data_response["locations"])):
         for j in range(len(country_a2_code)):
-            if graph_data_response["confirmed"]["locations"][i]["country_code"] == country_a2_code[j]:
+            if graph_data_response["locations"][i]["country_code"] == country_a2_code[j]:
                 # Če obstaja, posodobimo številke
-                if graph_data_response["confirmed"]["locations"][i]["country_code"] in graph_countries:
-                    index = graph_countries.index(graph_data_response["confirmed"]["locations"][i]["country_code"])
-                    for k in range(len(dates)):
-                        key = dates[k].strftime("X%m/X%d/X%y").replace("X0", "X").replace("X", "")            
-                        graph_data_confirmed[index][k] = graph_data_confirmed[index][k] + graph_data_response["confirmed"]["locations"][i]["history"][key]
-                        graph_data_dead[index][k] = graph_data_dead[index][k] + graph_data_response["deaths"]["locations"][i]["history"][key]
-                        graph_data_recovered[index][k] = graph_data_recovered[index][k] + graph_data_response["recovered"]["locations"][i]["history"][key]          
+                if graph_data_response["locations"][i]["country_code"] in graph_countries:
+                    index = graph_countries.index(graph_data_response["locations"][i]["country_code"])     
+                    graph_data_confirmed[index] = list(map(add, graph_data_confirmed[index], list(graph_data_response["locations"][i]["timelines"]["confirmed"]["timeline"].values())))
+                    graph_data_dead[index] = list(map(add, graph_data_dead[index], list(graph_data_response["locations"][i]["timelines"]["deaths"]["timeline"].values())))
+                    graph_data_recovered[index] = list(map(add, graph_data_recovered[index], list(graph_data_response["locations"][i]["timelines"]["recovered"]["timeline"].values())))
 
                 # Drugače dodamo novo
                 else:
-                    graph_countries.append(graph_data_response["confirmed"]["locations"][i]["country_code"])
-                    country_graph_data_confirmed = []
-                    country_graph_data_dead = []
-                    country_graph_data_recovered = []
-                    graph_dates = []
-                    for k in range(len(dates)):
-                        key = dates[k].strftime("X%m/X%d/X%y").replace("X0", "X").replace("X", "")
-                        graph_dates.append(key)
-                        country_graph_data_confirmed.append(graph_data_response["confirmed"]["locations"][i]["history"][key])
-                        country_graph_data_dead.append(graph_data_response["deaths"]["locations"][i]["history"][key])
-                        country_graph_data_recovered.append(graph_data_response["recovered"]["locations"][i]["history"][key])
+                    graph_countries.append(graph_data_response["locations"][i]["country_code"])
+                    country_graph_data_confirmed = list(graph_data_response["locations"][i]["timelines"]["confirmed"]["timeline"].values())
+                    country_graph_data_dead = list(graph_data_response["locations"][i]["timelines"]["deaths"]["timeline"].values())
+                    country_graph_data_recovered = list(graph_data_response["locations"][i]["timelines"]["recovered"]["timeline"].values())
                     graph_data_confirmed.append(country_graph_data_confirmed)
                     graph_data_dead.append(country_graph_data_dead)
                     graph_data_recovered.append(country_graph_data_recovered)
@@ -205,7 +197,7 @@ def process_data(corona_data, country_data, corona_global_data, graph_data_respo
 
     # Ustvarimo JSON za graf
     dates = {
-        "dates": graph_dates
+        "dates": dates
     }
     for i in range(len(graph_countries)):
         content = {
@@ -249,11 +241,16 @@ def process_data(corona_data, country_data, corona_global_data, graph_data_respo
     data = json.dumps(data)
 
 def get_data():
-    global data_time
+    global data_time, source
     country_response = requests.get("https://restcountries.eu/rest/v2/all") 
-    corona_response = requests.get("https://corona.lmao.ninja/countries") #https://coronavirus-19-api.herokuapp.com/countries
+    try:
+        corona_response = requests.get("https://corona.lmao.ninja/countries") #https://coronavirus-19-api.herokuapp.com/countries
+        source="https://corona.lmao.ninja/countries"
+    except Exception:
+        corona_response = requests.get("https://coronavirus-19-api.herokuapp.com/countries")
+        source="https://coronavirus-19-api.herokuapp.com/countries"
     corona_global_data = requests.get("https://coronavirus-19-api.herokuapp.com/all")
-    graph_data = requests.get("https://coronavirus-tracker-api.herokuapp.com/all")
+    graph_data = requests.get("https://coronavirus-tracker-api.herokuapp.com/v2/locations?timelines=1") #https://coronavirus-tracker-api.herokuapp.com/all
     now = datetime.now() + timedelta(hours=1)
     data_time = now.strftime("%d.%m.%Y %H:%M")
     process_data(corona_response, country_response, corona_global_data, graph_data)
@@ -275,7 +272,8 @@ def index():
         europeData=europe_data,
         dataTime=data_time,
         graphData=graph,
-        goodResponse=good_response)
+        goodResponse=good_response,
+        source=source)
 
 @app.route("/sitemap.xml")
 def sitemap():
