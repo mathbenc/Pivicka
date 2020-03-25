@@ -243,6 +243,7 @@
     var europeData = {{ europeData | tojson | safe }};
     var graphData = JSON.parse({{ graphData | tojson | safe }});
     var goodResponse = "{{ goodResponse }}";
+    var graphResponseFailed = "{{ graphResponseFailed }}";
   </script>
 
   <script src="{{ url_for('static', filename='app.js') }}"></script>

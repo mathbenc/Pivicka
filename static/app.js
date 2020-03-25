@@ -231,89 +231,97 @@ function switchTheme() {
   }
 }
 
-var ctxL = document.getElementById("lineChart").getContext('2d');
-var myLineChart = new Chart(ctxL, {
-  type: 'line',
-  data: {
-    labels: graphData["dates"].slice(-graphData["SI"]["dead"].length),
-    datasets: [
-      {
-        label: "Umrli",
-        data: graphData["SI"]["dead"],
-        backgroundColor: [
-          'rgba(255, 69, 69, .4)',
-        ],
-        borderColor: [
-          'rgba(255, 69, 69, .8)',
-        ],
-        borderWidth: 2
-      },
-      {
-        label: "Okuženi",
-        data: graphData["SI"]["confirmed"],
-        backgroundColor: [
-          'rgba(0, 184, 107, .25)',
-        ],
-        borderColor: [
-          'rgba(0, 184, 107, .5)',
-        ],
-        borderWidth: 2
-      },
-
-      /*
-      {
-        label: "Ozdraveli",
-        data: graphData["SI"]["recovered"],
-        backgroundColor: [
-          'rgba(0, 250, 220, .2)',
-        ],
-        borderColor: [
-          'rgba(0, 213, 132, .7)',
-        ],
-        borderWidth: 2
-      }
-      */
-    ] 
-  },
-  options: {
-    responsive: true,
-    scales: {
-      xAxes: [{
-        gridLines: {
-          color: '#ffeb3b',
-          zeroLineColor: "yellow",
-          display:false,
-        }
-      }],
-      yAxes: [{
-        gridLines: {
-          color: '#ffeb3b',
-          zeroLineColor: "#ffffff",
-          display:false,
+if (graphResponseFailed == "False") {
+  var ctxL = document.getElementById("lineChart").getContext('2d');
+  var myLineChart = new Chart(ctxL, {
+    type: 'line',
+    data: {
+      labels: graphData["dates"].slice(-graphData["SI"]["dead"].length),
+      datasets: [
+        {
+          label: "Umrli",
+          data: graphData["SI"]["dead"],
+          backgroundColor: [
+            'rgba(255, 69, 69, .4)',
+          ],
+          borderColor: [
+            'rgba(255, 69, 69, .8)',
+          ],
+          borderWidth: 2
         },
-        labels: {
-          color: 'yellow',
-          fontColor: 'red'
-        }  
-      }]
+        {
+          label: "Okuženi",
+          data: graphData["SI"]["confirmed"],
+          backgroundColor: [
+            'rgba(0, 184, 107, .25)',
+          ],
+          borderColor: [
+            'rgba(0, 184, 107, .5)',
+          ],
+          borderWidth: 2
+        },
+  
+        /*
+        {
+          label: "Ozdraveli",
+          data: graphData["SI"]["recovered"],
+          backgroundColor: [
+            'rgba(0, 250, 220, .2)',
+          ],
+          borderColor: [
+            'rgba(0, 213, 132, .7)',
+          ],
+          borderWidth: 2
+        }
+        */
+      ] 
     },
-    legend: {
-      position: "bottom"
-    },
-    elements: {
-      point: {
-        radius: 0
+    options: {
+      responsive: true,
+      scales: {
+        xAxes: [{
+          gridLines: {
+            color: '#ffeb3b',
+            zeroLineColor: "yellow",
+            display:false,
+          }
+        }],
+        yAxes: [{
+          gridLines: {
+            color: '#ffeb3b',
+            zeroLineColor: "#ffffff",
+            display:false,
+          },
+          labels: {
+            color: 'yellow',
+            fontColor: 'red'
+          }  
+        }]
+      },
+      legend: {
+        position: "bottom"
+      },
+      elements: {
+        point: {
+          radius: 0
+        }
       }
     }
-  }
-});
+  });
+}
+else {
+  $("#lineChart").remove();
+}
+
 
 function showGraph(countryCode) {
-  myLineChart.data.labels = graphData["dates"].slice(-graphData[countryCode]["confirmed"].length),
-  myLineChart.data.datasets[1].data = graphData[countryCode]["confirmed"]
-  myLineChart.data.datasets[0].data = graphData[countryCode]["dead"]
-  //myLineChart.data.datasets[2].data = graphData[countryCode]["recovered"]
-  myLineChart.update();
+  if (graphResponseFailed == "False") {
+    myLineChart.data.labels = graphData["dates"].slice(-graphData[countryCode]["confirmed"].length),
+    myLineChart.data.datasets[1].data = graphData[countryCode]["confirmed"]
+    myLineChart.data.datasets[0].data = graphData[countryCode]["dead"]
+    //myLineChart.data.datasets[2].data = graphData[countryCode]["recovered"]
+    myLineChart.update();
+  }
 }
 
 function modeSwitch() {

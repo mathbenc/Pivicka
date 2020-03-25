@@ -20,12 +20,13 @@ europe_data = None
 good_response = True
 graph = None
 source = None
+graph_response_failed = None
 
 with open("static/pivicka.json") as json_file:
     country_translations = json.load(json_file)
 
 def process_data(corona_data, country_data, corona_global_data, graph_data_response):
-    global data, good_response, global_data, graph, europe_data
+    global data, good_response, global_data, graph, europe_data, graph_response_failed
     country = []
     country_flag = []
     country_region = []
@@ -49,6 +50,7 @@ def process_data(corona_data, country_data, corona_global_data, graph_data_respo
     population_dead_share = []
     population_healthy_share = []
     data = []
+    dates = []
     global_data = []
     graph_data_confirmed = []
     graph_data_dead = []
@@ -60,11 +62,16 @@ def process_data(corona_data, country_data, corona_global_data, graph_data_respo
         "recovered": 0
     }
     graph = {}
+    graph_response_failed = False
 
     global_data = json.loads(corona_global_data.text)
     country_data = json.loads(country_data.text)
     corona_data = json.loads(corona_data.text)
-    graph_data_response = json.loads(graph_data_response.text)
+    if graph_data_response.status_code == 200:
+        graph_data_response = json.loads(graph_data_response.text)
+    else:
+        graph_response_failed = True
+        print("Graph API FAILED!!!")
 
     if len(corona_data) == 0:
         good_response = False
@@ -120,42 +127,44 @@ def process_data(corona_data, country_data, corona_global_data, graph_data_respo
                 else:
                     country_density.append(0)
 
-    # Spremenimo format datuma
-    dates = list(graph_data_response["locations"][0]["timelines"]["confirmed"]["timeline"].keys())
-    for k in range(len(dates)):
-        dates[k] = dates[k][8:10]+"."+dates[k][5:7]+"."+dates[k][:4]
+    #Grafi
+    if not graph_response_failed:
+        # Spremenimo format datuma
+        dates = list(graph_data_response["locations"][0]["timelines"]["confirmed"]["timeline"].keys())
+        for k in range(len(dates)):
+            dates[k] = dates[k][8:10]+"."+dates[k][5:7]+"."+dates[k][:4]
 
-    for i in range(len(graph_data_response["locations"])):
-        for j in range(len(country_a2_code)):
-            if graph_data_response["locations"][i]["country_code"] == country_a2_code[j]:
-                # Če obstaja, posodobimo številke
-                if graph_data_response["locations"][i]["country_code"] in graph_countries:
-                    index = graph_countries.index(graph_data_response["locations"][i]["country_code"])     
-                    graph_data_confirmed[index] = list(map(add, graph_data_confirmed[index], list(graph_data_response["locations"][i]["timelines"]["confirmed"]["timeline"].values())))
-                    graph_data_dead[index] = list(map(add, graph_data_dead[index], list(graph_data_response["locations"][i]["timelines"]["deaths"]["timeline"].values())))
-                    graph_data_recovered[index] = list(map(add, graph_data_recovered[index], list(graph_data_response["locations"][i]["timelines"]["recovered"]["timeline"].values())))
+        for i in range(len(graph_data_response["locations"])):
+            for j in range(len(country_a2_code)):
+                if graph_data_response["locations"][i]["country_code"] == country_a2_code[j]:
+                    # Če obstaja, posodobimo številke
+                    if graph_data_response["locations"][i]["country_code"] in graph_countries:
+                        index = graph_countries.index(graph_data_response["locations"][i]["country_code"])     
+                        graph_data_confirmed[index] = list(map(add, graph_data_confirmed[index], list(graph_data_response["locations"][i]["timelines"]["confirmed"]["timeline"].values())))
+                        graph_data_dead[index] = list(map(add, graph_data_dead[index], list(graph_data_response["locations"][i]["timelines"]["deaths"]["timeline"].values())))
+                        graph_data_recovered[index] = list(map(add, graph_data_recovered[index], list(graph_data_response["locations"][i]["timelines"]["recovered"]["timeline"].values())))
 
-                # Drugače dodamo novo
-                else:
-                    graph_countries.append(graph_data_response["locations"][i]["country_code"])
-                    country_graph_data_confirmed = list(graph_data_response["locations"][i]["timelines"]["confirmed"]["timeline"].values())
-                    country_graph_data_dead = list(graph_data_response["locations"][i]["timelines"]["deaths"]["timeline"].values())
-                    country_graph_data_recovered = list(graph_data_response["locations"][i]["timelines"]["recovered"]["timeline"].values())
-                    graph_data_confirmed.append(country_graph_data_confirmed)
-                    graph_data_dead.append(country_graph_data_dead)
-                    graph_data_recovered.append(country_graph_data_recovered)
+                    # Drugače dodamo novo
+                    else:
+                        graph_countries.append(graph_data_response["locations"][i]["country_code"])
+                        country_graph_data_confirmed = list(graph_data_response["locations"][i]["timelines"]["confirmed"]["timeline"].values())
+                        country_graph_data_dead = list(graph_data_response["locations"][i]["timelines"]["deaths"]["timeline"].values())
+                        country_graph_data_recovered = list(graph_data_response["locations"][i]["timelines"]["recovered"]["timeline"].values())
+                        graph_data_confirmed.append(country_graph_data_confirmed)
+                        graph_data_dead.append(country_graph_data_dead)
+                        graph_data_recovered.append(country_graph_data_recovered)
 
-    # Odstranimo dneve ko še ni bilo okuženih
-    for i in range(len(graph_data_confirmed)):
-        index = 0
-        for j in range(len(graph_data_confirmed[i])):
-            if graph_data_confirmed[i][j] > 0:
-                index = j-1
-                break
-        if index < 0:
+        # Odstranimo dneve ko še ni bilo okuženih
+        for i in range(len(graph_data_confirmed)):
             index = 0
-        graph_data_confirmed[i] = graph_data_confirmed[i][index:]
-        graph_data_dead[i] = graph_data_dead[i][index:]
+            for j in range(len(graph_data_confirmed[i])):
+                if graph_data_confirmed[i][j] > 0:
+                    index = j-1
+                    break
+            if index < 0:
+                index = 0
+            graph_data_confirmed[i] = graph_data_confirmed[i][index:]
+            graph_data_dead[i] = graph_data_dead[i][index:]
         
     # Številom dodamo vejice
     for i in range(len(infected)):
@@ -253,10 +262,9 @@ def process_data(corona_data, country_data, corona_global_data, graph_data_respo
 def get_data():
     global data_time, source
     country_response = requests.get("https://restcountries.eu/rest/v2/all") 
-    try:
-        corona_response = requests.get("https://coronavirus-19-api.herokuapp.com/countries")
-        source="https://coronavirus-19-api.herokuapp.com/countries"   
-    except Exception:
+    corona_response = requests.get("https://coronavirus-19-api.herokuapp.com/countries")
+    source="https://coronavirus-19-api.herokuapp.com/countries"   
+    if corona_response.status_code != 200:
         corona_response = requests.get("https://corona.lmao.ninja/countries") #https://coronavirus-19-api.herokuapp.com/countries
         source="https://corona.lmao.ninja/countries"
     corona_global_data = requests.get("https://coronavirus-19-api.herokuapp.com/all")
@@ -282,6 +290,7 @@ def index():
         europeData=europe_data,
         dataTime=data_time,
         graphData=graph,
+        graphResponseFailed=graph_response_failed,
         goodResponse=good_response,
         source=source)
 
