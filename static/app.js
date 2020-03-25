@@ -299,6 +299,11 @@ var myLineChart = new Chart(ctxL, {
     },
     legend: {
       position: "bottom"
+    },
+    elements: {
+      point: {
+        radius: 0
+      }
     }
   }
 });
