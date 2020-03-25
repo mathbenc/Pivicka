@@ -91,7 +91,7 @@ function tableCreate(region) {
   var headers = ["Država", "Populacija", "Okuženi", "Okuženi danes", "Obolevnost", "Umrli", "Umrli danes", "Umrljivost",
     "Ozdraveli"
   ];
-  var headersIcons = ["fas fa-flag", "", "fas fa-biohazard", "fas fa-calendar-day", "", "fas fa-book-dead", "", "",
+  var headersIcons = ["fas fa-flag", "", "fas fa-virus", "fas fa-calendar-day", "", "fas fa-book-dead", "", "",
     "fas fa-smile"
   ];
   var tbl = document.getElementById('dataTable');
