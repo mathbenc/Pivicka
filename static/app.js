@@ -141,11 +141,10 @@ new Tablesort(document.getElementById("dataTable"), {
 themeSetter();
 colorCountry();
 
-function colorCountry(country) {
+function colorCountry() {
   var table = $("#dataTable");
-  var tbody = table.find("tbody");
-  var rows = tbody.find("tr");
-  for (var i = 0; i < rows.length; i++) {
+  var rows = table.find("tr");
+  for (var i = 1; i < rows.length; i++) {
     var cells = rows[i].getElementsByTagName("td")
     if (cells[0].getAttribute("id")==country) {
       rows[i].classList.add("myCountry");
@@ -154,6 +153,8 @@ function colorCountry(country) {
     }
   }
 };
+
+$(document).on(colorCountry(), "#dataTable", function(){});
 
 $(document).ready(function() {
   $(document).on("click", ".countryExpand" , function() {
