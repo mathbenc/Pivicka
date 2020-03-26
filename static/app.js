@@ -91,7 +91,7 @@ function tableCreate(region) {
   var headers = ["Država", "Populacija", "Okuženi", "Okuženi danes", "Obolevnost", "Umrli", "Umrli danes", "Umrljivost",
     "Ozdraveli"
   ];
-  var headersIcons = ["fas fa-flag", "", "fas fa-virus", "fas fa-calendar-day", "", "fas fa-book-dead", "", "",
+  var headersIcons = ["fas fa-flag", "", "fas fa-biohazard", "fas fa-calendar-day", "", "fas fa-book-dead", "", "",
     "fas fa-grin-alt"
   ];
   var tbl = document.getElementById('dataTable');
@@ -308,11 +308,74 @@ if (graphResponseFailed == "False") {
       }
     }
   });
+
+  var ctxL = document.getElementById("globalChart").getContext('2d');
+  var myGlobalChart = new Chart(ctxL, {
+    type: 'line',
+    data: {
+      labels: graphData["dates"],
+      datasets: [
+        {
+          label: "Umrli",
+          data: graphGlobal["global_deaths"],
+          backgroundColor: [
+            'rgba(255, 69, 69, .4)',
+          ],
+          borderColor: [
+            'rgba(255, 69, 69, .8)',
+          ],
+          borderWidth: 2
+        },
+        {
+          label: "Okuženi",
+          data: graphGlobal["global_confirmed"],
+          backgroundColor: [
+            'rgba(0, 184, 107, .25)',
+          ],
+          borderColor: [
+            'rgba(0, 184, 107, .5)',
+          ],
+          borderWidth: 2
+        }
+      ] 
+    },
+    options: {
+      responsive: true,
+      scales: {
+        xAxes: [{
+          gridLines: {
+            color: '#ffeb3b',
+            zeroLineColor: "yellow",
+            display:false,
+          }
+        }],
+        yAxes: [{
+          gridLines: {
+            color: '#ffeb3b',
+            zeroLineColor: "#ffffff",
+            display:false,
+          },
+          labels: {
+            color: 'yellow',
+            fontColor: 'red'
+          }  
+        }]
+      },
+      legend: {
+        position: "bottom"
+      },
+      elements: {
+        point: {
+          radius: 0
+        }
+      }
+    }
+  });
 }
 else {
   $("#lineChart").remove();
+  $("#graphModal").remove();
 }
-
 
 function showGraph(countryCode) {
   if (graphResponseFailed == "False") {
@@ -332,6 +395,12 @@ function modeSwitch() {
     $("#globalDeaths").text(globalData["deaths"]);
     $("#globalRecovered").text(globalData["recovered"]);
     $("#globalCases").text(globalData["cases"]);
+    if (graphResponseFailed == "False") {
+      myGlobalChart.data.datasets[1].data = graphGlobal["global_confirmed"];
+      myGlobalChart.data.datasets[0].data = graphGlobal["global_deaths"];
+      myGlobalChart.update();
+      $("#regionTitle").text("Svet");
+    }
   }
   else {
     region = "Europe";
@@ -339,8 +408,14 @@ function modeSwitch() {
     $("#globalDeaths").text(europeData["deaths"]);
     $("#globalRecovered").text(europeData["recovered"]);
     $("#globalCases").text(europeData["cases"]);
+    if (graphResponseFailed == "False") {
+      myGlobalChart.data.datasets[1].data = graphGlobal["europe_confirmed"];
+      myGlobalChart.data.datasets[0].data = graphGlobal["europe_deaths"];
+      myGlobalChart.update();
+      $("#regionTitle").text("Evropa");
+    }
   };
-  tableBodyCreate(region)
+  tableBodyCreate(region);
   colorCountry();
 }
 

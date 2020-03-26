@@ -112,6 +112,10 @@ table {
     background-color: #ffff72 !important;
 }
 
+#countryDetailsModalHeader, #graphModalHeader {
+    background-color: #ffff72 !important;
+}
+
 .heading {
     color: black !important;
     font-family: "Roboto Mono", monospace !important;

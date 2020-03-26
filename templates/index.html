@@ -76,7 +76,7 @@
     <a class="navbar-brand">
       <img id="logotip" src="./static/images/icon-test-alt.png" height="25">
       <!-- <i id="logotip" class="fas fa-beer fa-lg"></i> -->
-      <span data-toggle="modal" data-target="#infoModal"><b>Pivička</b></span>
+      <span data-toggle="modal" class="hoverable" data-target="#infoModal"><b>Pivička</b></span>
     </a>
 
 
@@ -90,26 +90,26 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ml-auto">
 
-        <li class="nav-item mr-2">
-          <span class="nav-link"><i class="fas fa-virus"></i><span
-              id="globalCases">{{ globalData["cases"] }}</span></span>
-        </li>
-        <li class="nav-item mr-2">
-          <span class="nav-link"><i class="fas fa-book-dead"></i><span
-              id="globalDeaths">{{ globalData["deaths"] }}</span></span>
-        </li>
-        <li class="nav-item mr-2">
-          <span class="nav-link"><i class="fas fa-grin-alt"></i><span
-              id="globalRecovered">{{ globalData["recovered"] }}</span></span>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" onclick="modeSwitch()"><i id="globeSwitch" class="fa fa-globe"></i><span id="globeText">&nbspSvet&nbsp&nbsp</span></a>
-        </li>
+          <li class="nav-item mr-2 form-inline hoverable" data-toggle="modal" data-target="#graphModal">
+            <span class="nav-link">
+              <span><i class="fas fa-biohazard"></i><span
+                id="globalCases">{{ globalData["cases"] }}</span></span>
+            <span><i class="fas fa-book-dead"></i><span
+                id="globalDeaths">{{ globalData["deaths"] }}</span></span>
+            <span><i class="fas fa-grin-alt"></i><span
+                id="globalRecovered">{{ globalData["recovered"] }}</span></span>
+            </span>
+            
+          </li>
+          
+          <li class="nav-item">
+            <a class="nav-link hoverable" onclick="modeSwitch()"><i id="globeSwitch" class="fa fa-globe"></i><span id="globeText">&nbspSvet&nbsp&nbsp</span></a>
+          </li>
 
       </ul>
 
       <form class="form-inline my-0" id="searchContainer">
-        <div class="md-form form-sm my-0 active-pink active-pink-2">
+        <div class="md-form form-sm my-0 active-pink active-pink-2 w-100">
           <input class="form-control form-control-sm mr-sm-2" type="text" aria-label="Išči državo" id="search"
             placeholder="Išči državo">
         </div>
@@ -187,6 +187,22 @@
     </div>
   </div>
 
+  <div class="modal fade bottom" id="graphModal" tabindex="-1" role="dialog" aria-labelledby="graphModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-full-height modal-bottom modal-notify" role="document">
+      <div class="modal-content">
+        <div class="modal-header" id="graphModalHeader">
+          <p class="heading lead modal-title w-100"><b id="regionTitle">Svet</b></p>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div id="countryDetailsModalBody" class="modal-body container text-center">
+          <canvas id="globalChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
   <div class="modal fade bottom" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModal"
     aria-hidden="true">
@@ -221,7 +237,6 @@
   <!-- SCRIPTS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.1.0/tablesort.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.1.0/sorts/tablesort.number.min.js"></script>
-  <script src="https://kit.fontawesome.com/a9c2dc6b0c.js" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/chartist/0.11.4/chartist.min.js"></script>
 
   <!-- JQuery -->
@@ -242,6 +257,7 @@
     var globalData = {{ globalData | tojson | safe }};
     var europeData = {{ europeData | tojson | safe }};
     var graphData = JSON.parse({{ graphData | tojson | safe }});
+    var graphGlobal = JSON.parse({{ graphGlobal | tojson | safe }});
     var goodResponse = "{{ goodResponse }}";
     var graphResponseFailed = "{{ graphResponseFailed }}";
   </script>

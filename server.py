@@ -19,6 +19,7 @@ global_data = None
 europe_data = None
 good_response = True
 graph = None
+graph_global = None
 source = None
 graph_response_failed = None
 
@@ -26,7 +27,7 @@ with open("static/pivicka.json") as json_file:
     country_translations = json.load(json_file)
 
 def process_data(corona_data, country_data, corona_global_data, graph_data_response):
-    global data, good_response, global_data, graph, europe_data, graph_response_failed
+    global data, good_response, global_data, graph, europe_data, graph_response_failed, graph_global
     country = []
     country_flag = []
     country_region = []
@@ -129,6 +130,11 @@ def process_data(corona_data, country_data, corona_global_data, graph_data_respo
 
     #Grafi
     if not graph_response_failed:
+        graph_global = []
+        graph_global_confirmed = []
+        graph_global_deaths = []
+        graph_europe_confirmed = []
+        graph_europe_deaths = []
         # Spremenimo format datuma
         dates = list(graph_data_response["locations"][0]["timelines"]["confirmed"]["timeline"].keys())
         for k in range(len(dates)):
@@ -137,6 +143,21 @@ def process_data(corona_data, country_data, corona_global_data, graph_data_respo
         for i in range(len(graph_data_response["locations"])):
             for j in range(len(country_a2_code)):
                 if graph_data_response["locations"][i]["country_code"] == country_a2_code[j]:
+                    if len(graph_global_confirmed) > 0:
+                        graph_global_confirmed = list(map(add, graph_global_confirmed, list(graph_data_response["locations"][i]["timelines"]["confirmed"]["timeline"].values())))
+                        graph_global_deaths = list(map(add, graph_global_deaths, list(graph_data_response["locations"][i]["timelines"]["deaths"]["timeline"].values())))
+                    else:
+                        graph_global_confirmed = list(graph_data_response["locations"][i]["timelines"]["confirmed"]["timeline"].values())
+                        graph_global_deaths = list(graph_data_response["locations"][i]["timelines"]["deaths"]["timeline"].values())
+
+                    if country_region[j] == "Europe":
+                        if len(graph_europe_confirmed) > 0:
+                            graph_europe_confirmed = list(map(add, graph_europe_confirmed, list(graph_data_response["locations"][i]["timelines"]["confirmed"]["timeline"].values())))
+                            graph_europe_deaths = list(map(add, graph_europe_deaths, list(graph_data_response["locations"][i]["timelines"]["deaths"]["timeline"].values())))                                        
+                        else:
+                            graph_europe_confirmed = list(graph_data_response["locations"][i]["timelines"]["confirmed"]["timeline"].values())
+                            graph_europe_deaths = list(graph_data_response["locations"][i]["timelines"]["deaths"]["timeline"].values())                                           
+
                     # Če obstaja, posodobimo številke
                     if graph_data_response["locations"][i]["country_code"] in graph_countries:
                         index = graph_countries.index(graph_data_response["locations"][i]["country_code"])     
@@ -153,7 +174,7 @@ def process_data(corona_data, country_data, corona_global_data, graph_data_respo
                         graph_data_confirmed.append(country_graph_data_confirmed)
                         graph_data_dead.append(country_graph_data_dead)
                         graph_data_recovered.append(country_graph_data_recovered)
-
+        
         # Odstranimo dneve ko še ni bilo okuženih
         for i in range(len(graph_data_confirmed)):
             index = 0
@@ -164,8 +185,13 @@ def process_data(corona_data, country_data, corona_global_data, graph_data_respo
             if index < 0:
                 index = 0
             graph_data_confirmed[i] = graph_data_confirmed[i][index:]
-            graph_data_dead[i] = graph_data_dead[i][index:]
-        
+            graph_data_dead[i] = graph_data_dead[i][index:]    
+
+        graph_global.append(graph_global_confirmed)
+        graph_global.append(graph_global_deaths)
+        graph_global.append(graph_europe_confirmed)
+        graph_global.append(graph_europe_deaths)
+
     # Številom dodamo vejice
     for i in range(len(infected)):
         infected[i] = '{:,}'.format(infected[i])
@@ -214,10 +240,19 @@ def process_data(corona_data, country_data, corona_global_data, graph_data_respo
     print("Data process complete")
     sys.stdout.flush()
 
-    # Ustvarimo JSON za graf
     dates = {
         "dates": dates
     }
+    # Ustvarimo JSON za celoten graf
+    graph_global = {
+        "global_confirmed": graph_global[0],
+        "global_deaths": graph_global[1],
+        "europe_confirmed": graph_global[2],
+        "europe_deaths": graph_global[3]
+    }
+    graph_global = json.dumps(graph_global)
+
+    # Ustvarimo JSON za graf
     for i in range(len(graph_countries)):
         content = {
             graph_countries[i]: {
@@ -290,6 +325,7 @@ def index():
         europeData=europe_data,
         dataTime=data_time,
         graphData=graph,
+        graphGlobal=graph_global,
         graphResponseFailed=graph_response_failed,
         goodResponse=good_response,
         source=source)
