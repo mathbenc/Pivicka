@@ -90,16 +90,15 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ml-auto">
 
-          <li class="nav-item mr-2 form-inline hoverable" data-toggle="modal" data-target="#graphModal">
+          <li class="nav-item mr-2 form-inline hoverable" id="graphModalBtn" data-toggle="modal" data-target="#graphModal">
             <span class="nav-link">
               <span><i class="fas fa-biohazard"></i><span
-                id="globalCases">{{ globalData["cases"] }}</span></span>
-            <span><i class="fas fa-book-dead"></i><span
-                id="globalDeaths">{{ globalData["deaths"] }}</span></span>
-            <span><i class="fas fa-grin-alt"></i><span
-                id="globalRecovered">{{ globalData["recovered"] }}</span></span>
+                  id="globalCases">&nbsp{{ globalData["cases"] }}</span></span>
+              <span><i class="fas fa-book-dead"></i><span
+                  id="globalDeaths">&nbsp{{ globalData["deaths"] }}</span></span>
+              <span><i class="fas fa-grin-alt"></i><span
+                  id="globalRecovered">&nbsp{{ globalData["recovered"] }}</span></span>
             </span>
-            
           </li>
           
           <li class="nav-item">

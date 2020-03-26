@@ -124,3 +124,7 @@ table {
 #countryDetailsModalBody .row {
     font-size: 10pt !important;
 }
+
+#graphModalBtn {
+    cursor: pointer;
+}
