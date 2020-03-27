@@ -6,7 +6,9 @@ function themeSetter() {
     $("html").css("background-color", "#212121")
     $("body").css("background-color", "#212121")
 
-    $("#logotip").attr("src", "./static/images/icon-test-dark-alt.png");
+    $("#logotip").attr("src", "./static/images/icon-test-dark-alt-min.png");
+    $("#logotipWebp").attr("srcset", "./static/images/icon-test-dark-alt.webp");
+    $("#logotipPng").attr("srcset", "./static/images/icon-test-dark-alt-min.png");
 
     $("#dataTable").addClass("my-table-dark");
     $(".fakeThead").css("background-color", "#212121");
@@ -198,7 +200,9 @@ $(document).ready(function() {
 function switchTheme() {
   if (currentTheme == "light") {
     //$("#logotip").css("color", "black");
-    $("#logotip").attr("src", "./static/images/icon-test-dark-alt.png");
+    $("#logotip").attr("src", "./static/images/icon-test-dark-alt-min.png");
+    $("#logotipWebp").attr("srcset", "./static/images/icon-test-dark-alt.webp");
+    $("#logotipPng").attr("srcset", "./static/images/icon-test-dark-alt-min.png");
     $("html").css("background-color", "#212121")
     $("body").css("background-color", "#212121")
 
@@ -215,7 +219,10 @@ function switchTheme() {
   else {
     // vklopimo light theme
     //$("#logotip").css("color", "white");
-    $("#logotip").attr("src", "./static/images/icon-test-alt.png");
+    //$("#logotip").attr("src", "./static/images/icon-test-alt.png");
+    $("#logotip").attr("src", "./static/images/icon-test-alt-min.png");
+    $("#logotipWebp").attr("srcset", "./static/images/icon-test-alt.webp");
+    $("#logotipPng").attr("srcset", "./static/images/icon-test-alt-min.png");
     $("html").css("background-color", "white")
     $("body").css("background-color", "white")
 

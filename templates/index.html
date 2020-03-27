@@ -3,12 +3,11 @@
 
 <head>
   <!-- CSS -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/index.min.css') }}">
   <!-- Google Fonts -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
-  <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:300,400,500,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:300,400|Roboto:300,400&display=swap" rel="stylesheet">
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
   <!-- Bootstrap core CSS -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
   <!-- Material Design Bootstrap -->
@@ -74,7 +73,12 @@
 
     <!-- Navbar brand -->
     <a class="navbar-brand">
-      <img id="logotip" src="./static/images/icon-test-alt.png" height="25">
+      <picture>
+        <source id="logotipWebp" srcset="./static/images/icon-test-alt.webp" height="25" type="image/webp">
+        <source id="logotipPng" srcset="./static/images/icon-test-alt-min.png" height="25" type="image/png"> 
+        <img id="logotip" src="./static/images/icon-test-alt-min.png" height="25" alt="Pivicka">
+      </picture>                
+      <!--<img id="logotip" src="./static/images/icon-test-alt.png" height="25">-->
       <!-- <i id="logotip" class="fas fa-beer fa-lg"></i> -->
       <span data-toggle="modal" class="hoverable" data-target="#infoModal"><b>Pivička</b></span>
     </a>
@@ -223,7 +227,12 @@
               <br>
               <br>
               <a href="https://paypal.me/pools/c/8nFPCK0S2H" target="_blank">
-                <img src="https://image.flaticon.com/icons/png/512/233/233547.png" height="50"/>
+                <!--<img src="./static/images/donate.webp" height="50"/>-->
+                <picture>
+                  <source srcset="./static/images/donate.webp" height="50" type="image/webp">
+                  <source srcset="./static/images/donate.png" height="50" type="image/png"> 
+                  <img src="./static/images/donate.png" height="50" alt="Salcka">
+                </picture>                
               </a>
               <div>Če ste bili s ponudbo zadovoljni, lahko s klikom na zgornjo šalčko prispevate kakšen tringelt za kavo.</div>
             </div>
@@ -236,20 +245,13 @@
   <!-- SCRIPTS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.1.0/tablesort.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.1.0/sorts/tablesort.number.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/chartist/0.11.4/chartist.min.js"></script>
-
   <!-- JQuery -->
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <!-- Bootstrap tooltips -->
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js">
-  </script>
   <!-- Bootstrap core JavaScript -->
   <script type="text/javascript"
     src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
   <!-- MDB core JavaScript -->
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.14.1/js/mdb.min.js"></script>
-  <!-- MDBootstrap Datatables  -->
-  <script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
 
   <script>
     var data = JSON.parse({{ data | tojson | safe }});
@@ -261,7 +263,7 @@
     var graphResponseFailed = "{{ graphResponseFailed }}";
   </script>
 
-  <script src="{{ url_for('static', filename='app.js') }}"></script>
+  <script src="{{ url_for('static', filename='app.min.js') }}"></script>
 
 </body>
 
