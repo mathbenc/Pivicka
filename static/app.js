@@ -20,17 +20,17 @@ function themeSetter() {
     $(".modal-body").addClass("text-white");
 
     currentTheme = "dark"
-    
   }
 }
+themeSetter();
 
+// Set country
 var country = "";
 $.getJSON('https://json.geoiplookup.io', function (data) {})
   .done(function (data) {
     country = data.country_name
     colorCountry(country);
   })
-
 var region = "";
 
 // Search
@@ -43,8 +43,7 @@ $("#search").on("keyup", function () {
 });
 
 function tableBodyCreate(region) {
-  var tbl = document.getElementById('dataTable');
-  var tbdy = document.createElement('tbody');
+  var tbdy = document.getElementById("tableBody");
   $("#dataTable tbody").empty();
   for (var i = 0; i < data.length; i++) {
     if (data[i]["region"] == region || region == "") {
@@ -85,51 +84,11 @@ function tableBodyCreate(region) {
       cell.innerHTML = data[i]["cured"];
     }
   }
-  tbl.appendChild(tbdy);
   colorCountry();
 }
 
-function tableCreate(region) {
-  var headers = ["Država", "Populacija", "Okuženi", "Okuženi danes", "Obolevnost", "Umrli", "Umrli danes", "Umrljivost",
-    "Ozdraveli"
-  ];
-  var headersIcons = ["fas fa-flag", "", "fas fa-biohazard", "fas fa-calendar-day", "", "fas fa-book-dead", "", "",
-    "fas fa-grin-alt"
-  ];
-  var tbl = document.getElementById('dataTable');
-  var tbdy = document.createElement('tbody');
-  var thdr = tbl.createTHead();
-  thdr.setAttribute("id", "tableHead")
-  var row = thdr.insertRow();
-  for (var i = 0; i < headers.length; i++) {
-    var cell = document.createElement("th");
-    cell.innerHTML = '<div class="d-none d-sm-block">' + headers[i] + '</div><div class="d-sm-none"><i class="' +
-      headersIcons[i] + '"></i></div>'
-    if (headers[i] == "Okuženi") {
-      cell.setAttribute("data-sort-default", "")
-    }
-    if (i != 0) {
-      cell.setAttribute("class", "text-right col");
-    } else {
-      cell.setAttribute("class", "col");
-      cell.innerHTML = '<div>' + headers[i] + '</div>';
-    }
-    if (headers[i] == "Ozdraveli" || headers[i] == "Umrljivost") {
-      cell.setAttribute("class", "d-none d-md-table-cell text-right col");
-    }
-    if (headers[i] == "Obolevnost" || headers[i] == "Umrli danes") {
-      cell.setAttribute("class", "d-none d-sm-table-cell text-right col");
-    }
-    if (headers[i] == "Populacija") {
-      cell.setAttribute("class", "d-none d-lg-table-cell text-right col");
-    }
-    row.appendChild(cell);
-  }
-  tableBodyCreate(region);
-}
-
 if (goodResponse == "True") {
-  tableCreate(region);
+  tableBodyCreate(region);
 } else {
   var mainDiv = document.getElementById("mainDiv");
   mainDiv.innerHTML =
@@ -141,7 +100,6 @@ new Tablesort(document.getElementById("dataTable"), {
   descending: true
 });
 themeSetter();
-colorCountry();
 
 function colorCountry() {
   var table = $("#dataTable");
@@ -179,7 +137,6 @@ $(document).ready(function() {
   })
 })
 
-
 $(".tableFixHead").on("scroll", function (event) {
   var y = $(this).scrollTop(); 
   if (y > 0) {  
@@ -196,10 +153,8 @@ $(document).ready(function() {
   })
 })
 
-
 function switchTheme() {
   if (currentTheme == "light") {
-    //$("#logotip").css("color", "black");
     $("#logotip").attr("src", "./static/images/icon-test-dark-alt-min.png");
     $("#logotipWebp").attr("srcset", "./static/images/icon-test-dark-alt.webp");
     $("#logotipPng").attr("srcset", "./static/images/icon-test-dark-alt-min.png");
@@ -218,8 +173,6 @@ function switchTheme() {
   }
   else {
     // vklopimo light theme
-    //$("#logotip").css("color", "white");
-    //$("#logotip").attr("src", "./static/images/icon-test-alt.png");
     $("#logotip").attr("src", "./static/images/icon-test-alt-min.png");
     $("#logotipWebp").attr("srcset", "./static/images/icon-test-alt.webp");
     $("#logotipPng").attr("srcset", "./static/images/icon-test-alt-min.png");
