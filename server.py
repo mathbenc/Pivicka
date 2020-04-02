@@ -68,7 +68,7 @@ def process_data(corona_data, country_data, corona_global_data, graph_data_respo
     global_data = json.loads(corona_global_data.text)
     country_data = json.loads(country_data.text)
     corona_data = json.loads(corona_data.text)
-    if graph_data_response.status_code == 200:
+    if graph_data_response.status_code == 200 and len(json.loads(graph_data_response.text)) > 10:
         graph_data_response = json.loads(graph_data_response.text)
     else:
         graph_response_failed = True
@@ -244,13 +244,14 @@ def process_data(corona_data, country_data, corona_global_data, graph_data_respo
         "dates": dates
     }
     # Ustvarimo JSON za celoten graf
-    graph_global = {
-        "global_confirmed": graph_global[0],
-        "global_deaths": graph_global[1],
-        "europe_confirmed": graph_global[2],
-        "europe_deaths": graph_global[3]
-    }
-    graph_global = json.dumps(graph_global)
+    if not graph_response_failed:
+        graph_global = {
+            "global_confirmed": graph_global[0],
+            "global_deaths": graph_global[1],
+            "europe_confirmed": graph_global[2],
+            "europe_deaths": graph_global[3]
+        }
+        graph_global = json.dumps(graph_global)
 
     # Ustvarimo JSON za graf
     for i in range(len(graph_countries)):
@@ -348,8 +349,8 @@ def service_worker():
     response.headers['Cache-Control'] = 'no-cache'
     return response
 
-#app.config['TEMPLATES_AUTO_RELOAD'] = True
-sslify = SSLify(app)
+app.config['TEMPLATES_AUTO_RELOAD'] = True
+#sslify = SSLify(app)
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
