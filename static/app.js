@@ -92,7 +92,7 @@ if (goodResponse == "True") {
 } else {
   var mainDiv = document.getElementById("mainDiv");
   mainDiv.innerHTML =
-    '<div class="text-center" style="margin-top: 50px !important;"><h1>Dostop do podatkov trenutno ni mogoč! 😟</h1><p class="lead">Uporabite alternativne spletne aplikacije za pregled podatkov.<br>👉 <a href="https://www.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6">COVID-19 Tracker by CSSE</a></p></div>';
+    '<div class="text-center" style="margin-top: 50px !important; color: #ffeb3b"><h1>Dostop do podatkov trenutno ni mogoč! 😟</h1><p class="lead">Uporabite alternativne spletne aplikacije za pregled podatkov.<br>👉 <a href="https://www.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6">COVID-19 Tracker by CSSE</a></p></div>';
   var footerDiv = document.getElementById("footerDiv")
 }
   // Zaženemo plugin za sortiranje

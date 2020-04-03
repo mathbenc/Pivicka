@@ -68,7 +68,8 @@ def process_data(corona_data, country_data, corona_global_data, graph_data_respo
     global_data = json.loads(corona_global_data.text)
     country_data = json.loads(country_data.text)
     corona_data = json.loads(corona_data.text)
-    if graph_data_response.status_code == 200 and len(json.loads(graph_data_response.text)) > 10:
+
+    if graph_data_response.status_code == 200 and len(json.loads(graph_data_response.text)["locations"]) > 0:
         graph_data_response = json.loads(graph_data_response.text)
     else:
         graph_response_failed = True
