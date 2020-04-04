@@ -55,7 +55,7 @@ function tableBodyCreate(region) {
       cell.setAttribute("id", data[i]["name"])
       cell = row.insertCell();
       cell.setAttribute("align", "right");
-      cell.setAttribute("class", "d-none d-lg-table-cell text-right");
+      cell.setAttribute("class", "d-none d-xl-table-cell text-right");
       cell.innerHTML = data[i]["countryPopulation"];
       cell = row.insertCell();
       cell.setAttribute("align", "right");
@@ -82,6 +82,14 @@ function tableBodyCreate(region) {
       cell.setAttribute("align", "right");
       cell.setAttribute("class", "d-none d-md-table-cell text-right");
       cell.innerHTML = data[i]["cured"];
+      cell = row.insertCell();
+      cell.setAttribute("align", "right");
+      cell.setAttribute("class", "d-none d-lg-table-cell text-right");
+      cell.innerHTML = data[i]["tests"];
+      cell = row.insertCell();
+      cell.setAttribute("align", "right");
+      cell.setAttribute("class", "d-none d-lg-table-cell text-right");
+      cell.innerHTML = data[i]["testsPerMillion"] + "%";
     }
   }
   colorCountry();
@@ -95,7 +103,8 @@ if (goodResponse == "True") {
     '<div class="text-center" style="margin-top: 50px !important; color: #ffeb3b"><h1>Dostop do podatkov trenutno ni mogoč! 😟</h1><p class="lead">Uporabite alternativne spletne aplikacije za pregled podatkov.<br>👉 <a href="https://www.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6">COVID-19 Tracker by CSSE</a></p></div>';
   var footerDiv = document.getElementById("footerDiv")
 }
-  // Zaženemo plugin za sortiranje
+
+// Zaženemo plugin za sortiranje
 new Tablesort(document.getElementById("dataTable"), {
   descending: true
 });
@@ -132,6 +141,8 @@ $(document).ready(function() {
     $("#criticalModal").text(data[i]["critical"]);
     $("#countryFlag").attr("src", data[i]["flag"])
     $("#countryDensity").text(data[i]["density"] + " P/Km²")
+    $("#testsModal").text(data[i]["tests"]);
+    $("#testsRatioModal").text(data[i]["testsPerMillion"] + "%");
     $("#countryDetailsModal").modal("show");
     showGraph(data[i]["A2code"]);
   })
@@ -375,6 +386,7 @@ function modeSwitch() {
       $("#regionTitle").text("Evropa");
     }
   };
+
   tableBodyCreate(region);
   colorCountry();
 }

@@ -47,6 +47,8 @@ def process_data(corona_data, country_data, corona_global_data, graph_data_respo
     critical = []
     infected_ratio = []
     dead_ratio = []
+    tests = []
+    tests_per_million = []
     population_cured_share = []
     population_dead_share = []
     population_healthy_share = []
@@ -65,9 +67,14 @@ def process_data(corona_data, country_data, corona_global_data, graph_data_respo
     graph = {}
     graph_response_failed = False
 
-    global_data = json.loads(corona_global_data.text)
     country_data = json.loads(country_data.text)
-    corona_data = json.loads(corona_data.text)
+    if len(corona_data.text) != 0 or len(corona_global_data.text) != 0:
+        global_data = json.loads(corona_global_data.text)
+        corona_data = json.loads(corona_data.text)
+    else:
+        corona_data = ""
+        global_data = ""
+        good_response = False
 
     if graph_data_response.status_code == 200 and len(json.loads(graph_data_response.text)["locations"]) > 0:
         graph_data_response = json.loads(graph_data_response.text)
@@ -113,17 +120,20 @@ def process_data(corona_data, country_data, corona_global_data, graph_data_respo
                 cured.append(int(corona_data[i]["recovered"]))
                 active.append(int(corona_data[i]["active"]))
                 critical.append(int(corona_data[i]["critical"]))
+                tests.append(int(corona_data[i]["totalTests"]))
+                #tests_per_million.append(int(corona_data[i]["testsPerOneMillion"]))
                 if country_data[j]["region"] == "Europe":
                     europe_data["cases"] += corona_data[i]["cases"]
                     europe_data["deaths"] += corona_data[i]["deaths"]
                     europe_data["recovered"] += corona_data[i]["recovered"]
                 
                 # Statistika
-                infected_ratio.append(round(float(corona_data[i]["cases"] * 100 / country_data[j]["population"]), 5))
-                dead_ratio.append(round(float(corona_data[i]["deaths"] * 100 / corona_data[i]["cases"]), 5))
-                population_dead_share.append(round(float(corona_data[i]["deaths"] * 100 / country_data[j]["population"]), 5))
-                population_healthy_share.append(round(float((country_data[j]["population"] - corona_data[i]["cases"]) * 100 / country_data[j]["population"]), 5))
-                population_cured_share.append(round(float(corona_data[i]["recovered"] * 100 / country_data[j]["population"]), 5))
+                infected_ratio.append(round(float(corona_data[i]["cases"] * 100 / country_data[j]["population"]), 4))
+                dead_ratio.append(round(float(corona_data[i]["deaths"] * 100 / corona_data[i]["cases"]), 4))
+                population_dead_share.append(round(float(corona_data[i]["deaths"] * 100 / country_data[j]["population"]), 4))
+                population_healthy_share.append(round(float((country_data[j]["population"] - corona_data[i]["cases"]) * 100 / country_data[j]["population"]), 4))
+                population_cured_share.append(round(float(corona_data[i]["recovered"] * 100 / country_data[j]["population"]), 4))
+                tests_per_million.append(round(float(corona_data[i]["totalTests"] * 100 / country_data[j]["population"]), 4))
                 if country_data[j]["area"] != None:
                     country_density.append(int(country_data[j]["population"] / country_data[j]["area"]))
                 else:
@@ -204,6 +214,8 @@ def process_data(corona_data, country_data, corona_global_data, graph_data_respo
         critical[i] = '{:,}'.format(critical[i])
         country_population[i] = '{:,}'.format(country_population[i])
         country_density[i] = '{:,}'.format(country_density[i])
+        tests[i] = '{:,}'.format(tests[i])
+        tests_per_million[i] = '{:,}'.format(tests_per_million[i])
     europe_data["cases"] = '{:,}'.format(europe_data["cases"])
     europe_data["deaths"] = '{:,}'.format(europe_data["deaths"])
     europe_data["recovered"] = '{:,}'.format(europe_data["recovered"])
@@ -289,6 +301,8 @@ def process_data(corona_data, country_data, corona_global_data, graph_data_respo
             "cured": cured[i],
             "critical": critical[i],
             "active": active[i],
+            "tests": tests[i],
+            "testsPerMillion": tests_per_million[i],
             "populationHealthyShare": population_healthy_share[i],
             "populationCuredShare": population_cured_share[i],
             "populationDeadShare": population_dead_share[i]

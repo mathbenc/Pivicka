@@ -131,7 +131,7 @@
           <th class="col">
             <div>Država</div>
           </th>
-          <th class="d-none d-lg-table-cell text-right col">
+          <th class="d-none d-xl-table-cell text-right col">
             <div class="d-none d-sm-block">Populacija</div><div class="d-sm-none"><i class=""></i></div>
           </th>
           <th class="text-right col" data-sort-default>
@@ -154,6 +154,12 @@
           </th>
           <th class="d-none d-md-table-cell text-right col">
             <div class="d-none d-sm-block">Ozdraveli</div><div class="d-sm-none"><i class="fas fa-grin-alt"></i></div>
+          </th>
+          <th class="d-none d-lg-table-cell text-right col">
+            <div class="d-none d-sm-block">Testirani</div><div class="d-sm-none"><i class=""></i></div>
+          </th>
+          <th class="d-none d-lg-table-cell text-right col">
+            <div class="d-none d-sm-block">Delež testiranih</div><div class="d-sm-none"><i class=""></i></div>
           </th>
         </tr>
       </thead>
@@ -217,6 +223,15 @@
             </div>
             <div class="col-3"><b>Kritični primeri</b>
               <p id="criticalModal"></p>
+            </div>
+
+            <div class="w-100"></div>
+
+            <div class="col-6"><b>Testi</b>
+              <p id="testsModal"></p>
+            </div>
+            <div class="col-6"><b>Delež testiranih prebivalcev</b>
+              <p id="testsRatioModal"></p>
             </div>
           </div>
           <canvas id="lineChart"></canvas>
