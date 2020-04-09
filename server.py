@@ -320,7 +320,7 @@ def get_data():
         source="https://corona.lmao.ninja/countries"
     corona_global_data = requests.get("https://coronavirus-19-api.herokuapp.com/all")
     graph_data = requests.get("https://coronavirus-tracker-api.herokuapp.com/v2/locations?timelines=1") #https://coronavirus-tracker-api.herokuapp.com/all
-    now = datetime.now() + timedelta(hours=1)
+    now = datetime.now() + timedelta(hours=2)
     data_time = now.strftime("%d.%m.%Y %H:%M")
     process_data(corona_response, country_response, corona_global_data, graph_data)
     print("API Update complete")

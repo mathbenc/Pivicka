@@ -26,11 +26,21 @@ themeSetter();
 
 // Set country
 var country = "";
-$.getJSON('https://json.geoiplookup.io', function (data) {})
-  .done(function (data) {
-    country = data.country_name
+$.ajax({
+  url: "https://get.geojs.io/v1/ip/country.js",
+  dataType: "jsonp",
+  type: "POST",
+  jsonpCallback: 'processJSONPResponse', // add this property
+  contentType: "application/json; charset=utf-8",
+  success: function(result, status, xhr) {
+    country = result.name;
     colorCountry(country);
-  })
+  },
+  error: function(xhr, status, error) {
+    console.log("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
+  }
+});
+
 var region = "";
 
 // Search
