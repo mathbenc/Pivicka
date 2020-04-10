@@ -24,22 +24,16 @@ function themeSetter() {
 }
 themeSetter();
 
-// Set country
 var country = "";
 $.ajax({
-  url: "https://get.geojs.io/v1/ip/country.js",
+  url: "https://ipinfo.io?token=0b3053efc15e81",
+  type: "get",
   dataType: "jsonp",
-  type: "POST",
-  jsonpCallback: 'processJSONPResponse', // add this property
-  contentType: "application/json; charset=utf-8",
-  success: function(result, status, xhr) {
-    country = result.name;
-    colorCountry(country);
-  },
-  error: function(xhr, status, error) {
-    console.log("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
+  success: function(data) {
+    country = data.country;
+    colorCountry();
   }
-});
+})
 
 var region = "";
 
@@ -54,7 +48,9 @@ $("#search").on("keyup", function () {
 
 function tableBodyCreate(region) {
   var tbdy = document.getElementById("tableBody");
+  console.log($("#dataTable tbody"));
   $("#dataTable tbody").empty();
+  console.log($("#dataTable tbody"));
   for (var i = 0; i < data.length; i++) {
     if (data[i]["region"] == region || region == "") {
       var row = tbdy.insertRow();
@@ -62,7 +58,7 @@ function tableBodyCreate(region) {
       row.setAttribute("class", "countryExpand");
       row.setAttribute("id", i);
       cell.innerHTML = data[i]["slovenianName"]
-      cell.setAttribute("id", data[i]["name"])
+      cell.setAttribute("id", data[i]["A2code"])
       cell = row.insertCell();
       cell.setAttribute("align", "right");
       cell.setAttribute("class", "d-none d-xl-table-cell text-right");
@@ -102,6 +98,7 @@ function tableBodyCreate(region) {
       cell.innerHTML = data[i]["testsPerMillion"] + "%";
     }
   }
+  $("tbody").show();
   colorCountry();
 }
 
@@ -121,6 +118,7 @@ new Tablesort(document.getElementById("dataTable"), {
 themeSetter();
 
 function colorCountry() {
+  console.log(country)
   var table = $("#dataTable");
   var rows = table.find("tr");
   for (var i = 1; i < rows.length; i++) {

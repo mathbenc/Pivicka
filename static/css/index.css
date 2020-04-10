@@ -12,6 +12,10 @@
     background-color: #ffeb3b;
 }
 
+table tbody {
+    display: none;
+}
+
 th div {
     opacity: 0.5;
 }
