@@ -117,27 +117,31 @@ def process_data(corona_data, country_data, corona_global_data, graph_data_respo
                     dead_today.append(int(corona_data[i]["todayDeaths"]))
                 else:
                     dead_today.append(int(0))
-                cured.append(int(corona_data[i]["recovered"]))
+                if corona_data[i]["recovered"] != None:
+                    cured.append(int(corona_data[i]["recovered"]))
+                else:
+                    cured.append(int(0))
                 active.append(int(corona_data[i]["active"]))
                 critical.append(int(corona_data[i]["critical"]))
                 tests.append(int(corona_data[i]["totalTests"]))
                 #tests_per_million.append(int(corona_data[i]["testsPerOneMillion"]))
-                if country_data[j]["region"] == "Europe":
-                    europe_data["cases"] += corona_data[i]["cases"]
-                    europe_data["deaths"] += corona_data[i]["deaths"]
-                    europe_data["recovered"] += corona_data[i]["recovered"]
                 
                 # Statistika
                 infected_ratio.append(round(float(corona_data[i]["cases"] * 100 / country_data[j]["population"]), 4))
                 dead_ratio.append(round(float(corona_data[i]["deaths"] * 100 / corona_data[i]["cases"]), 4))
                 population_dead_share.append(round(float(corona_data[i]["deaths"] * 100 / country_data[j]["population"]), 4))
                 population_healthy_share.append(round(float((country_data[j]["population"] - corona_data[i]["cases"]) * 100 / country_data[j]["population"]), 4))
-                population_cured_share.append(round(float(corona_data[i]["recovered"] * 100 / country_data[j]["population"]), 4))
+                population_cured_share.append(round(float(cured[len(cured)-1] * 100 / country_data[j]["population"]), 4))
                 tests_per_million.append(round(float(corona_data[i]["totalTests"] * 100 / country_data[j]["population"]), 4))
                 if country_data[j]["area"] != None:
                     country_density.append(int(country_data[j]["population"] / country_data[j]["area"]))
                 else:
                     country_density.append(0)
+
+        if corona_data[i]["country"] == "Europe":
+            europe_data["cases"] = corona_data[i]["cases"]
+            europe_data["deaths"] = corona_data[i]["deaths"]
+            europe_data["recovered"] = corona_data[i]["recovered"]
 
     #Grafi
     if not graph_response_failed:
