@@ -48,9 +48,7 @@ $("#search").on("keyup", function () {
 
 function tableBodyCreate(region) {
   var tbdy = document.getElementById("tableBody");
-  console.log($("#dataTable tbody"));
   $("#dataTable tbody").empty();
-  console.log($("#dataTable tbody"));
   for (var i = 0; i < data.length; i++) {
     if (data[i]["region"] == region || region == "") {
       var row = tbdy.insertRow();
@@ -68,6 +66,9 @@ function tableBodyCreate(region) {
       cell.innerHTML = data[i]["infected"];
       cell = row.insertCell();
       cell.setAttribute("align", "right");
+      if (data[i]["infectedToday"] != "0") {
+        cell.style.color = "#FF0266";
+      }
       cell.innerHTML = data[i]["infectedToday"];
       cell = row.insertCell();
       cell.setAttribute("align", "right");
@@ -79,6 +80,9 @@ function tableBodyCreate(region) {
       cell = row.insertCell();
       cell.setAttribute("align", "right");
       cell.setAttribute("class", "d-none d-sm-table-cell text-right");
+      if (data[i]["deadToday"] != 0) {
+        cell.style.color = "#FF0266";
+      }
       cell.innerHTML = data[i]["deadToday"];
       cell = row.insertCell();
       cell.setAttribute("align", "right");
