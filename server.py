@@ -113,12 +113,17 @@ def process_data(corona_data, country_data, corona_global_data, graph_data_respo
                 infected.append(int(corona_data[i]["cases"]))
                 infected_today.append(int(corona_data[i]["todayCases"]))
                 dead.append(int(corona_data[i]["deaths"]))
+                if country_data[j]["region"] == "Europe":
+                    europe_data["cases"] += corona_data[i]["cases"]
+                    europe_data["deaths"] += corona_data[i]["deaths"]
                 if corona_data[i]["todayDeaths"] != None:
                     dead_today.append(int(corona_data[i]["todayDeaths"]))
                 else:
                     dead_today.append(int(0))
                 if corona_data[i]["recovered"] != None:
                     cured.append(int(corona_data[i]["recovered"]))
+                    if country_data[j]["region"] == "Europe":
+                        europe_data["recovered"] += corona_data[i]["recovered"]
                 else:
                     cured.append(int(0))
                 active.append(int(corona_data[i]["active"]))
@@ -137,11 +142,6 @@ def process_data(corona_data, country_data, corona_global_data, graph_data_respo
                     country_density.append(int(country_data[j]["population"] / country_data[j]["area"]))
                 else:
                     country_density.append(0)
-
-        if corona_data[i]["country"] == "Europe":
-            europe_data["cases"] = corona_data[i]["cases"]
-            europe_data["deaths"] = corona_data[i]["deaths"]
-            europe_data["recovered"] = corona_data[i]["recovered"]
 
     #Grafi
     if not graph_response_failed:
