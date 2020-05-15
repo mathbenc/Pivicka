@@ -64,6 +64,28 @@
 
 
   <meta http-equiv="refresh" content="300">
+
+  <script>
+    var today = new Date();
+    var h = today.getHours();
+    if (h > 20 || h < 7) {
+      $("html").css("background-color", "#212121")
+      $("body").css("background-color", "#212121")
+
+      $("#logotip").attr("src", "./static/images/icon-test-dark-alt-min.png");
+      $("#logotipWebp").attr("srcset", "./static/images/icon-test-dark-alt.webp");
+      $("#logotipPng").attr("srcset", "./static/images/icon-test-dark-alt-min.png");
+
+      $("#dataTable").addClass("my-table-dark");
+      $(".fakeThead").css("background-color", "#212121");
+      
+      $("thead th").css("background-color", "#212121")
+      $("thead th").css("color", "white")
+
+      $(".modal-content").addClass("elegant-color");
+      $(".modal-body").addClass("text-white");
+    }
+  </script>
 </head>
 
 <body>
