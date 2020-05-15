@@ -372,7 +372,7 @@ def service_worker():
     return response
 
 #app.config['TEMPLATES_AUTO_RELOAD'] = True
-sslify = SSLify(app)
+#sslify = SSLify(app)
 
 if __name__ == '__main__':
     app.run()
