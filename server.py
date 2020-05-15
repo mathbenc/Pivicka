@@ -119,6 +119,10 @@ def process_data(corona_data, country_data, corona_global_data, graph_data_respo
                 if corona_data[i]["todayDeaths"] != None:
                     dead_today.append(int(corona_data[i]["todayDeaths"]))
                 else:
+                    active.append(int(0))
+                if corona_data[i]["active"] != None:
+                    active.append(int(corona_data[i]["active"]))
+                else:
                     dead_today.append(int(0))
                 if corona_data[i]["recovered"] != None:
                     cured.append(int(corona_data[i]["recovered"]))
@@ -126,7 +130,6 @@ def process_data(corona_data, country_data, corona_global_data, graph_data_respo
                         europe_data["recovered"] += corona_data[i]["recovered"]
                 else:
                     cured.append(int(0))
-                active.append(int(corona_data[i]["active"]))
                 critical.append(int(corona_data[i]["critical"]))
                 tests.append(int(corona_data[i]["totalTests"]))
                 #tests_per_million.append(int(corona_data[i]["testsPerOneMillion"]))
@@ -368,8 +371,8 @@ def service_worker():
     response.headers['Cache-Control'] = 'no-cache'
     return response
 
-#app.config['TEMPLATES_AUTO_RELOAD'] = True
-sslify = SSLify(app)
+app.config['TEMPLATES_AUTO_RELOAD'] = True
+#sslify = SSLify(app)
 
 if __name__ == '__main__':
     app.run()
