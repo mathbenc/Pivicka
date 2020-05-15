@@ -109,8 +109,6 @@ def process_data(corona_data, country_data, corona_global_data, graph_data_respo
                 country_population.append(country_data[j]["population"])
                 country_area.append(country_data[j]["area"])
 
-                print(corona_data[i]["active"])
-
                 # Podatki o pivu
                 infected.append(int(corona_data[i]["cases"]))
                 infected_today.append(int(corona_data[i]["todayCases"]))
