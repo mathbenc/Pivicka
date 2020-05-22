@@ -76,25 +76,29 @@ function tableBodyCreate(region) {
       cell.innerHTML = data[i]["infectedRatio"] + "%";
       cell = row.insertCell();
       cell.setAttribute("align", "right");
+      cell.setAttribute("class", "d-none d-sm-table-cell text-right");
       cell.innerHTML = data[i]["dead"];
       cell = row.insertCell();
       cell.setAttribute("align", "right");
-      cell.setAttribute("class", "d-none d-sm-table-cell text-right");
       if (data[i]["deadToday"] != 0) {
         cell.style.color = "#FF0266";
       }
       cell.innerHTML = data[i]["deadToday"];
       cell = row.insertCell();
       cell.setAttribute("align", "right");
-      cell.setAttribute("class", "d-none d-md-table-cell text-right");
+      cell.setAttribute("class", "d-none d-lg-table-cell text-right");
       cell.innerHTML = data[i]["deadRatio"] + "%";
       cell = row.insertCell();
       cell.setAttribute("align", "right");
-      cell.setAttribute("class", "d-none d-md-table-cell text-right");
+      cell.setAttribute("class", "d-none d-lg-table-cell text-right");
       cell.innerHTML = data[i]["cured"];
       cell = row.insertCell();
       cell.setAttribute("align", "right");
-      cell.setAttribute("class", "d-none d-lg-table-cell text-right");
+      cell.setAttribute("class", "d-none d-md-table-cell text-right");
+      cell.innerHTML = data[i]["active"];
+      cell = row.insertCell();
+      cell.setAttribute("align", "right");
+      cell.setAttribute("class", "d-none d-xl-table-cell text-right");
       cell.innerHTML = data[i]["tests"];
       cell = row.insertCell();
       cell.setAttribute("align", "right");
@@ -122,7 +126,6 @@ new Tablesort(document.getElementById("dataTable"), {
 themeSetter();
 
 function colorCountry() {
-  console.log(country)
   var table = $("#dataTable");
   var rows = table.find("tr");
   for (var i = 1; i < rows.length; i++) {

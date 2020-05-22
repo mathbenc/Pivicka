@@ -135,12 +135,12 @@ def process_data(corona_data, country_data, corona_global_data, graph_data_respo
                 #tests_per_million.append(int(corona_data[i]["testsPerOneMillion"]))
                 
                 # Statistika
-                infected_ratio.append(round(float(corona_data[i]["cases"] * 100 / country_data[j]["population"]), 4))
-                dead_ratio.append(round(float(corona_data[i]["deaths"] * 100 / corona_data[i]["cases"]), 4))
-                population_dead_share.append(round(float(corona_data[i]["deaths"] * 100 / country_data[j]["population"]), 4))
-                population_healthy_share.append(round(float((country_data[j]["population"] - corona_data[i]["cases"]) * 100 / country_data[j]["population"]), 4))
-                population_cured_share.append(round(float(cured[len(cured)-1] * 100 / country_data[j]["population"]), 4))
-                tests_per_million.append(round(float(corona_data[i]["totalTests"] * 100 / country_data[j]["population"]), 4))
+                infected_ratio.append(round(float(corona_data[i]["cases"] * 100 / country_data[j]["population"]), 2))
+                dead_ratio.append(round(float(corona_data[i]["deaths"] * 100 / corona_data[i]["cases"]), 2))
+                population_dead_share.append(round(float(corona_data[i]["deaths"] * 100 / country_data[j]["population"]), 2))
+                population_healthy_share.append(round(float((country_data[j]["population"] - corona_data[i]["cases"]) * 100 / country_data[j]["population"]), 2))
+                population_cured_share.append(round(float(cured[len(cured)-1] * 100 / country_data[j]["population"]), 2))
+                tests_per_million.append(round(float(corona_data[i]["totalTests"] * 100 / country_data[j]["population"]), 2))
                 if country_data[j]["area"] != None:
                     country_density.append(int(country_data[j]["population"] / country_data[j]["area"]))
                 else:
