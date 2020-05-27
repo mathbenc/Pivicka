@@ -321,7 +321,7 @@ def get_data():
     global data_time, source
     country_response = requests.get("https://restcountries.eu/rest/v2/all") 
     corona_response = requests.get("https://coronavirus-19-api.herokuapp.com/countries")
-    source="https://coronavirus-19-api.herokuapp.com/countries"   
+    source="https://www.worldometers.info/coronavirus/"   
     if corona_response.status_code != 200:
         corona_response = requests.get("https://corona.lmao.ninja/countries") #https://coronavirus-19-api.herokuapp.com/countries
         source="https://corona.lmao.ninja/countries"
