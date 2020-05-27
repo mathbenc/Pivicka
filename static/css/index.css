@@ -20,6 +20,11 @@ th div {
     opacity: 0.5;
 }
 
+.emphasize:hover { 
+    border-bottom: 1px solid;
+    margin-bottom: -1px;
+}
+
 th[aria-sort]:not(.no-sort) div {
     opacity: 1;
 }

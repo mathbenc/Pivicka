@@ -46,6 +46,10 @@ $("#search").on("keyup", function () {
   colorCountry();
 });
 
+// Zaženemo plugin za sortiranje
+var table = document.getElementById('dataTable');
+var sort = new Tablesort((table), { descending: true });
+
 function tableBodyCreate(region) {
   var tbdy = document.getElementById("tableBody");
   $("#dataTable tbody").empty();
@@ -106,6 +110,7 @@ function tableBodyCreate(region) {
       cell.innerHTML = data[i]["testsPerMillion"] + "%";
     }
   }
+  sort.refresh();
   $("tbody").show();
   colorCountry();
 }
@@ -119,10 +124,6 @@ if (goodResponse == "True") {
   var footerDiv = document.getElementById("footerDiv")
 }
 
-// Zaženemo plugin za sortiranje
-new Tablesort(document.getElementById("dataTable"), {
-  descending: true
-});
 themeSetter();
 
 function colorCountry() {
@@ -401,7 +402,6 @@ function modeSwitch() {
       $("#regionTitle").text("Evropa");
     }
   };
-
   tableBodyCreate(region);
   colorCountry();
 }
