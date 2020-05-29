@@ -1,5 +1,4 @@
 from flask import Flask, render_template, jsonify, send_from_directory, make_response
-from flask_sslify import SSLify
 from flask_compress import Compress
 import requests
 import json
@@ -375,7 +374,6 @@ def service_worker():
     return response
 
 #app.config['TEMPLATES_AUTO_RELOAD'] = True
-#sslify = SSLify(app)
 
 if __name__ == '__main__':
     app.run()
