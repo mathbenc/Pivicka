@@ -130,7 +130,10 @@ def process_data(corona_data, country_data, corona_global_data, graph_data_respo
                         europe_data["recovered"] += corona_data[i]["recovered"]
                 else:
                     cured.append(int(0))
-                critical.append(int(corona_data[i]["critical"]))
+                if corona_data[i]["critical"] != None:
+                    active.append(int(corona_data[i]["critical"]))
+                else:
+                    active.append(int(0))    
                 tests.append(int(corona_data[i]["totalTests"]))
                 #tests_per_million.append(int(corona_data[i]["testsPerOneMillion"]))
                 
