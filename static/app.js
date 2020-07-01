@@ -100,17 +100,17 @@ function tableBodyCreate(region) {
       cell.setAttribute("align", "right");
       cell.setAttribute("class", "d-none d-md-table-cell text-right");
       cell.innerHTML = data[i]["active"];
-      /*
+      
       cell = row.insertCell();
       cell.setAttribute("align", "right");
       cell.setAttribute("class", "d-none d-xl-table-cell text-right");
       cell.innerHTML = data[i]["tests"];
-      */
+      /*
       cell = row.insertCell();
       cell.setAttribute("align", "right");
       cell.setAttribute("class", "d-none d-xl-table-cell text-right");
       cell.innerHTML = data[i]["newTests"];
-      
+      */
       cell = row.insertCell();
       cell.setAttribute("align", "right");
       cell.setAttribute("class", "d-none d-lg-table-cell text-right");
