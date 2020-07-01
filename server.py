@@ -157,8 +157,8 @@ def process_data(corona_data, country_data, corona_global_data, graph_data_respo
                     country_density.append(0)
 
     #Za vsako drzavo shranimo danasnje stevilo testov, naredimo 1x na dan med 23.45 in 00.00
-    now = datetime.now() + timedelta(hours=2)
-    if not yesterday_tests_saved and now.hour >= 23 and now.minute >= 45:
+    now = datetime.now() - timedelta(hours=2)
+    if not yesterday_tests_saved and now.hour >= 23 and now.minute >= 50:
         print(now, "=> Shranjujemo teste!!!!")
         yesterday_tests_saved = True
         yesterday_tests.clear()
