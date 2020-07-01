@@ -100,10 +100,17 @@ function tableBodyCreate(region) {
       cell.setAttribute("align", "right");
       cell.setAttribute("class", "d-none d-md-table-cell text-right");
       cell.innerHTML = data[i]["active"];
+      /*
       cell = row.insertCell();
       cell.setAttribute("align", "right");
       cell.setAttribute("class", "d-none d-xl-table-cell text-right");
       cell.innerHTML = data[i]["tests"];
+      */
+      cell = row.insertCell();
+      cell.setAttribute("align", "right");
+      cell.setAttribute("class", "d-none d-xl-table-cell text-right");
+      cell.innerHTML = data[i]["newTests"];
+      
       cell = row.insertCell();
       cell.setAttribute("align", "right");
       cell.setAttribute("class", "d-none d-lg-table-cell text-right");
@@ -158,6 +165,7 @@ $(document).ready(function() {
     $("#countryFlag").attr("src", data[i]["flag"])
     $("#countryDensity").text(data[i]["density"] + " P/Km²")
     $("#testsModal").text(data[i]["tests"]);
+    $("#newTestsModal").text(data[i]["newTests"]);
     $("#testsRatioModal").text(data[i]["testsPerMillion"] + "%");
     $("#countryDetailsModal").modal("show");
     showGraph(data[i]["A2code"]);

@@ -12,6 +12,9 @@ from apscheduler.schedulers.background import BackgroundScheduler
 app = Flask(__name__)
 Compress(app)
 
+yesterday_tests_saved = False
+yesterday_tests = []
+
 data_time = None
 data = None
 global_data = None
@@ -26,7 +29,7 @@ with open("static/pivicka.json") as json_file:
     country_translations = json.load(json_file)
 
 def process_data(corona_data, country_data, corona_global_data, graph_data_response):
-    global data, good_response, global_data, graph, europe_data, graph_response_failed, graph_global
+    global data, good_response, global_data, graph, europe_data, graph_response_failed, graph_global, yesterday_tests_saved,yesterday_tests
     country = []
     country_flag = []
     country_region = []
@@ -47,6 +50,7 @@ def process_data(corona_data, country_data, corona_global_data, graph_data_respo
     infected_ratio = []
     dead_ratio = []
     tests = []
+    new_tests = []
     tests_per_million = []
     population_cured_share = []
     population_dead_share = []
@@ -115,24 +119,28 @@ def process_data(corona_data, country_data, corona_global_data, graph_data_respo
                 if country_data[j]["region"] == "Europe":
                     europe_data["cases"] += corona_data[i]["cases"]
                     europe_data["deaths"] += corona_data[i]["deaths"]
+                
                 if corona_data[i]["todayDeaths"] != None:
                     dead_today.append(int(corona_data[i]["todayDeaths"]))
                 else:
-                    dead_today.append(int(0))
+                    dead_today.append("")
+                
                 if corona_data[i]["active"] != None:
                     active.append(int(corona_data[i]["active"]))
                 else:
-                    active.append(int(0))
+                    active.append("")
+                
                 if corona_data[i]["recovered"] != None:
                     cured.append(int(corona_data[i]["recovered"]))
                     if country_data[j]["region"] == "Europe":
                         europe_data["recovered"] += corona_data[i]["recovered"]
                 else:
-                    cured.append(int(0))
+                    cured.append("")
+                
                 if corona_data[i]["critical"] != None:
                     critical.append(int(corona_data[i]["critical"]))
                 else:
-                    critical.append(int(0))    
+                    critical.append("")    
                 tests.append(int(corona_data[i]["totalTests"]))
                 #tests_per_million.append(int(corona_data[i]["testsPerOneMillion"]))
                 
@@ -140,13 +148,30 @@ def process_data(corona_data, country_data, corona_global_data, graph_data_respo
                 infected_ratio.append(round(float(corona_data[i]["cases"] * 100 / country_data[j]["population"]), 2))
                 dead_ratio.append(round(float(corona_data[i]["deaths"] * 100 / corona_data[i]["cases"]), 2))
                 population_dead_share.append(round(float(corona_data[i]["deaths"] * 100 / country_data[j]["population"]), 2))
-                population_healthy_share.append(round(float((country_data[j]["population"] - corona_data[i]["cases"]) * 100 / country_data[j]["population"]), 2))
-                population_cured_share.append(round(float(cured[len(cured)-1] * 100 / country_data[j]["population"]), 2))
+                #population_healthy_share.append(round(float((country_data[j]["population"] - corona_data[i]["cases"]) * 100 / country_data[j]["population"]), 2))
+                #population_cured_share.append(round(float(cured[len(cured)-1] * 100 / country_data[j]["population"]), 2))
                 tests_per_million.append(round(float(corona_data[i]["totalTests"] * 100 / country_data[j]["population"]), 2))
                 if country_data[j]["area"] != None:
                     country_density.append(int(country_data[j]["population"] / country_data[j]["area"]))
                 else:
                     country_density.append(0)
+
+    #Za vsako drzavo shranimo danasnje stevilo testov, naredimo 1x na dan med 23.45 in 00.00
+    now = datetime.now() + timedelta(hours=2)
+    if not yesterday_tests_saved and now.hour >= 22 and now.minute >= 30:
+        print(now, "=> Shranjujemo teste!!!!")
+        yesterday_tests_saved = True
+        yesterday_tests.clear()
+        for i in range(len(country)):
+            yesterday_tests.append(tests[i])
+
+    #Za vsako drzavo pogledamo stevilo danasnjih in shranjenih vcerajsnjih testov
+    for i in range(len(country)):
+        new_tests.append(0)
+    for i in range(len(new_tests)):
+        tests_diff = tests[i] - yesterday_tests[i]
+        if tests_diff > new_tests[i]:
+            new_tests[i] = int(tests_diff)
 
     #Grafi
     if not graph_response_failed:
@@ -217,19 +242,22 @@ def process_data(corona_data, country_data, corona_global_data, graph_data_respo
         infected[i] = '{:,}'.format(infected[i])
         infected_today[i] = '{:,}'.format(infected_today[i])
         dead[i] = '{:,}'.format(dead[i])
-        dead_today[i] = '{:,}'.format(dead_today[i])
-        cured[i] = '{:,}'.format(cured[i])
-        active[i] = '{:,}'.format(active[i])
-        critical[i] = '{:,}'.format(critical[i])
+        if type(dead_today[i]) == int:
+            dead_today[i] = '{:,}'.format(dead_today[i])
+        if type(cured[i]) == int:
+            cured[i] = '{:,}'.format(cured[i])
+        if type(active[i]) == int:
+            active[i] = '{:,}'.format(active[i])
+        if type(critical[i]) == int:
+            critical[i] = '{:,}'.format(critical[i])
         country_population[i] = '{:,}'.format(country_population[i])
         country_density[i] = '{:,}'.format(country_density[i])
         tests[i] = '{:,}'.format(tests[i])
         tests_per_million[i] = '{:,}'.format(tests_per_million[i])
+        new_tests[i] = '{:,}'.format(new_tests[i])
     europe_data["cases"] = '{:,}'.format(europe_data["cases"])
     europe_data["deaths"] = '{:,}'.format(europe_data["deaths"])
     europe_data["recovered"] = '{:,}'.format(europe_data["recovered"])
-        
-
     global_data["cases"] = '{:,}'.format(global_data["cases"])
     global_data["deaths"] = '{:,}'.format(global_data["deaths"])
     global_data["recovered"] = '{:,}'.format(global_data["recovered"])
@@ -312,10 +340,14 @@ def process_data(corona_data, country_data, corona_global_data, graph_data_respo
             "active": active[i],
             "tests": tests[i],
             "testsPerMillion": tests_per_million[i],
+            "newTests": new_tests[i]
+        }
+        """
             "populationHealthyShare": population_healthy_share[i],
             "populationCuredShare": population_cured_share[i],
             "populationDeadShare": population_dead_share[i]
         }
+        """
         data.append(content)
     data = json.dumps(data)
 
@@ -373,7 +405,7 @@ def service_worker():
     response.headers['Cache-Control'] = 'no-cache'
     return response
 
-#app.config['TEMPLATES_AUTO_RELOAD'] = True
+app.config['TEMPLATES_AUTO_RELOAD'] = True
 
 if __name__ == '__main__':
     app.run()
