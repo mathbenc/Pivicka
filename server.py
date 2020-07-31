@@ -158,21 +158,20 @@ def process_data(corona_data, country_data, corona_global_data, graph_data_respo
 
     #Za vsako drzavo shranimo danasnje stevilo testov, naredimo 1x na dan med 23.45 in 00.00
     now = datetime.now() + timedelta(hours=2)
-    print("Cas:", now)
-    if not yesterday_tests_saved and now.hour >= 0 and now.minute >= 15:
+    print("Current time:", now)
+    if not yesterday_tests_saved and now.hour >= 23 and now.minute >= 45:
         print(now, "=> Shranjujemo teste!!!!")
         yesterday_tests_saved = True
-        yesterday_tests.clear()
-        for i in range(len(country)):
-            yesterday_tests.append(tests[i])
+        save_tests(country, tests)
 
     #Za vsako drzavo pogledamo stevilo danasnjih in shranjenih vcerajsnjih testov
+    yesterday_tests = open_tests()
+    new_tests.clear()
     for i in range(len(country)):
-        new_tests.append(0)
-    for i in range(len(new_tests)):
-        tests_diff = tests[i] - yesterday_tests[i]
-        if tests_diff > new_tests[i]:
-            new_tests[i] = int(tests_diff)
+        for j in range(len(yesterday_tests)):
+            if country[i] == yesterday_tests[j]["name"]:
+                tests_diff = tests[i] - yesterday_tests[j]["tests"]
+                new_tests.append(int(tests_diff))
 
     #Grafi
     if not graph_response_failed:
@@ -368,6 +367,22 @@ def get_data():
     print("API Update complete")
     sys.stdout.flush()
 
+def save_tests(country, tests):
+    data = []
+    for i in range(len(country)):
+        content = {
+            "name": country[i],
+            "tests": tests[i]
+        }
+        data.append(content)
+    with open("yesterday_tests.txt", "w") as outfile:
+        json.dump(data, outfile)
+
+def open_tests():
+    with open("yesterday_tests.txt") as json_file:
+        data = json.load(json_file)
+    return data
+
 get_data()
 
 sched = BackgroundScheduler()
@@ -406,7 +421,7 @@ def service_worker():
     response.headers['Cache-Control'] = 'no-cache'
     return response
 
-app.config['TEMPLATES_AUTO_RELOAD'] = True
+#app.config['TEMPLATES_AUTO_RELOAD'] = True
 
 if __name__ == '__main__':
     app.run()

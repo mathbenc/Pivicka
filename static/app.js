@@ -76,11 +76,11 @@ function tableBodyCreate(region) {
       cell.innerHTML = data[i]["infectedToday"];
       cell = row.insertCell();
       cell.setAttribute("align", "right");
-      cell.setAttribute("class", "d-none d-sm-table-cell text-right");
+      cell.setAttribute("class", "d-none d-md-table-cell text-right");
       cell.innerHTML = data[i]["infectedRatio"] + "%";
       cell = row.insertCell();
       cell.setAttribute("align", "right");
-      cell.setAttribute("class", "d-none d-sm-table-cell text-right");
+      cell.setAttribute("class", "d-none d-md-table-cell text-right");
       cell.innerHTML = data[i]["dead"];
       cell = row.insertCell();
       cell.setAttribute("align", "right");
@@ -100,20 +100,19 @@ function tableBodyCreate(region) {
       cell.setAttribute("align", "right");
       cell.setAttribute("class", "d-none d-md-table-cell text-right");
       cell.innerHTML = data[i]["active"];
-      
-      cell = row.insertCell();
-      cell.setAttribute("align", "right");
-      cell.setAttribute("class", "d-none d-xl-table-cell text-right");
-      cell.innerHTML = data[i]["tests"];
       /*
       cell = row.insertCell();
       cell.setAttribute("align", "right");
       cell.setAttribute("class", "d-none d-xl-table-cell text-right");
-      cell.innerHTML = data[i]["newTests"];
+      cell.innerHTML = data[i]["tests"];
       */
       cell = row.insertCell();
       cell.setAttribute("align", "right");
-      cell.setAttribute("class", "d-none d-lg-table-cell text-right");
+      cell.setAttribute("class", "d-none d-sm-table-cell text-right");
+      cell.innerHTML = data[i]["newTests"];
+      cell = row.insertCell();
+      cell.setAttribute("align", "right");
+      cell.setAttribute("class", "d-none d-xl-table-cell text-right");
       cell.innerHTML = data[i]["testsPerMillion"] + "%";
     }
   }
