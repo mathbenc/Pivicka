@@ -54,48 +54,49 @@ function tableBodyCreate(region) {
   var tbdy = document.getElementById("tableBody");
   $("#dataTable tbody").empty();
   for (var i = 0; i < data.length; i++) {
-    if (data[i]["region"] == region || region == "") {
+    if (data[i]["continent"] == region || region == "") {
       var row = tbdy.insertRow();
       var cell = row.insertCell();
       row.setAttribute("class", "countryExpand");
       row.setAttribute("id", i);
-      cell.innerHTML = data[i]["slovenianName"]
-      cell.setAttribute("id", data[i]["A2code"])
+      cell.innerHTML = data[i]["translation"]
+      cell.setAttribute("id", data[i]["countryInfo"]["iso2"])
       cell = row.insertCell();
       cell.setAttribute("align", "right");
       cell.setAttribute("class", "d-none d-xl-table-cell text-right");
-      cell.innerHTML = data[i]["countryPopulation"];
+      cell.innerHTML = data[i]["population"];
       cell = row.insertCell();
       cell.setAttribute("align", "right");
-      cell.innerHTML = data[i]["infected"];
+      cell.setAttribute("class", "d-none d-sm-table-cell text-right");
+      cell.innerHTML = data[i]["cases"];
       cell = row.insertCell();
       cell.setAttribute("align", "right");
-      if (data[i]["infectedToday"] != "0") {
+      if (data[i]["todayCases"] != "0") {
         cell.style.color = "#FF0266";
       }
-      cell.innerHTML = data[i]["infectedToday"];
+      cell.innerHTML = data[i]["todayCases"];
       cell = row.insertCell();
       cell.setAttribute("align", "right");
       cell.setAttribute("class", "d-none d-md-table-cell text-right");
-      cell.innerHTML = data[i]["infectedRatio"] + "%";
+      cell.innerHTML = data[i]["casesPerOneMillion"];
       cell = row.insertCell();
       cell.setAttribute("align", "right");
       cell.setAttribute("class", "d-none d-md-table-cell text-right");
-      cell.innerHTML = data[i]["dead"];
+      cell.innerHTML = data[i]["deaths"];
       cell = row.insertCell();
       cell.setAttribute("align", "right");
-      if (data[i]["deadToday"] != 0) {
+      if (data[i]["todayDeaths"] != 0) {
         cell.style.color = "#FF0266";
       }
-      cell.innerHTML = data[i]["deadToday"];
+      cell.innerHTML = data[i]["todayDeaths"];
       cell = row.insertCell();
       cell.setAttribute("align", "right");
       cell.setAttribute("class", "d-none d-lg-table-cell text-right");
-      cell.innerHTML = data[i]["deadRatio"] + "%";
+      cell.innerHTML = data[i]["deathsPerOneMillion"];
       cell = row.insertCell();
       cell.setAttribute("align", "right");
       cell.setAttribute("class", "d-none d-lg-table-cell text-right");
-      cell.innerHTML = data[i]["cured"];
+      cell.innerHTML = data[i]["recovered"];
       cell = row.insertCell();
       cell.setAttribute("align", "right");
       cell.setAttribute("class", "d-none d-md-table-cell text-right");
@@ -108,12 +109,11 @@ function tableBodyCreate(region) {
       */
       cell = row.insertCell();
       cell.setAttribute("align", "right");
-      cell.setAttribute("class", "d-none d-sm-table-cell text-right");
       cell.innerHTML = data[i]["newTests"];
       cell = row.insertCell();
       cell.setAttribute("align", "right");
       cell.setAttribute("class", "d-none d-xl-table-cell text-right");
-      cell.innerHTML = data[i]["testsPerMillion"] + "%";
+      cell.innerHTML = data[i]["testsPerOneMillion"];
     }
   }
   sort.refresh();
@@ -121,14 +121,7 @@ function tableBodyCreate(region) {
   colorCountry();
 }
 
-if (goodResponse == "True") {
-  tableBodyCreate(region);
-} else {
-  var mainDiv = document.getElementById("mainDiv");
-  mainDiv.innerHTML =
-    '<div class="text-center" style="margin-top: 50px !important; color: #ffeb3b"><h1>Dostop do podatkov trenutno ni mogoč! 😟</h1><p class="lead">Uporabite alternativne spletne aplikacije za pregled podatkov.<br>👉 <a href="https://www.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6">COVID-19 Tracker by CSSE</a></p></div>';
-  var footerDiv = document.getElementById("footerDiv")
-}
+tableBodyCreate(region);
 
 themeSetter();
 
@@ -150,24 +143,23 @@ $(document).on(colorCountry(), "#dataTable", function(){});
 $(document).ready(function() {
   $(document).on("click", ".countryExpand" , function() {
     var i = $(this).attr("id");
-    $("#countryDetailsModalTitle").text(data[i]["slovenianName"]);
-    $("#populationModal").text(data[i]["countryPopulation"]);
-    $("#infectedModal").text(data[i]["infected"]);
-    $("#infectedTodayModal").text(data[i]["infectedToday"]);
-    $("#infectedRatioModal").text(data[i]["infectedRatio"] + "%");
-    $("#deadModal").text(data[i]["dead"]);
-    $("#deadTodayModal").text(data[i]["deadToday"]);
-    $("#deadRatioModal").text(data[i]["deadRatio"] + "%");
-    $("#curedModal").text(data[i]["cured"]);
+    $("#countryDetailsModalTitle").text(data[i]["translation"]);
+    $("#populationModal").text(data[i]["population"]);
+    $("#infectedModal").text(data[i]["cases"]);
+    $("#infectedTodayModal").text(data[i]["todayCases"]);
+    $("#infectedRatioModal").text(data[i]["casesPerOneMillion"]);
+    $("#deadModal").text(data[i]["deaths"]);
+    $("#deadTodayModal").text(data[i]["todayDeaths"]);
+    $("#deadRatioModal").text(data[i]["deathsPerOneMillion"]);
+    $("#curedModal").text(data[i]["recovered"]);
     $("#activeModal").text(data[i]["active"]);
     $("#criticalModal").text(data[i]["critical"]);
-    $("#countryFlag").attr("src", data[i]["flag"])
-    $("#countryDensity").text(data[i]["density"] + " P/Km²")
+    $("#countryFlag").attr("src", data[i]["countryInfo"]["flag"])
     $("#testsModal").text(data[i]["tests"]);
     $("#newTestsModal").text(data[i]["newTests"]);
-    $("#testsRatioModal").text(data[i]["testsPerMillion"] + "%");
+    $("#testsRatioModal").text(data[i]["testsPerOneMillion"]);
     $("#countryDetailsModal").modal("show");
-    showGraph(data[i]["A2code"]);
+    showGraph(data[i].country);
   })
 })
 
@@ -225,49 +217,45 @@ function switchTheme() {
   }
 }
 
-if (graphResponseFailed == "False") {
   var ctxL = document.getElementById("lineChart").getContext('2d');
   var myLineChart = new Chart(ctxL, {
     type: 'line',
     data: {
-      labels: graphData["dates"].slice(-graphData["SI"]["dead"].length),
+      labels: Object.keys(graphData[0].timeline.cases),
       datasets: [
         {
           label: "Umrli",
-          data: graphData["SI"]["dead"],
+          data: Object.values(graphData[0].timeline.deaths),
           backgroundColor: [
             'rgba(255, 69, 69, .4)',
           ],
           borderColor: [
-            'rgba(255, 69, 69, .8)',
+            'rgba(255, 69, 69, 1)',
+          ],
+          borderWidth: 2
+        },
+        {
+          label: "Ozdraveli",
+          data: Object.values(graphData[0].timeline.recovered),
+          backgroundColor: [
+            'rgba(0, 177, 106, .4)',
+          ],
+          borderColor: [
+            'rgba(0, 177, 106, 1)',
           ],
           borderWidth: 2
         },
         {
           label: "Okuženi",
-          data: graphData["SI"]["confirmed"],
+          data: Object.values(graphData[0].timeline.cases),
           backgroundColor: [
-            'rgba(0, 184, 107, .25)',
+            'rgba(247, 202, 24, .4)',
           ],
           borderColor: [
-            'rgba(0, 184, 107, .5)',
-          ],
-          borderWidth: 2
-        },
-  
-        /*
-        {
-          label: "Ozdraveli",
-          data: graphData["SI"]["recovered"],
-          backgroundColor: [
-            'rgba(0, 250, 220, .2)',
-          ],
-          borderColor: [
-            'rgba(0, 213, 132, .7)',
+            'rgba(247, 202, 24, 1)',
           ],
           borderWidth: 2
         }
-        */
       ] 
     },
     options: {
@@ -303,6 +291,7 @@ if (graphResponseFailed == "False") {
     }
   });
 
+  /*
   var ctxL = document.getElementById("globalChart").getContext('2d');
   var myGlobalChart = new Chart(ctxL, {
     type: 'line',
@@ -365,20 +354,19 @@ if (graphResponseFailed == "False") {
       }
     }
   });
-}
-else {
-  $("#lineChart").remove();
-  $("#graphModal").remove();
-}
+  */
 
 function showGraph(countryCode) {
-  if (graphResponseFailed == "False") {
-    myLineChart.data.labels = graphData["dates"].slice(-graphData[countryCode]["confirmed"].length),
-    myLineChart.data.datasets[1].data = graphData[countryCode]["confirmed"]
-    myLineChart.data.datasets[0].data = graphData[countryCode]["dead"]
-    //myLineChart.data.datasets[2].data = graphData[countryCode]["recovered"]
-    myLineChart.update();
-  }
+    for(var i=0;i<graphData.length;i++) {
+      if(graphData[i].country == countryCode) {
+        myLineChart.data.labels = Object.keys(graphData[i].timeline.cases);
+        myLineChart.data.datasets[0].data = Object.values(graphData[i].timeline.deaths);
+        myLineChart.data.datasets[2].data = Object.values(graphData[i].timeline.cases);
+        myLineChart.data.datasets[1].data = Object.values(graphData[i].timeline.recovered);
+        myLineChart.update();
+        break;
+      }
+    }
 }
 
 function modeSwitch() {
@@ -389,25 +377,29 @@ function modeSwitch() {
     $("#globalDeaths").text(globalData["deaths"]);
     $("#globalRecovered").text(globalData["recovered"]);
     $("#globalCases").text(globalData["cases"]);
-    if (graphResponseFailed == "False") {
-      myGlobalChart.data.datasets[1].data = graphGlobal["global_confirmed"];
-      myGlobalChart.data.datasets[0].data = graphGlobal["global_deaths"];
-      myGlobalChart.update();
-      $("#regionTitle").text("Svet");
-    }
+    /*
+    myGlobalChart.data.datasets[1].data = graphGlobal["global_confirmed"];
+    myGlobalChart.data.datasets[0].data = graphGlobal["global_deaths"];
+    myGlobalChart.update();
+    */
+    $("#regionTitle").text("Svet");
   }
   else {
     region = "Europe";
-    $("#globeText").text(" Evropa");
-    $("#globalDeaths").text(europeData["deaths"]);
-    $("#globalRecovered").text(europeData["recovered"]);
-    $("#globalCases").text(europeData["cases"]);
-    if (graphResponseFailed == "False") {
-      myGlobalChart.data.datasets[1].data = graphGlobal["europe_confirmed"];
-      myGlobalChart.data.datasets[0].data = graphGlobal["europe_deaths"];
-      myGlobalChart.update();
-      $("#regionTitle").text("Evropa");
-    }
+    for(var i=0;i<europeData.length;i++) {
+      if(europeData[i]["continent"] == "Europe") {
+        $("#globeText").text(" Evropa");
+        $("#globalDeaths").text(europeData[i]["deaths"]);
+        $("#globalRecovered").text(europeData[i]["recovered"]);
+        $("#globalCases").text(europeData[i]["cases"]);
+      }
+     }
+    /*
+    myGlobalChart.data.datasets[1].data = graphGlobal["europe_confirmed"];
+    myGlobalChart.data.datasets[0].data = graphGlobal["europe_deaths"];
+    myGlobalChart.update();
+    */
+    $("#regionTitle").text("Evropa");
   };
   tableBodyCreate(region);
   colorCountry();

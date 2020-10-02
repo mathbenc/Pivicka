@@ -76,29 +76,7 @@
 
 
   <meta http-equiv="refresh" content="300">
-  <!--
-  <script>
-    var today = new Date();
-    var h = today.getHours();
-    if (h > 20 || h < 7) {
-      $("html").css("background-color", "#212121")
-      $("body").css("background-color", "#212121")
 
-      $("#logotip").attr("src", "./static/images/icon-test-dark-alt-min.png");
-      $("#logotipWebp").attr("srcset", "./static/images/icon-test-dark-alt.webp");
-      $("#logotipPng").attr("srcset", "./static/images/icon-test-dark-alt-min.png");
-
-      $("#dataTable").addClass("my-table-dark");
-      $(".fakeThead").css("background-color", "#212121");
-      
-      $("thead th").css("background-color", "#212121")
-      $("thead th").css("color", "white")
-
-      $(".modal-content").addClass("elegant-color");
-      $(".modal-body").addClass("text-white");
-    }
-  </script>
-  -->
 </head>
 
 <body>
@@ -169,14 +147,14 @@
           <th class="d-none d-xl-table-cell text-right col">
             <div class="d-none d-sm-block">Populacija</div><div class="d-sm-none"><i class=""></i></div>
           </th>
-          <th class="text-right col">
+          <th class="d-none d-sm-table-cell text-right col">
             <div class="d-none d-sm-block">Okuženi</div><div class="d-sm-none"><i class="fas fa-viruses"></i></div>
           </th>
           <th class="text-right col" data-sort-default>
             <div class="d-none d-sm-block">Okuženi danes</div><div class="d-sm-none">+&nbsp<i class="fas fa-virus"></i></div>
           </th>
           <th class="d-none d-md-table-cell text-right col">
-            <div class="d-none d-sm-block">Okuženost</div><div class="d-sm-none"><i class=""></i></div>
+            <div class="d-none d-sm-block">Okuženost/1M</div><div class="d-sm-none"><i class=""></i></div>
           </th>
           <th class="d-none d-md-table-cell text-right col">
             <div class="d-none d-sm-block">Umrli</div><div class="d-sm-none"><i class=""></i></div>
@@ -185,7 +163,7 @@
             <div class="d-none d-sm-block">Umrli danes</div><div class="d-sm-none">+&nbsp<i class="fas fa-skull-crossbones"></i></div>
           </th>
           <th class="d-none d-lg-table-cell text-right col">
-            <div class="d-none d-sm-block">Umrljivost</div><div class="d-sm-none"><i class=""></i></div>
+            <div class="d-none d-sm-block">Umrljivost/1M</div><div class="d-sm-none"><i class=""></i></div>
           </th>
           <th class="d-none d-lg-table-cell text-right col">
             <div class="d-none d-sm-block">Ozdraveli</div><div class="d-sm-none"><i class="fas fa-grin-alt"></i></div>
@@ -193,11 +171,11 @@
           <th class="d-none d-md-table-cell text-right col">
             <div class="d-none d-sm-block">Odprti primeri</div><div class="d-sm-none"><i class="fas fa-grin-alt"></i></div>
           </th>
-          <th class="d-none d-sm-table-cell text-right col">
-            <div class="d-none d-sm-block">Novi testi</div><div class="d-sm-none"><i class=""></i></div>
+          <th class="text-right col">
+            <div class="d-none d-sm-block">Novi testi</div><div class="d-sm-none">+&nbsp<i class="fas fa-vial"></i></div>
           </th>
           <th class="d-none d-xl-table-cell text-right col">
-            <div class="d-none d-sm-block">Delež testiranih</div><div class="d-sm-none"><i class=""></i></div>
+            <div class="d-none d-sm-block">Testiranost/1M</div><div class="d-sm-none"><i class=""></i></div>
           </th>
         </tr>
       </thead>
@@ -225,19 +203,16 @@
             <div class="col-3"><b>Populacija</b>
               <p id="populationModal"></p>
             </div>
-            <div class="col-3"><b>Poseljenost</b>
-              <p id="countryDensity"></p>
-            </div>
             <div class="col-3"><b>Okuženi</b>
               <p id="infectedModal"></p>
+            </div>
+            <div class="col-3"><b>Danes okuženi</b>
+              <p id="infectedTodayModal"></p>
             </div>
 
             <div class="w-100"></div>
 
-            <div class="col-3"><b>Danes okuženi</b>
-              <p id="infectedTodayModal"></p>
-            </div>
-            <div class="col-3"><b>Obolevnost</b>
+            <div class="col-3"><b>Okuženost/1M</b>
               <p id="infectedRatioModal"></p>
             </div>
             <div class="col-3"><b>Umrli</b>
@@ -246,12 +221,12 @@
             <div class="col-3"><b>Danes umrli</b>
               <p id="deadTodayModal"></p>
             </div>
+            <div class="col-3"><b>Umrljivost/1M</b>
+              <p id="deadRatioModal"></p>
+            </div>
 
             <div class="w-100"></div>
 
-            <div class="col-3"><b>Umrljivost</b>
-              <p id="deadRatioModal"></p>
-            </div>
             <div class="col-3"><b>Ozdraveli</b>
               <p id="curedModal"></p>
             </div>
@@ -261,16 +236,16 @@
             <div class="col-3"><b>Kritični primeri</b>
               <p id="criticalModal"></p>
             </div>
+            <div class="col-3"><b>Število testiranih</b>
+              <p id="testsModal"></p>
+            </div>
 
             <div class="w-100"></div>
 
-            <div class="col-4"><b>Število testiranih</b>
-              <p id="testsModal"></p>
-            </div>
-            <div class="col-4"><b>Novi testi</b>
+            <div class="col-3"><b>Novi testi</b>
               <p id="newTestsModal"></p>
             </div>
-            <div class="col-4"><b>Delež testiranih prebivalcev</b>
+            <div class="col-3"><b>Testiranost/1M</b>
               <p id="testsRatioModal"></p>
             </div>
           </div>
@@ -280,6 +255,7 @@
     </div>
   </div>
 
+  <!--
   <div class="modal fade bottom" id="graphModal" tabindex="-1" role="dialog" aria-labelledby="graphModal" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable modal-full-height modal-bottom modal-notify" role="document">
       <div class="modal-content">
@@ -295,6 +271,7 @@
       </div>
     </div>
   </div>
+  -->
 
 
   <div class="modal fade bottom" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModal"
@@ -347,11 +324,9 @@
   <script>
     var data = JSON.parse({{ data | tojson | safe }});
     var globalData = {{ globalData | tojson | safe }};
-    var europeData = {{ europeData | tojson | safe }};
+    var europeData = {{ continentData | tojson | safe }};
     var graphData = JSON.parse({{ graphData | tojson | safe }});
     var graphGlobal = JSON.parse({{ graphGlobal | tojson | safe }});
-    var goodResponse = "{{ goodResponse }}";
-    var graphResponseFailed = "{{ graphResponseFailed }}";
   </script>
 
   <script src="{{ url_for('static', filename='app.min.js') }}"></script>

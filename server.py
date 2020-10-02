@@ -12,376 +12,69 @@ from apscheduler.schedulers.background import BackgroundScheduler
 app = Flask(__name__)
 Compress(app)
 
-yesterday_tests_saved = False
-yesterday_tests = [0] * 1000000
-
 data_time = None
 data = None
 global_data = None
-europe_data = None
-good_response = True
+continents_data = None
 graph = None
 graph_global = None
 source = None
-graph_response_failed = None
 
 with open("static/pivicka.json") as json_file:
     country_translations = json.load(json_file)
 
-def process_data(corona_data, country_data, corona_global_data, graph_data_response):
-    global data, good_response, global_data, graph, europe_data, graph_response_failed, graph_global, yesterday_tests_saved,yesterday_tests
-    country = []
-    country_flag = []
-    country_region = []
-    country_capital = []
-    country_a2_code = []
-    country_a3_code = []
-    country_translated = []
-    country_area = []
-    country_density = []
-    country_population = []
-    infected = []
-    infected_today = []
-    dead = []
-    dead_today = []
-    cured = []
-    active = []
-    critical = []
-    infected_ratio = []
-    dead_ratio = []
-    tests = []
-    new_tests = []
-    tests_per_million = []
-    population_cured_share = []
-    population_dead_share = []
-    population_healthy_share = []
-    data = []
-    dates = []
-    global_data = []
-    graph_data_confirmed = []
-    graph_data_dead = []
-    graph_data_recovered = []
-    graph_countries = []
-    europe_data = {
-        "cases": 0,
-        "deaths": 0,
-        "recovered": 0
-    }
-    graph = {}
-    graph_response_failed = False
+def process_data(corona_data, corona_yesterday, corona_global_data, corona_continents_data, graph_data):
+    global data, graph, global_data, continents_data
+    corona_data = json.loads(corona_data.text)
+    corona_yesterday = json.loads(corona_yesterday.text)
+    graph = graph_data.text
+    global_data = json.loads(corona_global_data.text)
+    continents_data = json.loads(corona_continents_data.text)
 
-    country_data = json.loads(country_data.text)
-    if len(corona_data.text) != 0 or len(corona_global_data.text) != 0:
-        global_data = json.loads(corona_global_data.text)
-        corona_data = json.loads(corona_data.text)
-    else:
-        corona_data = ""
-        global_data = ""
-        good_response = False
-
-    if graph_data_response.status_code == 200 and len(json.loads(graph_data_response.text)["locations"]) > 0:
-        graph_data_response = json.loads(graph_data_response.text)
-    else:
-        graph_response_failed = True
-        print("Graph API FAILED!!!")
-
-    if len(corona_data) == 0:
-        good_response = False
-        return
-    good_response = True
-
-    # Prilagodimo imena držav
-    wrongNames = ["Falkland Islands (Malvinas)", "Saint Pierre and Miquelon", "Bonaire, Sint Eustatius and Saba", "Virgin Islands (British)", "Turks and Caicos Islands", "Lao People's Democratic Republic", "Syrian Arab Republic", "Korea (Republic of)", "Korea (Democratic People's Republic of)", "Iran (Islamic Republic of)", "United Kingdom of Great Britain and Northern Ireland", "Russian Federation", "Viet Nam", "Brunei Darussalam", "Faroe Islands", "Palestine, State of", "United States of America", "Czech Republic", "United Arab Emirates", "Macedonia (the former Yugoslav Republic of)", "Moldova (Republic of)", "Venezuela (Bolivarian Republic of)", "Congo (Democratic Republic of the)", "Bolivia (Plurinational State of)", "Côte d'Ivoire", "Tanzania, United Republic of", "Saint Barthélemy", "Saint Martin (French part)", "Virgin Islands (U.S.)", "Central African Republic", "Holy See", "Saint Vincent and the Grenadines", "Sint Maarten (Dutch part)", "Swaziland"]
-    correctNames = ["Falkland Islands", "Saint Pierre Miquelon", "Caribbean Netherlands", "British Virgin Islands", "Turks and Caicos", "Laos", "Syria", "S. Korea", "North Korea", "Iran", "UK", "Russia", "Vietnam", "Brunei", "Faeroe Islands", "Palestine", "USA", "Czechia", "UAE", "North Macedonia", "Moldova", "Venezuela", "DRC", "Bolivia", "Ivory Coast", "Tanzania", "St. Barth", "Saint Martin", "U.S. Virgin Islands", "CAR", "Vatican City", "St. Vincent Grenadines", "Sint Maarten", "Eswatini"]
-    for i in range(len(country_data)):
-        for j in range(len(wrongNames)):
-            if country_data[i]["name"] == wrongNames[j]:
-                country_data[i]["name"] = correctNames[j]
- 
-    # Polnimo podatke v naše sezname
+    # Dodamo prevode imen...
     for i in range(len(corona_data)):
-        for j in range(len(country_data)):
-            if corona_data[i]["country"] == country_data[j]["name"]: 
-                # Podatki o državi
-                country.append(corona_data[i]["country"])
-                country_region.append(country_data[j]["region"])
-                country_a2_code.append(country_data[j]["alpha2Code"])
-                country_a3_code.append(country_data[j]["alpha3Code"])
-                country_flag.append(country_data[j]["flag"])
-                country_capital.append(country_data[j]["capital"])
-                country_population.append(country_data[j]["population"])
-                country_area.append(country_data[j]["area"])
-
-                # Podatki o pivu
-                infected.append(int(corona_data[i]["cases"]))
-                infected_today.append(int(corona_data[i]["todayCases"]))
-                dead.append(int(corona_data[i]["deaths"]))
-                if country_data[j]["region"] == "Europe":
-                    europe_data["cases"] += corona_data[i]["cases"]
-                    europe_data["deaths"] += corona_data[i]["deaths"]
-                
-                if corona_data[i]["todayDeaths"] != None:
-                    dead_today.append(int(corona_data[i]["todayDeaths"]))
-                else:
-                    dead_today.append("")
-                
-                if corona_data[i]["active"] != None:
-                    active.append(int(corona_data[i]["active"]))
-                else:
-                    active.append("")
-                
-                if corona_data[i]["recovered"] != None:
-                    cured.append(int(corona_data[i]["recovered"]))
-                    if country_data[j]["region"] == "Europe":
-                        europe_data["recovered"] += corona_data[i]["recovered"]
-                else:
-                    cured.append("")
-                
-                if corona_data[i]["critical"] != None:
-                    critical.append(int(corona_data[i]["critical"]))
-                else:
-                    critical.append("")    
-                tests.append(int(corona_data[i]["totalTests"]))
-                #tests_per_million.append(int(corona_data[i]["testsPerOneMillion"]))
-                
-                # Statistika
-                infected_ratio.append(round(float(corona_data[i]["cases"] * 100 / country_data[j]["population"]), 2))
-                dead_ratio.append(round(float(corona_data[i]["deaths"] * 100 / corona_data[i]["cases"]), 2))
-                population_dead_share.append(round(float(corona_data[i]["deaths"] * 100 / country_data[j]["population"]), 2))
-                #population_healthy_share.append(round(float((country_data[j]["population"] - corona_data[i]["cases"]) * 100 / country_data[j]["population"]), 2))
-                #population_cured_share.append(round(float(cured[len(cured)-1] * 100 / country_data[j]["population"]), 2))
-                tests_per_million.append(round(float(corona_data[i]["totalTests"] * 100 / country_data[j]["population"]), 2))
-                if country_data[j]["area"] != None:
-                    country_density.append(int(country_data[j]["population"] / country_data[j]["area"]))
-                else:
-                    country_density.append(0)
-
-    #Za vsako drzavo shranimo danasnje stevilo testov, naredimo 1x na dan med 23.45 in 00.00
-    now = datetime.now() + timedelta(hours=2)
-    print("Current time:", now)
-    if not yesterday_tests_saved and now.hour >= 23 and now.minute >= 45:
-        print(now, "=> Shranjujemo teste!!!!")
-        yesterday_tests_saved = True
-        save_tests(country, tests)
-
-    #Za vsako drzavo pogledamo stevilo danasnjih in shranjenih vcerajsnjih testov
-    yesterday_tests = open_tests()
-    new_tests.clear()
-    for i in range(len(country)):
-        for j in range(len(yesterday_tests)):
-            if country[i] == yesterday_tests[j]["name"]:
-                tests_diff = tests[i] - yesterday_tests[j]["tests"]
-                new_tests.append(int(tests_diff))
-
-    #Grafi
-    if not graph_response_failed:
-        graph_global = []
-        graph_global_confirmed = []
-        graph_global_deaths = []
-        graph_europe_confirmed = []
-        graph_europe_deaths = []
-        # Spremenimo format datuma
-        dates = list(graph_data_response["locations"][0]["timelines"]["confirmed"]["timeline"].keys())
-        for k in range(len(dates)):
-            dates[k] = dates[k][8:10]+"."+dates[k][5:7]+"."+dates[k][:4]
-
-        for i in range(len(graph_data_response["locations"])):
-            for j in range(len(country_a2_code)):
-                if graph_data_response["locations"][i]["country_code"] == country_a2_code[j]:
-                    if len(graph_global_confirmed) > 0:
-                        graph_global_confirmed = list(map(add, graph_global_confirmed, list(graph_data_response["locations"][i]["timelines"]["confirmed"]["timeline"].values())))
-                        graph_global_deaths = list(map(add, graph_global_deaths, list(graph_data_response["locations"][i]["timelines"]["deaths"]["timeline"].values())))
-                    else:
-                        graph_global_confirmed = list(graph_data_response["locations"][i]["timelines"]["confirmed"]["timeline"].values())
-                        graph_global_deaths = list(graph_data_response["locations"][i]["timelines"]["deaths"]["timeline"].values())
-
-                    if country_region[j] == "Europe":
-                        if len(graph_europe_confirmed) > 0:
-                            graph_europe_confirmed = list(map(add, graph_europe_confirmed, list(graph_data_response["locations"][i]["timelines"]["confirmed"]["timeline"].values())))
-                            graph_europe_deaths = list(map(add, graph_europe_deaths, list(graph_data_response["locations"][i]["timelines"]["deaths"]["timeline"].values())))                                        
-                        else:
-                            graph_europe_confirmed = list(graph_data_response["locations"][i]["timelines"]["confirmed"]["timeline"].values())
-                            graph_europe_deaths = list(graph_data_response["locations"][i]["timelines"]["deaths"]["timeline"].values())                                           
-
-                    # Če obstaja, posodobimo številke
-                    if graph_data_response["locations"][i]["country_code"] in graph_countries:
-                        index = graph_countries.index(graph_data_response["locations"][i]["country_code"])     
-                        graph_data_confirmed[index] = list(map(add, graph_data_confirmed[index], list(graph_data_response["locations"][i]["timelines"]["confirmed"]["timeline"].values())))
-                        graph_data_dead[index] = list(map(add, graph_data_dead[index], list(graph_data_response["locations"][i]["timelines"]["deaths"]["timeline"].values())))
-                        graph_data_recovered[index] = list(map(add, graph_data_recovered[index], list(graph_data_response["locations"][i]["timelines"]["recovered"]["timeline"].values())))
-
-                    # Drugače dodamo novo
-                    else:
-                        graph_countries.append(graph_data_response["locations"][i]["country_code"])
-                        country_graph_data_confirmed = list(graph_data_response["locations"][i]["timelines"]["confirmed"]["timeline"].values())
-                        country_graph_data_dead = list(graph_data_response["locations"][i]["timelines"]["deaths"]["timeline"].values())
-                        country_graph_data_recovered = list(graph_data_response["locations"][i]["timelines"]["recovered"]["timeline"].values())
-                        graph_data_confirmed.append(country_graph_data_confirmed)
-                        graph_data_dead.append(country_graph_data_dead)
-                        graph_data_recovered.append(country_graph_data_recovered)
-        
-        # Odstranimo dneve ko še ni bilo okuženih
-        for i in range(len(graph_data_confirmed)):
-            index = 0
-            for j in range(len(graph_data_confirmed[i])):
-                if graph_data_confirmed[i][j] > 0:
-                    index = j-1
-                    break
-            if index < 0:
-                index = 0
-            graph_data_confirmed[i] = graph_data_confirmed[i][index:]
-            graph_data_dead[i] = graph_data_dead[i][index:]    
-
-        graph_global.append(graph_global_confirmed)
-        graph_global.append(graph_global_deaths)
-        graph_global.append(graph_europe_confirmed)
-        graph_global.append(graph_europe_deaths)
+        for translation in country_translations:
+            if corona_data[i]["countryInfo"]["iso3"] == translation["COUNTRY_ALPHA3_CODE"]:
+                corona_data[i]["translation"] = translation["COUNTRY_NAME"]
+        for i in range(len(corona_yesterday)):
+            if corona_data[i]["country"] == corona_yesterday[i]["country"]:
+                corona_data[i]["newTests"] = corona_data[i]["tests"] - corona_yesterday[i]["tests"]
 
     # Številom dodamo vejice
-    for i in range(len(infected)):
-        infected[i] = '{:,}'.format(infected[i])
-        infected_today[i] = '{:,}'.format(infected_today[i])
-        dead[i] = '{:,}'.format(dead[i])
-        if type(dead_today[i]) == int:
-            dead_today[i] = '{:,}'.format(dead_today[i])
-        if type(cured[i]) == int:
-            cured[i] = '{:,}'.format(cured[i])
-        if type(active[i]) == int:
-            active[i] = '{:,}'.format(active[i])
-        if type(critical[i]) == int:
-            critical[i] = '{:,}'.format(critical[i])
-        country_population[i] = '{:,}'.format(country_population[i])
-        country_density[i] = '{:,}'.format(country_density[i])
-        tests[i] = '{:,}'.format(tests[i])
-        tests_per_million[i] = '{:,}'.format(tests_per_million[i])
-        new_tests[i] = '{:,}'.format(new_tests[i])
-    europe_data["cases"] = '{:,}'.format(europe_data["cases"])
-    europe_data["deaths"] = '{:,}'.format(europe_data["deaths"])
-    europe_data["recovered"] = '{:,}'.format(europe_data["recovered"])
-    global_data["cases"] = '{:,}'.format(global_data["cases"])
-    global_data["deaths"] = '{:,}'.format(global_data["deaths"])
-    global_data["recovered"] = '{:,}'.format(global_data["recovered"])
+    for i in range(len(corona_data)):
+        corona_data[i]["cases"] = '{:,}'.format(corona_data[i]["cases"])
+        corona_data[i]["todayCases"] = '{:,}'.format(corona_data[i]["todayCases"])
+        corona_data[i]["deaths"] = '{:,}'.format(corona_data[i]["deaths"])
+        corona_data[i]["todayDeaths"] = '{:,}'.format(corona_data[i]["todayDeaths"])
+        corona_data[i]["recovered"] = '{:,}'.format(corona_data[i]["recovered"])
+        corona_data[i]["todayRecovered"] = '{:,}'.format(corona_data[i]["todayRecovered"])
+        corona_data[i]["active"] = '{:,}'.format(corona_data[i]["active"])
+        corona_data[i]["critical"] = '{:,}'.format(corona_data[i]["critical"])
+        corona_data[i]["tests"] = '{:,}'.format(corona_data[i]["tests"])
+        corona_data[i]["casesPerOneMillion"] = '{:,}'.format(corona_data[i]["casesPerOneMillion"])
+        corona_data[i]["deathsPerOneMillion"] = '{:,}'.format(corona_data[i]["deathsPerOneMillion"])
+        corona_data[i]["testsPerOneMillion"] = '{:,}'.format(corona_data[i]["testsPerOneMillion"])
+        corona_data[i]["population"] = '{:,}'.format(corona_data[i]["population"])
+        corona_data[i]["newTests"] = '{:,}'.format(corona_data[i]["newTests"])
 
-    # Preverimo razliko števila držav
-    missingCountries = len(corona_data) - len(infected)
-    if missingCountries > 7:
-        print("MANJKAJO DRZAVE!!!! ->", missingCountries)
-        missingCountries = []
-        for i in range(len(corona_data)):
-            found = False
-            for j in range(len(country)):
-                if corona_data[i]["country"] == country[j]:
-                    found = True
-                    break
-            
-            if not found:
-                missingCountries.append(corona_data[i]["country"])
-
-        print("Manjka: ", len(missingCountries), " -> ", missingCountries)
-        sys.stdout.flush()
-
-    # Prevedemo imena držav
-    for i in range(len(country)):
-        for j in range(len(country_translations)):
-            if country_a3_code[i] == country_translations[j]["COUNTRY_ALPHA3_CODE"]:
-                country_translated.append(country_translations[j]["COUNTRY_NAME"])
-                break
+    data = json.dumps(corona_data)
 
     print("Data process complete")
     sys.stdout.flush()
 
-    dates = {
-        "dates": dates
-    }
-    # Ustvarimo JSON za celoten graf
-    if not graph_response_failed:
-        graph_global = {
-            "global_confirmed": graph_global[0],
-            "global_deaths": graph_global[1],
-            "europe_confirmed": graph_global[2],
-            "europe_deaths": graph_global[3]
-        }
-        graph_global = json.dumps(graph_global)
-
-    # Ustvarimo JSON za graf
-    for i in range(len(graph_countries)):
-        content = {
-            graph_countries[i]: {
-                "confirmed": graph_data_confirmed[i],
-                "dead": graph_data_dead[i],
-                "recovered": graph_data_recovered[i]
-            }
-        }
-        graph.update(content)
-    graph.update(dates)
-    graph = json.dumps(graph)
-
-    # Ustvarimo JSON
-    for i in range(len(country)):
-        content = {
-            "name": country[i],
-            "countryPopulation": country_population[i],
-            "area": country_area[i],
-            "flag": country_flag[i],
-            "capital": country_capital[i],
-            "region": country_region[i],
-            "A2code": country_a2_code[i],
-            "A3code": country_a3_code[i],
-            "slovenianName": country_translated[i],
-            "density": country_density[i],
-            "infected": infected[i],
-            "infectedToday": infected_today[i],
-            "infectedRatio": infected_ratio[i],
-            "dead": dead[i],
-            "deadToday": dead_today[i],
-            "deadRatio": dead_ratio[i],
-            "cured": cured[i],
-            "critical": critical[i],
-            "active": active[i],
-            "tests": tests[i],
-            "testsPerMillion": tests_per_million[i],
-            "newTests": new_tests[i]
-        }
-        """
-            "populationHealthyShare": population_healthy_share[i],
-            "populationCuredShare": population_cured_share[i],
-            "populationDeadShare": population_dead_share[i]
-        }
-        """
-        data.append(content)
-    data = json.dumps(data)
-
 def get_data():
     global data_time, source
-    country_response = requests.get("https://restcountries.eu/rest/v2/all") 
-    corona_response = requests.get("https://coronavirus-19-api.herokuapp.com/countries")
+    corona_response = requests.get("https://disease.sh/v3/covid-19/countries")
+    corona_response_yesterday = requests.get("https://disease.sh/v3/covid-19/countries?yesterday=1")
     source="https://www.worldometers.info/coronavirus/"   
-    if corona_response.status_code != 200:
-        corona_response = requests.get("https://corona.lmao.ninja/countries") #https://coronavirus-19-api.herokuapp.com/countries
-        source="https://corona.lmao.ninja/countries"
-    corona_global_data = requests.get("https://coronavirus-19-api.herokuapp.com/all")
-    graph_data = requests.get("https://coronavirus-tracker-api.herokuapp.com/v2/locations?timelines=1") #https://coronavirus-tracker-api.herokuapp.com/all
+    corona_global_data = requests.get("https://disease.sh/v3/covid-19/all")
+    corona_continents_data = requests.get("https://disease.sh/v3/covid-19/continents")
+    graph_data = requests.get("https://disease.sh/v3/covid-19/historical?lastdays=all")
     now = datetime.now() + timedelta(hours=2)
     data_time = now.strftime("%d.%m.%Y %H:%M")
-    process_data(corona_response, country_response, corona_global_data, graph_data)
+    process_data(corona_response, corona_response_yesterday, corona_global_data, corona_continents_data, graph_data)
     print("API Update complete")
     sys.stdout.flush()
-
-def save_tests(country, tests):
-    data = []
-    for i in range(len(country)):
-        content = {
-            "name": country[i],
-            "tests": tests[i]
-        }
-        data.append(content)
-    with open("yesterday_tests.txt", "w") as outfile:
-        json.dump(data, outfile)
-
-def open_tests():
-    with open("yesterday_tests.txt") as json_file:
-        data = json.load(json_file)
-    return data
 
 get_data()
 
@@ -395,12 +88,10 @@ def index():
         title="Pivička",
         data=data,
         globalData=global_data,
-        europeData=europe_data,
+        continentData=continents_data,
         dataTime=data_time,
         graphData=graph,
         graphGlobal=graph_global,
-        graphResponseFailed=graph_response_failed,
-        goodResponse=good_response,
         source=source)
 
 @app.route("/sitemap.xml")
@@ -424,4 +115,4 @@ def service_worker():
 #app.config['TEMPLATES_AUTO_RELOAD'] = True
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=False)
