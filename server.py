@@ -18,27 +18,34 @@ global_data = None
 continents_data = None
 graph = None
 graph_global = None
+graph_europe = None
 source = None
 
 with open("static/pivicka.json") as json_file:
     country_translations = json.load(json_file)
 
-def process_data(corona_data, corona_yesterday, corona_global_data, corona_continents_data, graph_data):
-    global data, graph, global_data, continents_data
+def process_data(corona_data, corona_yesterday, corona_global_data, corona_continents_data, graph_data, graph_global_data, graph_europe_data):
+    global data, graph, graph_global, graph_europe, global_data, continents_data
     corona_data = json.loads(corona_data.text)
     corona_yesterday = json.loads(corona_yesterday.text)
     graph = graph_data.text
+    graph_global = graph_global_data.text
+    graph_europe_data = graph_europe_data.text
+    
+    #TODO: Graf za evropo!
+
     global_data = json.loads(corona_global_data.text)
     continents_data = json.loads(corona_continents_data.text)
 
     # Dodamo prevode imen...
     for i in range(len(corona_data)):
+        corona_data[i]["newTests"] = 0
         for translation in country_translations:
             if corona_data[i]["countryInfo"]["iso3"] == translation["COUNTRY_ALPHA3_CODE"]:
                 corona_data[i]["translation"] = translation["COUNTRY_NAME"]
-        for i in range(len(corona_yesterday)):
-            if corona_data[i]["country"] == corona_yesterday[i]["country"]:
-                corona_data[i]["newTests"] = corona_data[i]["tests"] - corona_yesterday[i]["tests"]
+        for j in range(len(corona_yesterday)):
+            if corona_data[i]["country"] == corona_yesterday[j]["country"]:
+                corona_data[i]["newTests"] = corona_data[i]["tests"] - corona_yesterday[j]["tests"]
 
     # Številom dodamo vejice
     for i in range(len(corona_data)):
@@ -56,6 +63,13 @@ def process_data(corona_data, corona_yesterday, corona_global_data, corona_conti
         corona_data[i]["testsPerOneMillion"] = '{:,}'.format(corona_data[i]["testsPerOneMillion"])
         corona_data[i]["population"] = '{:,}'.format(corona_data[i]["population"])
         corona_data[i]["newTests"] = '{:,}'.format(corona_data[i]["newTests"])
+    for i in range(len(continents_data)):
+        continents_data[i]["cases"] = '{:,}'.format(continents_data[i]["cases"])
+        continents_data[i]["deaths"] = '{:,}'.format(continents_data[i]["deaths"])
+        continents_data[i]["recovered"] = '{:,}'.format(continents_data[i]["recovered"])
+    global_data["cases"] = '{:,}'.format(global_data["cases"])
+    global_data["deaths"] = '{:,}'.format(global_data["deaths"])
+    global_data["recovered"] = '{:,}'.format(global_data["recovered"])
 
     data = json.dumps(corona_data)
 
@@ -70,9 +84,11 @@ def get_data():
     corona_global_data = requests.get("https://disease.sh/v3/covid-19/all")
     corona_continents_data = requests.get("https://disease.sh/v3/covid-19/continents")
     graph_data = requests.get("https://disease.sh/v3/covid-19/historical?lastdays=all")
+    graph_global_data = requests.get("https://disease.sh/v3/covid-19/historical/all?lastdays=all")
+    graph_europe_data = requests.get("https://disease.sh/v3/covid-19/historical/Albania,Andorra,Austria,Belarus,Belgium,Bosnia,Bulgaria,Channel%20Islands,Croatia,Czechia,Denmark,Estonia,Faroe%20Islands,Finland,France,Germany,Gibraltar,Greece,Holy%20See%20(Vatican%20City%20State),Hungary,Iceland,Ireland,Isle%20of%20Man,Italy,Latvia,Liechtenstein,Lithuania,Luxembourg,Macedonia,Malta,Moldova,Monaco,Montenegro,Netherlands,Norway,Poland,Portugal,Romania,Russia,San%20Marino,Serbia,Slovakia,Slovenia,Spain,Sweden,Switzerland,UK,Ukraine?lastdays=all")
     now = datetime.now() + timedelta(hours=2)
     data_time = now.strftime("%d.%m.%Y %H:%M")
-    process_data(corona_response, corona_response_yesterday, corona_global_data, corona_continents_data, graph_data)
+    process_data(corona_response, corona_response_yesterday, corona_global_data, corona_continents_data, graph_data, graph_global_data, graph_europe_data)
     print("API Update complete")
     sys.stdout.flush()
 
@@ -92,6 +108,7 @@ def index():
         dataTime=data_time,
         graphData=graph,
         graphGlobal=graph_global,
+        graphEurope=graph_europe,
         source=source)
 
 @app.route("/sitemap.xml")

@@ -291,16 +291,15 @@ function switchTheme() {
     }
   });
 
-  /*
   var ctxL = document.getElementById("globalChart").getContext('2d');
   var myGlobalChart = new Chart(ctxL, {
     type: 'line',
     data: {
-      labels: graphData["dates"],
+      labels: Object.keys(graphGlobal["cases"]),
       datasets: [
         {
           label: "Umrli",
-          data: graphGlobal["global_deaths"],
+          data: Object.values(graphGlobal["deaths"]),
           backgroundColor: [
             'rgba(255, 69, 69, .4)',
           ],
@@ -311,7 +310,7 @@ function switchTheme() {
         },
         {
           label: "Okuženi",
-          data: graphGlobal["global_confirmed"],
+          data: Object.values(graphGlobal["cases"]),
           backgroundColor: [
             'rgba(0, 184, 107, .25)',
           ],
@@ -354,7 +353,6 @@ function switchTheme() {
       }
     }
   });
-  */
 
 function showGraph(countryCode) {
     for(var i=0;i<graphData.length;i++) {

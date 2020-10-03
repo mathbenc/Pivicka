@@ -255,7 +255,7 @@
     </div>
   </div>
 
-  <!--
+  
   <div class="modal fade bottom" id="graphModal" tabindex="-1" role="dialog" aria-labelledby="graphModal" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable modal-full-height modal-bottom modal-notify" role="document">
       <div class="modal-content">
@@ -271,7 +271,7 @@
       </div>
     </div>
   </div>
-  -->
+
 
 
   <div class="modal fade bottom" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModal"
@@ -327,6 +327,7 @@
     var europeData = {{ continentData | tojson | safe }};
     var graphData = JSON.parse({{ graphData | tojson | safe }});
     var graphGlobal = JSON.parse({{ graphGlobal | tojson | safe }});
+    var graphEurope = JSON.parse({{ graphEurope | tojson | safe }});
   </script>
 
   <script src="{{ url_for('static', filename='app.min.js') }}"></script>
